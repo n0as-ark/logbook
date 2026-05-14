@@ -4,7 +4,7 @@ const currentlyLearning = [
   "Operating Systems",
   "Networking",
   "Linux",
-  "Crptography",
+  "Cryptography",
 ];
 
 const skills = [
