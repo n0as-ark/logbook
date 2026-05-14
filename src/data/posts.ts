@@ -14,7 +14,7 @@ export const posts: Post[] = [
   {
     title: "A Password Lock Isn't Real Encryption",
     slug: "xor-cipher-excel-password-intro",
-    date: "2026-05-19",
+    date: "2026-05-14",
     tags: ["Cryptography", "Python"],
     excerpt: "A lot of organizations still lock down sensitive files with nothing more than an Excel or Word password. In this post, I look at why that falls short of real encryption - and walk through a small project I built to make that gap visible.",
     readTime: "4 min",
