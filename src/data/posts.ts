@@ -22,8 +22,7 @@ export const posts: Post[] = [
 
 It feels secure. You set a password, the file locks, done.
 
-But what does that password actually do - and how secure is it really?
-I wanted to find out, so I decided to build an encryption tool from scratch to understand what's really going on under the hood.
+But what does that password actually do - and how secure is it really?<br>I wanted to find out, so I decided to build an encryption tool from scratch to understand what's really going on under the hood.
 
 ## What Is Encryption, Really?
 
