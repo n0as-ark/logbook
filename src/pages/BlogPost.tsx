@@ -17,7 +17,6 @@ const BlogPost = () => {
     );
   }
 
-  // Simple markdown-like rendering for the content
   const renderContent = (content: string) => {
     const lines = content.split("\n");
     const elements: JSX.Element[] = [];
@@ -53,9 +52,16 @@ const BlogPost = () => {
       }
 
       if (line.startsWith("## ")) {
-        elements.push(<h2 key={key++}>{line.slice(3)}</h2>);
+        elements.push(<h2 key={key++} className="prose-blog">{line.slice(3)}</h2>);
       } else if (line.startsWith("### ")) {
-        elements.push(<h3 key={key++}>{line.slice(4)}</h3>);
+        elements.push(<h3 key={key++} className="prose-blog">{line.slice(4)}</h3>);
+      } else if (line.startsWith("- ")) {
+        const html = line.slice(2)
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        elements.push(
+          <li key={key++} className="prose-blog" dangerouslySetInnerHTML={{ __html: html }} />
+        );
       } else if (line.trim() === "") {
         continue;
       } else {
