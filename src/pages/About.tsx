@@ -17,7 +17,7 @@ const About = () => {
       <h1 className="text-3xl font-semibold tracking-tight mb-8">About</h1>
       <div className="space-y-6 mb-16">
         <p className="text-muted-foreground leading-relaxed">
-          I'm a student who got into CS because of cybersecurity — and now I'm taking the long way there. That means a lot of C++, data structures, operating systems, and networking before the fun stuff.
+          I'm a student who got into CS because of cybersecurity — and now I'm building my way there. That means a lot of C++, data structures, operating systems, and networking before the fun stuff.
         </p>
         <p className="text-muted-foreground leading-relaxed">
           This is where I keep track of what I'm learning. Partly for myself, partly in case it's useful to someone else.
