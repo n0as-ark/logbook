@@ -11,7 +11,7 @@ const Index = () => {
           Building my way into cybersecurity.
         </h1>
         <p className="text-muted-foreground leading-relaxed max-w-lg">
-          Notes on what I'm learning — C++, systems, networking, and eventually the fun stuff. Written for myself, useful if it helps someone else.
+          Notes on what I'm learning — C++, systems, networking, cryptography, and eventually the fun stuff. Written for myself, useful if it helps someone else.
         </p>
       </section>
       {/* Latest posts */}
