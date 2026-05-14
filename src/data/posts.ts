@@ -18,11 +18,12 @@ export const posts: Post[] = [
     tags: ["Cryptography", "Python"],
     excerpt: "A lot of organizations still lock down sensitive files with nothing more than an Excel or Word password. In this post, I look at why that falls short of real encryption - and walk through a small project I built to make that gap visible.",
     readTime: "4 min",
-    content: `Across many industries, sensitive data - employee records,financial documents, personal identifiers - gets shared as Excel or Word files protected by a simple password.
+    content: `Across many industries, sensitive data - employee records, financial documents, personal identifiers - gets shared as Excel or Word files protected by a simple password.
 
     It feels secure. You set a password, the file locks, done.
 
-    But what does that password actually do - and how secure is it really? I wanted to find out, so I decided to build an encryption tool from scratch to understand what's really going on under the hood.
+    But what does that password actually do - and how secure is it really?
+    I wanted to find out, so I decided to build an encryption tool from scratch to understand what's really going on under the hood.
 
     ## What Is Encryption, Really?
 
