@@ -22,6 +22,7 @@ const BlogPost = () => {
     const elements: JSX.Element[] = [];
     let inCodeBlock = false;
     let codeLines: string[] = [];
+    let listItems: JSX.Element[] = [];
     let key = 0;
 
     const flush = () => {
@@ -35,6 +36,12 @@ const BlogPost = () => {
       }
     };
 
+    const flushList = () => {
+      if (listItems.length > 0) {
+        elements.push(<ul key={key++} className="prose-blog list-disc pl-5 space-y-1 mb-4">{listItems}</ul>);
+        listItems = [];
+      }
+    };
     for (const line of lines) {
       if (line.startsWith("```")) {
         if (inCodeBlock) {
@@ -52,20 +59,22 @@ const BlogPost = () => {
       }
 
       if (line.startsWith("## ")) {
+        flushList();
         elements.push(<h2 key={key++} className="prose-blog">{line.slice(3)}</h2>);
       } else if (line.startsWith("### ")) {
+        flushList();
         elements.push(<h3 key={key++} className="prose-blog">{line.slice(4)}</h3>);
       } else if (line.startsWith("- ")) {
         const html = line.slice(2)
           .replace(/`([^`]+)`/g, '<code>$1</code>')
           .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-        elements.push(
-          <li key={key++} className="prose-blog" dangerouslySetInnerHTML={{ __html: html }} />
-        );
+        listItems.push(<li key={key++} dangerouslySetInnerHTML={{ __html: html }} />);
       } else if (line.trim() === "") {
+        flushList();
         continue;
       } else {
         // Handle inline code and bold
+        flushList();
         const html = line
           .replace(/`([^`]+)`/g, '<code>$1</code>')
           .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -74,6 +83,7 @@ const BlogPost = () => {
         );
       }
     }
+    flushList();
     flush();
     return elements;
   };
