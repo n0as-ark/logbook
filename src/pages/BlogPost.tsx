@@ -50,7 +50,7 @@ const BlogPost = () => {
       }
     };
 
-    const flushTable = () = > {
+    const flushTable = () => {
       if (tableLines.length < 2) { tableLines=[]; return; }
       const parseRow = (row) =>
         row.split("|").map(c=>c.trim()).filter(Boolean);
