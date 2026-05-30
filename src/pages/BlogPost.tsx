@@ -17,12 +17,19 @@ const BlogPost = () => {
     );
   }
 
+  const renderInline = (text: string) =>
+    text
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  
   const renderContent = (content: string) => {
     const lines = content.split("\n");
     const elements: JSX.Element[] = [];
     let inCodeBlock = false;
     let codeLines: string[] = [];
     let listItems: JSX.Element[] = [];
+    let tableLines: string[] = [];
     let key = 0;
 
     const flush = () => {
