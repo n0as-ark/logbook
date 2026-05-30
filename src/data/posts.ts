@@ -55,19 +55,19 @@ In the next post, I'll implement XOR encryption from scratch, walk through exact
    readTime: "5 min",
    content: `In the last post, I talked about how a password prompt does not automatically mean strong protection. In modern Office files, a password is usually used to derive a real encryption key for algorithms like AES. But older protection methods could be much weaker, which makes XOR a useful place to start if the goal is to understand what encryption is actually doing behind the scenes.
    So instead of jumping straight into modern cryptography, I want to begin with XOR. Not because it is secure, but because it is one of the clearest ways to see how plaintext becomes ciphertext, and how a weak design can fail very quickly.
-   ## What is XOR?
-   XOR stands for *exclusive or*. It is a bitwise operation that compares two bits and returns \`1\` if they are different, and \`0\` if they are the same.
-   | A | B | A XOR B |
-   |---|---|---------|
-   | 0 | 0 | 0 |
-   | 0 | 1 | 1 |
-   | 1 | 0 | 1 |
-   | 1 | 1 | 0 |
-   What makes XOR interesting is that it is reversible. If you apply XOR to a value with the same key twice, you get the original value back. That means the same operation can be used for both encryption and decryption.
-   \`\`\`python
-   5 ^ 3  # 6
-   6 ^ 3  # 5
-   \`\`\`
-   Simple and elegant. But in this case, that simplicity is also the weakness.`,
+## What is XOR?
+XOR stands for *exclusive or*. It is a bitwise operation that compares two bits and returns \`1\` if they are different, and \`0\` if they are the same.
+| A | B | A XOR B |
+|---|---|---------|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
+What makes XOR interesting is that it is reversible. If you apply XOR to a value with the same key twice, you get the original value back. That means the same operation can be used for both encryption and decryption.
+\`\`\`python
+5 ^ 3  # 6
+6 ^ 3  # 5
+\`\`\`
+Simple and elegant. But in this case, that simplicity is also the weakness.`,
   },
 ];
