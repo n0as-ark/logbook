@@ -36,7 +36,7 @@ const BlogPost = () => {
       if (codeLines.length > 0) {
         elements.push(
           <pre key={key++}>
-            <code>{JSON.stringify(codeLines}</code>
+            <code>{JSON.stringify(codeLines)}</code>
           </pre>
         );
         codeLines = [];
