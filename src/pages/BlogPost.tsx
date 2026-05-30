@@ -56,7 +56,24 @@ const BlogPost = () => {
         row.split("|").map(c=>c.trim()).filter(Boolean);
       const headers = parseRow(tableLines[0]);
       const body = tableLines.slice(2);
-      elements.push(<table>...</table>);
+      elements.push(
+        <table key={key++} className="w-full text-sm border-collapse mb-6 mt-2">
+          <thread><tr>
+            {headers.map((h,i) => (
+              <th key={i} className="border border-border px-4 py-2 text-left font-medium text-muted-foreground bg-muted/40">{h}</th>
+            ))}
+          </tr></thread>
+          <tbody>
+            {body.map((row, ri) => (
+              <tr key={ri}>
+                {parseRow(row).map((cell, ci) => (
+                  <td key={ci} className="border border-border px-4 py-2 text-center">{cell}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
       tableLines = [];
     };
   
@@ -78,7 +95,7 @@ const BlogPost = () => {
         continue;
       }
 
-      if(line.trim().startWith("|")) {
+      if(line.trim().startsWith("|")) {
         flushList();
         tableLines.push(line);
         continue;
@@ -108,6 +125,7 @@ const BlogPost = () => {
       }
     }
     flushList();
+    flushTable();
     flush();
     return elements;
   };
