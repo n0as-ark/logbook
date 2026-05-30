@@ -60,7 +60,7 @@ const BlogPost = () => {
         <table key={key++} className="w-full text-sm border-collapse mb-6 mt-2">
           <thread><tr>
             {headers.map((h,i) => (
-              <th key={i} className="border border-border px-4 py-2 text-left font-medium text-muted-foreground bg-muted/40">{h}</th>
+              <th key={i} className="border border-border px-4 py-2 text-center font-medium text-muted-foreground bg-muted/40">{h}</th>
             ))}
           </tr></thread>
           <tbody>
