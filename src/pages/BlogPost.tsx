@@ -36,7 +36,7 @@ const BlogPost = () => {
       if (codeLines.length > 0) {
         elements.push(
           <pre key={key++}>
-            <code>{codeLines.join("\n")}</code>
+            <code>{codeLines.map(1 => 1.trimStart()).join("\n")}</code>
           </pre>
         );
         codeLines = [];
@@ -58,11 +58,11 @@ const BlogPost = () => {
       const body = tableLines.slice(2);
       elements.push(
         <table key={key++} className="w-full text-sm border-collapse mb-6 mt-2">
-          <thread><tr>
+          <thead><tr>
             {headers.map((h,i) => (
               <th key={i} className="border border-border px-4 py-2 text-center font-medium text-muted-foreground bg-muted/40">{h}</th>
             ))}
-          </tr></thread>
+          </tr></thead>
           <tbody>
             {body.map((row, ri) => (
               <tr key={ri}>
