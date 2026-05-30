@@ -49,12 +49,25 @@ const BlogPost = () => {
         listItems = [];
       }
     };
+
+    const flushTable = () = > {
+      if (tableLines.length < 2) { tableLines=[]; return; }
+      const parseRow = (row) =>
+        row.split("|").map(c=>c.trim()).filter(Boolean);
+      const headers = parseRow(tableLines[0]);
+      const body = tableLines.slice(2);
+      elements.push(<table>...</table>);
+      tableLines = [];
+    };
+  
     for (const line of lines) {
       if (line.startsWith("```")) {
         if (inCodeBlock) {
           flush();
           inCodeBlock = false;
         } else {
+          flushList();
+          flushTable();
           inCodeBlock = true;
         }
         continue;
@@ -65,6 +78,14 @@ const BlogPost = () => {
         continue;
       }
 
+      if(line.trim().startWith("|")) {
+        flushList();
+        tableLines.push(line);
+        continue;
+      } else if (tableLines.length > 0 ) {
+        flushTable();
+      }
+      
       if (line.startsWith("## ")) {
         flushList();
         elements.push(<h2 key={key++} className="prose-blog">{line.slice(3)}</h2>);
@@ -72,21 +93,17 @@ const BlogPost = () => {
         flushList();
         elements.push(<h3 key={key++} className="prose-blog">{line.slice(4)}</h3>);
       } else if (line.startsWith("- ")) {
-        const html = line.slice(2)
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-        listItems.push(<li key={key++} dangerouslySetInnerHTML={{ __html: html }} />);
+        listItems.push(
+          <li dangerouslySetInnerHTML=
+            {{__html: renderInline(line.slice(2))}} />
+          );
       } else if (line.trim() === "") {
         flushList();
         continue;
       } else {
-        // Handle inline code and bold
         flushList();
-        const html = line
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
         elements.push(
-          <p key={key++} dangerouslySetInnerHTML={{ __html: html }} />
+          <p dangerouslySetInnerHTML={{ __html: renderInline(line)}} />
         );
       }
     }
