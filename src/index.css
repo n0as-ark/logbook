@@ -132,6 +132,9 @@
   .prose-blog pre {
     @apply bg-muted p-4 rounded-sm overflow-x-auto mb-6 font-mono-display text-sm leading-relaxed;
   }
+  .prose-blog pre code {
+    @apply bg-transparent p-0 rounded-none;
+  }
   .prose-blog ul, .prose-blog ol {
     @apply mb-6 pl-6 space-y-2 text-foreground/85;
   }
