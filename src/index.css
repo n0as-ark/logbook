@@ -130,7 +130,7 @@
     @apply font-mono-display text-sm bg-muted px-1.5 py-0.5 rounded-sm;
   }
   .prose-blog pre {
-    @apply bg-muted/40 p-4 rounded-sm overflow-x-auto mb-6 font-mono-display text-sm leading-relaxed;
+    @apply bg-muted/20 p-4 rounded-sm overflow-x-auto mb-6 font-mono-display text-sm leading-relaxed;
   }
   .prose-blog pre code {
     @apply bg-transparent p-0 rounded-none;
