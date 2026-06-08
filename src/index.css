@@ -116,7 +116,7 @@
 @layer utilities {
   .plain-code {
     @apply p-4 rounded-sm overflow-x-auto mb-6 font-mono-display text-sm leading-relaxed;
-    background-color: hsl(0 0% 93%);
+    background-color: hsl(0 0% 93%) !important;
   }
   .font-mono-display {
     font-family: 'JetBrains Mono', monospace;
