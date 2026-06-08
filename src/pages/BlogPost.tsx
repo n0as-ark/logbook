@@ -38,10 +38,10 @@ const BlogPost = () => {
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/(#[^\n]*)/g, "<span style='color:#6A9955'>$1</span>")
         .replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise)\b/g, "<span style='color:#569CD6'>$1</span>")
-        .replace(/\b(\d+)\b/g, "<span style='color:#B5CEA8'>$1</span>")
-        .replace(/("""[\s\S]*?"""|'''[\s\S]*?'''|"[^"]*"|'[^']*')/g, "<span style='color:#CE9178'>$1</span>");
+        .replace(/(b?"[^"]*"|b?'[^']*')/g, "<span style='color:#CE9178'>$1</span>")
+        .replace(/(#[^\n]*)/g, "<span style='color:#6A9955'>$1</span>")
+        .replace(/\b(\d+)\b/g, "<span style='color:#B5CEA8'>$1</span>");
     };
 
     const flush = () => {
