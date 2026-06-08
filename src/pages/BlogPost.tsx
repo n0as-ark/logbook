@@ -44,11 +44,12 @@ const BlogPost = () => {
 
     const flush = () => {
       if (codeLines.length > 0) {
-        const highlighted = highlight(codeLines.join("\n"));
+        const raw = codeLines.join("\n");
+        const content = currentLang ? highlight(raw) : raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         elements.push(
           <pre key={key++} style={{ background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem" }}>
             <code style={{ fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" }}
-              dangerouslySetInnerHTML={{ __html: highlighted }} />
+              dangerouslySetInnerHTML={{ __html: content }} />
           </pre>
         );
         codeLines = [];
