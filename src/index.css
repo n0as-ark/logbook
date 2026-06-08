@@ -152,6 +152,6 @@
     @apply border-l-2 border-accent pl-4 italic text-muted-foreground mb-6;
   }
   .prose-blog p + ul {
-    margin-top: -1.5rem;
+    margin-top: -0.75rem;
   }
 }
