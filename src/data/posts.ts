@@ -63,6 +63,16 @@ XOR stands for *exclusive or*. It is a bitwise operation that compares two bits 
 | 0 | 1 | 1 |
 | 1 | 0 | 1 |
 | 1 | 1 | 0 |
+For example, if we write 5 and 3 in binary:
+- 5 is **101**
+- 3 is **011**
+Now we apply XOR bit by bit:
+\`\`\`
+5 → 101
+3 → 011
+────────
+6 → 110
+\`\`\`
 What makes XOR interesting is that it is reversible. If you apply XOR to a value with the same key twice, you get the original value back. That means the same operation can be used for both encryption and decryption.
 \`\`\`python
 5 ^ 3  # 6
