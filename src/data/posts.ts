@@ -79,6 +79,24 @@ What makes XOR interesting is that it is reversible. If you apply XOR to a value
 5 ^ 3  # 6
 6 ^ 3  # 5
 \`\`\`
-Simple and elegant. But in this case, that simplicity is also the weakness.`,
+Simple and elegant. But in this case, that simplicity is also the weakness.
+## Building XOR encryption in Python
+Here's the most basic version: take each byte of a message and XOR it with a single-byte key.
+\`\`\`python
+def xor_encrypt(plaintext: bytes, key: int) -> bytes:
+  return bytes(byte ^ key for byte in plaintext)
+
+xor_decrypt = xor_encrypt
+
+message = b"Hello, World!"
+key = 13
+
+ciphertext = xor_encrypt(message, key)
+recovered = xor_decrypt(ciphertext, key)
+
+print(ciphertext)
+print(recovered)
+\`\`\`
+This works exactly as expected. The original message turns into unreadable bytes, and applying the same key again restores it. At a mechanical level, that is encryption.`,
   },
 ];
