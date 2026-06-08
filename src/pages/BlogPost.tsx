@@ -1,20 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { posts } from "@/data/posts";
 import { ArrowLeft } from "lucide-react";
-import { useEffect } from "react";
-import * as Prism from "prismjs";
-import "prismjs/components/prism-python";
-import "prismjs/themes/prism-tomorrow.css";
 
 const BlogPost = () => {
   const { slug } = useParams();
   const post = posts.find((p) => p.slug === slug);
-
-  useEffect(() => {
-    if(typeof Prism !== "undefined" && typeof Prism.highlightAll === "function"){
-      Prism.highlishtAll();
-    }
-  }, [post]);
   
   if (!post) {
     return (
@@ -43,13 +33,22 @@ const BlogPost = () => {
     let tableLines: string[] = [];
     let key = 0;
 
+    const highlight = (code: string) => {
+      return code
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/(#[^\n]*)/g, '<span style="color:#6A9955">$1</span>')
+        .replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise)\b/g, '<span style="color:#569CD6">$1</span>')
+        .replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>')
+        .replace(/("""[\s\S]*?"""|'''[\s\S]*?'''|"[^"]*"|'[^']*')/g, '<span style="color:#CE9178">$1</span>');
+    };
+
     const flush = () => {
       if (codeLines.length > 0) {
+        const highlighted = highlight(codeLines.join("\n"));
         elements.push(
-          <pre key={key++} className={`language-${currentLang || "none"}`}>
-            <code className={`language-${currentLang || "none"}`}>
-              {codeLines.map(line => line.trimStart()).join("\n")}
-            </code>
+          <pre key={key++} style={{ background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem" }}>
+            <code style={{ fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" }}
+              dangerouslySetInnerHTML={{ __html: highlighted }} />
           </pre>
         );
         codeLines = [];
