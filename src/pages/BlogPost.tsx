@@ -39,8 +39,15 @@ const BlogPost = () => {
         if (l.trimStart().startsWith("#")) {
           return `<span style="color:#6A9955">${l}</span>`;
         }
+        // Strings first
         l = l.replace(/(b?"[^"]*")/g, '<span style="color:#CE9178">$1</span>');
-        l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise)\b/g, '<span style="color:#569CD6">$1</span>');
+        // Keywords
+        l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise|print)\b/g, '<span style="color:#569CD6">$1</span>');
+        // Types
+        l = l.replace(/\b(bytes|int|str|float|bool|list|dict|tuple|set)\b/g, '<span style="color:#4EC9B0">$1</span>');
+        // Function names
+        l = l.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
+        // Numbers
         l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
         return l;
       }).join("\n");
