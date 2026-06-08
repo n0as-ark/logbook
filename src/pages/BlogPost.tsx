@@ -32,15 +32,15 @@ const BlogPost = () => {
     let listItems: JSX.Element[] = [];
     let tableLines: string[] = [];
     let key = 0;
-
+    
     const highlight = (code: string) => {
       return code.split("\n").map(line => {
         let l = line.replace(/&/g, "&amp;").replace(/</g, "&lt;");
         if (l.trimStart().startsWith("#")) {
           return `<span style="color:#6A9955">${l}</span>`;
         }
-        l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise)\b/g, '<span style="color:#569CD6">$1</span>');
         l = l.replace(/(b?"[^"]*")/g, '<span style="color:#CE9178">$1</span>');
+        l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise)\b/g, '<span style="color:#569CD6">$1</span>');
         l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
         return l;
       }).join("\n");
@@ -56,7 +56,7 @@ const BlogPost = () => {
             className={isPython ? "" : ""} 
             style={isPython 
               ? { background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem" } 
-              : { background: "hsl(0 0% 88%)", padding: "1rem", borderRadius: "2px", overflowX: "auto", marginBottom: "1.5rem", fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6" }}>
+              : { background: "hsl(0 0% 85%)", padding: "1rem", borderRadius: "2px", overflowX: "auto", marginBottom: "1.5rem", fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6" }}>
             <code style={isPython ? { fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" } : {}}
               dangerouslySetInnerHTML={{ __html: content }} />
           </pre>
