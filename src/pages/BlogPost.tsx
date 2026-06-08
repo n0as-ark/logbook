@@ -47,10 +47,11 @@ const BlogPost = () => {
     const flush = () => {
       if (codeLines.length > 0) {
         const raw = codeLines.join("\n");
-        const content = currentLang ? highlight(raw) : raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const isPython = currentLang === "python";
+        const content = isPython ? highlight(raw) : raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         elements.push(
-          <pre key={key++} style={{ background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem" }}>
-            <code style={{ fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" }}
+          <pre key={key++} style={isPython ? { background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem" } : {}}>
+            <code style={isPython ? { fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" } : {}}
               dangerouslySetInnerHTML={{ __html: content }} />
           </pre>
         );
