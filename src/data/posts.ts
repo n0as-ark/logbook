@@ -73,6 +73,7 @@ Now we apply XOR bit by bit:
 ────────
 6 → 110
 \`\`\`
+The result **110** in binary is 6 in decimal, so 5 XOR 3 = 6.
 What makes XOR interesting is that it is reversible. If you apply XOR to a value with the same key twice, you get the original value back. That means the same operation can be used for both encryption and decryption.
 \`\`\`python
 5 ^ 3  # 6
