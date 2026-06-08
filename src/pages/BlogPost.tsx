@@ -10,6 +10,10 @@ const BlogPost = () => {
   const { slug } = useParams();
   const post = posts.find((p) => p.slug === slug);
 
+  useEffect(() => {
+    Prism.highlishtAll();
+  }, [post]);
+  
   if (!post) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-16">
@@ -32,6 +36,7 @@ const BlogPost = () => {
     const elements: JSX.Element[] = [];
     let inCodeBlock = false;
     let codeLines: string[] = [];
+    let currentLang = "";
     let listItems: JSX.Element[] = [];
     let tableLines: string[] = [];
     let key = 0;
@@ -39,11 +44,14 @@ const BlogPost = () => {
     const flush = () => {
       if (codeLines.length > 0) {
         elements.push(
-          <pre key={key++}>
-            <code>{codeLines.map(line => line.trimStart()).join("\n")}</code>
+          <pre key={key++} className={`language-${currentLang || "none"}`}>
+            <code className={`language-${currentLang || "none"}`}>
+              {codeLines.map(line => line.trimStart()).join("\n")}
+            </code>
           </pre>
         );
         codeLines = [];
+        currentLang = "";
       }
     };
 
@@ -90,6 +98,7 @@ const BlogPost = () => {
           flushList();
           flushTable();
           inCodeBlock = true;
+          currentLang = line.slice(3).trim();
         }
         continue;
       }
