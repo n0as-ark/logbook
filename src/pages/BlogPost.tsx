@@ -11,7 +11,9 @@ const BlogPost = () => {
   const post = posts.find((p) => p.slug === slug);
 
   useEffect(() => {
-    Prism.highlishtAll();
+    if(typeof Prism !== "undefined" && typeof Prism.highlightAll === "function"){
+      Prism.highlishtAll();
+    }
   }, [post]);
   
   if (!post) {
