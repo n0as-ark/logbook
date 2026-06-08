@@ -2,15 +2,9 @@ import { useParams, Link } from "react-router-dom";
 import { posts } from "@/data/posts";
 import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
-useEffect(() => {
-  const loadPrism = async () => {
-    const Prism = (await import("prismjs")).default;
-    await import ("prismjs/components/prism-python");
-    await import ("prismjs/themes/prism-tomorrow.css");
-    Prism.highlightAll();
-  };
-  loadPrism();
-}, [post]);
+import Prism from "prismjs";
+import "prismjs/components/prism-python";
+import "prismjs/themes/prism-tomorrow.css";
 
 const BlogPost = () => {
   const { slug } = useParams();
