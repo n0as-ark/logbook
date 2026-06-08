@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { posts } from "@/data/posts";
 import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
-import Prism from "prismjs";
+import * as Prism from "prismjs";
 import "prismjs/components/prism-python";
 import "prismjs/themes/prism-tomorrow.css";
 
