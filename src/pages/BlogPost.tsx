@@ -35,7 +35,7 @@ const BlogPost = () => {
 
     const highlight = (code: string) => {
       return code.split("\n").map(line => {
-        let l = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        let l = line.replace(/&/g, "&amp;").replace(/</g, "&lt;");
         if (l.trimStart().startsWith("#")) {
           return `<span style="color:#6A9955">${l}</span>`;
         }
