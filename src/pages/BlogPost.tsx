@@ -34,14 +34,16 @@ const BlogPost = () => {
     let key = 0;
 
     const highlight = (code: string) => {
-      return code
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise)\b/g, '<span style="color:#569CD6">$1</span>')
-        .replace(/(b?&quot;[^&]*&quot;)/g, '<span style="color:#CE9178">$1</span>')
-        .replace(/(#[^\n]*)/g, '<span style="color:#6A9955">$1</span>')
-        .replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+      return code.split("\n").map(line => {
+        let l = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        if (l.trimStart().startsWith("#")) {
+          return `<span style="color:#6A9955">${l}</span>`;
+        }
+        l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise)\b/g, '<span style="color:#569CD6">$1</span>');
+        l = l.replace(/(b?"[^"]*")/g, '<span style="color:#CE9178">$1</span>');
+        l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+        return l;
+      }).join("\n");
     };
 
     const flush = () => {
