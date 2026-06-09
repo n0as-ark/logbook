@@ -117,6 +117,7 @@ That is why single byte XOR is not something you would rely on for real world pr
 There is another weakness too: if part of the original plaintext is predictable, for example a file header or a standard phrase, XOR can leak the key very quicky. That kind of weakness is one reason real encryption systems need more than a simple reversible operation.
 ### Why learn it anyway?
 Even though XOR is weak on its own, it is not useless. XOR still appears inside modern cryptographic algorithms, but there is only one small component inside a much larger design with strong keys, multiple rounds, and carefully constructed transformations.
-That is exactly why I think it is worth building from scratch. If you understand how a simple scheme like XOR works, it becomes much easier to see why modern encryption needs things like large key sizes, key derivation, and stronger cipher structure.`,
+That is exactly why I think it is worth building from scratch. If you understand how a simple scheme like XOR works, it becomes much easier to see why modern encryption needs things like large key sizes, key derivation, and stronger cipher structure.
+> → **Next up:** We'll look at multi-byte XOR with a repeating key - a step up from single-byte, but still breakable with a technique called frequency analysis.`,
   },
 ];
