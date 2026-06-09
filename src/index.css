@@ -151,6 +151,9 @@
   .prose-blog blockquote {
     @apply border-l-2 border-accent pl-4 italic text-muted-foreground mb-6;
   }
+  .prose-blog blockquote p {
+    @apply mb-0;
+  }
   .prose-blog p + ul {
     margin-top: -0.5 rem;
   }
