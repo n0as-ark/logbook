@@ -49,7 +49,7 @@ In the next post, I'll implement XOR encryption from scratch, walk through exact
   },
   {title: "XOR Encryption: A Simple Cipher That Breaks Very Easily",
    slug: "xor-cipher-basics",
-   date:"2026-05-18",
+   date:"2026-05-24",
    tags: ["Cryptography", "Python"],
    excerpt: "Before jumping into modern cryptography, I want to start with XOR - the weakest possible cipher. Not because it is secure, but because it is the clearest way to see how plaintext becomes ciphertext, and how a weak design can fail very quickly.",
    readTime: "5 min",
