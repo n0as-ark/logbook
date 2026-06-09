@@ -137,7 +137,7 @@ const BlogPost = () => {
       if (line.startsWith("> ")) {
         flushList();
         elements.push(
-          <blockquote key={key++} className="prose-blog border border-foreground rounded-lg px-4 py-3 my-6">
+          <blockquote key={key++} className="prose-blog border border-foreground rounded-lg px-4 py-3 my-6 mb-0">
             <p dangerouslySetInnerHTML={{ __html: renderInline(line.slice(2)) }} />
           </blockquote>
         );
