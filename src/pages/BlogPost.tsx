@@ -60,10 +60,10 @@ const BlogPost = () => {
         const content = isPython ? highlight(raw) : raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         elements.push(
           <pre key={key++} 
-            className={isPython ? "" : ""} 
+            className={isPython ? "" : "prose-blog"} 
             style={isPython 
               ? { background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem" } 
-              : { background: "hsl(0 0% 85%)", padding: "1rem", borderRadius: "2px", overflowX: "auto", marginBottom: "1.5rem", fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6" }}>
+              : undefined}>
             <code style={isPython ? { fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" } : {}}
               dangerouslySetInnerHTML={{ __html: content }} />
           </pre>
