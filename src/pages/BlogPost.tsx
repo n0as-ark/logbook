@@ -134,7 +134,14 @@ const BlogPost = () => {
         flushTable();
       }
       
-      if (line.startsWith("## ")) {
+      if (line.startsWith("> ")) {
+        flushList();
+        elements.push(
+          <blockquote key={key++} className="prose-blog border border-border rounded-lg px-4 py-3 my-6">
+            <p dangerouslySetInnerHTML={{ __html: renderInline(line.slice(2)) }} />
+          </blockquote>
+        );
+      } else if (line.startsWith("## ")) {
         flushList();
         elements.push(<h2 key={key++} className="prose-blog">{line.slice(3)}</h2>);
       } else if (line.startsWith("### ")) {
