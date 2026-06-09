@@ -97,6 +97,23 @@ recovered = xor_decrypt(ciphertext, key)
 print(ciphertext)
 print(recovered)
 \`\`\`
-This works exactly as expected. The original message turns into unreadable bytes, and applying the same key again restores it. At a mechanical level, that is encryption.`,
+This works exactly as expected. The original message turns into unreadable bytes, and applying the same key again restores it. At a mechanical level, that is encryption.
+### Why it falls apart
+The problem is the size of the key space. A single byte key only has 256 possible values, which means an attacker can simply try every possible key and check which output looks like real text.
+\`\`\`python
+def brute_force(ciphertext: bytes) -> None:
+  for key in range(256):
+      attempt = xor_decrypt(ciphertext, key)
+      try:
+          text = attempt.decode("utf-8")
+          if " " in text:
+              print(f"Key {key}: {text}")
+      except UnicodeDecodeError:
+          pass
+\`\`\`
+This version makes a very simple assumption: the original plaintext is a normal English sentence, so the brute force loop treats any decoded output that contains a space as "interesting." That is enough for a quick demo, but it is only a heuristic, not a general solution. If the plaintext were something else, such as a numeric PIN or a password with letters, numbers, and a small set of symbols, the `if` condition inside `brute_force` would need to be updated to match that expected format instead.
+The important part is not the exact heuristic, but the fact that every possible key can be tested quickly.
+That is why single byte XOR is not something you would rely on for real world protection. It is useful as a teaching tool, but not as a serious security design.
+There is another weakness too: if part of the original plaintext is predictable, for example a file header or a standard phrase, XOR can leak the key very quicky. That kind of weakness is one reason real encryption systems need more than a simple reversible operation.`,
   },
 ];
