@@ -118,7 +118,8 @@ const BlogPost = () => {
       tableLines = [];
     };
   
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
       if (line.startsWith("```")) {
         if (inCodeBlock) {
           flush();
@@ -168,7 +169,7 @@ const BlogPost = () => {
         continue;
       } else {
         flushList();
-        const isNextLineCode = lines[lines.indexOf(line) + 1]?.startsWith("```");
+        const isNextLineCode = lines[i + 1]?.startsWith("```");
         elements.push(
           <p className={isNextLineCode ? "mb-2 leading-relaxed text-foreground/85" : undefined}
             dangerouslySetInnerHTML={{ __html: renderInline(line)}} />
