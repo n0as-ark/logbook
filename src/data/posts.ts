@@ -139,6 +139,37 @@ int *ptr;    // also valid
 int * ptr;   // also valid
 \`\`\`
 All three mean the same thing. The \`*\` is what makes it a pointer, it declares that \`ptr\` holds an address of an \`int\`, not an \`int\` itself.
-In memory, a pointer value behaves like an address. Its size is fixed per platform, typically 8 bytes on a 64 bit system, regardless of what type it points to.`,
+In memory, a pointer value behaves like an address. Its size is fixed per platform, typically 8 bytes on a 64 bit system, regardless of what type it points to.
+## Making a Pointer point to something
+To make a pointer point at a variable, you use the address of operator \`&\`:
+\`\`\`c++
+int x = 100;
+int* ptr;
+ptr = &x;    // ptr now holds the address of x
+\`\`\`
+You can read `\&x\` as asking where in memory \`x\` lives. The answer, a memory address, gets stored in \`ptr\`.
+**Dereferencing: getting the value back**
+Storing an address is only useful if the program can follow it to the data.
+Dereferencing does exactly that, using the \`*\` operator:
+\`\`\`c++
+int x = 100;
+int* ptr = &x;
+cout << *ptr;    // outputs 100, reads the value at the address ptr holds
+*ptr = 20;       // writes 20 to that address, x is now 20
+\`\`\`
+\`ptr\` is the address, and \`*ptr\` is the value living at that address.
+**What if a pointer should not point to anything?**
+A pointer may point to a valid object, hold a special null value, or contain an indeterminate value if it is uninitialized. When a pointer is not pointing to anything valid on purpose, it should be set to \`nullptr\`:
+\`\`\`c++
+int* ptr = nullptr;
+\`\`\`
+Dereferencing a null pointer is undefined behavior, and in practice it often results in a crash. That is actually helpful, because a hard failure is easier to detect than silent memory corruption.
+**Defining multiple pointers on one line**
+The \`*\` binds to the variable name, not the type. This trips people up:
+\`\`\`c++
+int *ptr1, x:       // ptr1 is a pointer, x is a plain int
+int *ptr2, *ptr3    // both are pointers
+\`\`\`
+`,
   },
 ];
