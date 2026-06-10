@@ -33,22 +33,33 @@ const BlogPost = () => {
     let tableLines: string[] = [];
     let key = 0;
     
-    const highlight = (code: string) => {
+    const highlight = (code: string, lang: string) => {
       return code.split("\n").map(line => {
         let l = line.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-        if (l.trimStart().startsWith("#")) {
-          return `<span style="color:#6A9955">${l}</span>`;
+
+        if (lang === "python") {
+          if (l.trimStart().startsWith("#")) {
+            return `<span style="color:#6A9955">${l}</span>`;
+          }
+          l = l.replace(/(b?"[^"]*")/g, '<span style="color:#CE9178">$1</span>');
+          l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise|print)\b/g, '<span style="color:#569CD6">$1</span>');
+          l = l.replace(/\b(bytes|int|str|float|bool|list|dict|tuple|set)\b/g, '<span style="color:#4EC9B0">$1</span>');
+          l = l.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
+          l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
         }
-        // Strings first
-        l = l.replace(/(b?"[^"]*")/g, '<span style="color:#CE9178">$1</span>');
-        // Keywords
-        l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise|print)\b/g, '<span style="color:#569CD6">$1</span>');
-        // Types
-        l = l.replace(/\b(bytes|int|str|float|bool|list|dict|tuple|set)\b/g, '<span style="color:#4EC9B0">$1</span>');
-        // Function names
-        l = l.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
-        // Numbers
-        l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+
+        if (lang === "c++") {
+          if (l.trimStart().startsWith("//")) {
+            return `<span style="color:#6A9955">${l}</span>`;
+          }
+          l = l.replace(/(\/\/.*)/g, '<span style="color:#6A9955">$1</span>');
+          l = l.replace(/(".*?")/g, '<span style="color:#CE9178">$1</span>');
+          l = l.replace(/\b(int|double|float|char|bool|void|return|new|delete|nullptr|NULL|if|else|for|while|do|class|struct|public|private|protected|const|static|include|using|namespace|cout|cin|endl)\b/g, '<span style="color:#569CD6">$1</span>');
+          l = l.replace(/\b(string|vector|array|auto)\b/g, '<span style="color:#4EC9B0">$1</span>');
+          l = l.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
+          l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+        }
+
         return l;
       }).join("\n");
     };
@@ -56,15 +67,15 @@ const BlogPost = () => {
     const flush = () => {
       if (codeLines.length > 0) {
         const raw = codeLines.join("\n");
-        const isPython = currentLang === "python";
-        const content = isPython ? highlight(raw) : raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const isCoded = currentLang === "python" || currentLang === "c++";
+        const content = isCoded ? highlight(raw, currentLang) : raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         elements.push(
           <pre key={key++} 
-            className={isPython ? "" : "prose-blog"} 
-            style={isPython 
+            className={isCoded ? "" : "prose-blog"} 
+            style={isCoded 
               ? { background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem" } 
               : undefined}>
-            <code style={isPython ? { fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" } : {}}
+            <code style={isCoded ? { fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" } : {}}
               dangerouslySetInnerHTML={{ __html: content }} />
           </pre>
         );
