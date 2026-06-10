@@ -147,7 +147,7 @@ int x = 100;
 int* ptr;
 ptr = &x;    // ptr now holds the address of x
 \`\`\`
-You can read `\&x\` as asking where in memory \`x\` lives. The answer, a memory address, gets stored in \`ptr\`.
+You can read \`&x\` as asking where in memory \`x\` lives. The answer, a memory address, gets stored in \`ptr\`.
 **Dereferencing: getting the value back**
 Storing an address is only useful if the program can follow it to the data.
 Dereferencing does exactly that, using the \`*\` operator:
@@ -167,8 +167,8 @@ Dereferencing a null pointer is undefined behavior, and in practice it often res
 **Defining multiple pointers on one line**
 The \`*\` binds to the variable name, not the type. This trips people up:
 \`\`\`c++
-int *ptr1, x:       // ptr1 is a pointer, x is a plain int
-int *ptr2, *ptr3    // both are pointers
+int *ptr1, x;       // ptr1 is a pointer, x is a plain int
+int *ptr2, *ptr3;    // both are pointers
 \`\`\`
 `,
   },
