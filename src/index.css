@@ -155,6 +155,9 @@
     @apply mb-0;
   }
   .prose-blog p + ul {
-    margin-top: -0.5 rem;
+    margin-top: -0.5rem;
+  }
+  .prose-blog p + pre {
+    margin-top: -1.5rem;
   }
 }
