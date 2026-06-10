@@ -170,8 +170,13 @@ const BlogPost = () => {
       } else {
         flushList();
         const isNextLineCode = lines[i + 1]?.startsWith("```");
+        const isBoldHeading = /^\*\*[^*]+\*\*$/.test(line.trim());
         elements.push(
-          <p className={isNextLineCode ? "mb-2 leading-relaxed text-foreground/85" : "mb-3 leading-relaxed text-foreground/85"}
+          <p className={
+            isBoldHeading ? "mb-1 leading-relaxed text-foreground/85" :
+            isNextLineCode ? "mb-2 leading-relaxed text-foreground/85" :
+            "mb-3 leading-relaxed text-foreground/85"
+          }
             dangerouslySetInnerHTML={{ __html: renderInline(line)}} />
         );
       }
