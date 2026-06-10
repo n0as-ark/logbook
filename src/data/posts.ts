@@ -149,8 +149,7 @@ ptr = &x;    // ptr now holds the address of x
 \`\`\`
 You can read \`&x\` as asking where in memory \`x\` lives. The answer, a memory address, gets stored in \`ptr\`.
 **Dereferencing: getting the value back**
-Storing an address is only useful if the program can follow it to the data.
-Dereferencing does exactly that, using the \`*\` operator:
+Storing an address is only useful if the program can follow it to the data. Dereferencing does exactly that, using the \`*\` operator:
 \`\`\`c++
 int x = 100;
 int* ptr = &x;
