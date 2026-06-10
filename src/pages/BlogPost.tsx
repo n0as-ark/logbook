@@ -169,9 +169,8 @@ const BlogPost = () => {
         continue;
       } else {
         flushList();
-        const isNextLineCode = lines[i + 1]?.startsWith("```");
         elements.push(
-          <p className={isNextLineCode ? "mb-2 leading-relaxed text-foreground/85" : undefined}
+          <p className="mb-2 leading-relaxed text-foreground/85"
             dangerouslySetInnerHTML={{ __html: renderInline(line)}} />
         );
       }
