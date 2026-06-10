@@ -57,6 +57,7 @@ const BlogPost = () => {
           l = l.replace(/\b(string|vector|array|auto)\b/g, '<span style="color:#4EC9B0">$1</span>');
           l = l.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
           l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+          l = l.replace(/(\/\/.*)$/, '<span style="color:#6A9955">$1</span>');
         }
 
         return l;
