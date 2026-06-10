@@ -173,7 +173,7 @@ const BlogPost = () => {
         const isBoldHeading = /^\*\*[^*]+\*\*$/.test(line.trim());
         elements.push(
           <p className={
-            isBoldHeading ? "mb-1 leading-relaxed text-foreground/85" :
+            isBoldHeading ? "mb-2 leading-relaxed text-foreground/85" :
             isNextLineCode ? "mb-2 leading-relaxed text-foreground/85" :
             "mb-3 leading-relaxed text-foreground/85"
           }
