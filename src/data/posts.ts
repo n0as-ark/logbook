@@ -133,7 +133,7 @@ A pointer is a variable that stores the memory address of another object. Why do
 - To allocate large amounts of memory on the heap, independent of any function's lifetime.
 - To link objects together, which is the foundation of data structures like linked lists and trees.
    
-Declaring a pointer
+**Declaring a pointer**
 \`\`\`cpp
 int* ptr;    // preferred by many
 int *ptr;    // also valid
