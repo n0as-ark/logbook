@@ -128,7 +128,7 @@
     @apply text-lg font-semibold mt-6 mb-2 text-foreground;
   }
   .prose-blog p {
-    @apply mb-6 leading-relaxed text-foreground/85;
+    @apply leading-relaxed text-foreground/85;
   }
   .prose-blog code {
     @apply font-mono-display text-sm bg-muted px-1.5 py-0.5 rounded-sm;
