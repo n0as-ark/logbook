@@ -52,7 +52,6 @@ const BlogPost = () => {
           if (l.trimStart().startsWith("//")) {
             return `<span style="color:#6A9955">${l}</span>`;
           }
-          l = l.replace(/(\/\/.*)/g, '<span style="color:#6A9955">$1</span>');
           l = l.replace(/(".*?")/g, '<span style="color:#CE9178">$1</span>');
           l = l.replace(/\b(int|double|float|char|bool|void|return|new|delete|nullptr|NULL|if|else|for|while|do|class|struct|public|private|protected|const|static|include|using|namespace|cout|cin|endl)\b/g, '<span style="color:#569CD6">$1</span>');
           l = l.replace(/\b(string|vector|array|auto)\b/g, '<span style="color:#4EC9B0">$1</span>');
