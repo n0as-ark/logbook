@@ -134,11 +134,11 @@ A pointer is a variable that stores the memory address of another object. Why do
 - To link objects together, which is the foundation of data structures like linked lists and trees.
    
 Declaring a pointer
-\`\`\cpp
+\`\`\`cpp
 int* ptr;    // preferred by many
 int *ptr;    // also valid
 int * ptr;   // also valid
-\`\`\
+\`\`\`
 All three mean the same thing. The \`*\` is what makes it a pointer, it declares that \`ptr\` holds an address of an \`int\`, not an \`int\` itself.
 In memory, a pointer value behaves like an address. Its size is fixed per platform, typically 8 bytes on a 64 bit system, regardless of what type it points to.`,
   },
