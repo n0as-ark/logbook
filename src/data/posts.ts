@@ -120,8 +120,8 @@ Even though XOR is weak on its own, it is not useless. XOR still appears inside 
 That is exactly why I think it is worth building from scratch. If you understand how a simple scheme like XOR works, it becomes much easier to see why modern encryption needs things like large key sizes, key derivation, and stronger cipher structure.
 > → **Next up:** We'll look at multi-byte XOR with a repeating key - a step up from single-byte, but still breakable with a technique called frequency analysis.`,
   },
-  {title: "Pointers and Dynamic Memory in C++",
-   slug: "pointers-and-dynamic-memory-in-cpp",
+  {title: "Pointers and Dynamic Memory in C++ - Part 1",
+   slug: "pointers-and-dynamic-memory-in-cpp-part1",
    date:"2026-05-30",
    tags: ["C++"],
    excerpt: "Pointers, heap allocation, dynamic arrays, and pointer arithmetic were some of the challenging topics when I learned C++. This post walks through each topic in detail - mostly for my own benefit, but hopefully useful for anyone struggling with them as well.",
@@ -234,5 +234,38 @@ arr = nullptr;
 With a heap array, the size can be based on runtime input, not just compile time constants. Once created, that particular array cannot grow on its own. Because it is accessed through a pointer, you can allocate a new larger array, copy the data over, and delete the old one. This is the basic idea behind how resizable arrays are implemented under the hood.
 ## What Comes Next
 This first part focuses on the fundamentals: what pointers are, how they behave on the stack, and how they interact with heap allocation and dynamic arrays. The next part covers \`std::vector\`, pointer arithmetic, and the role of pointers in function interfaces and double pointers.`,
+  },
+  {title: "Pointers and Dynamic Memory in C++ - Part 2",
+   slug: "pointers-and-dynamic-memory-in-cpp-part1",
+   date:"2026-06-07",
+   tags: ["C++"],
+   excerpt: "This second part looks at how std::vector builds on raw pointers and dynamic arrays, how pointer arithmetic really works, and how pointers are used in function parameters and double pointers.",
+   readTime: "10 min",
+   content: `The first part covered basic pointers, stack and heap memory, and raw dynamic arrays. This second part looks at how \`std::vector\` builds on those ideas, how pointer arithmetic actually works, and how pointers are used in function interfaces and double pointers.
+## Vectors, the Standard Library Solution
+Manually managing resizable arrays is error prone. The C++ Standard Library provides \`std::vector\`, which handles dynamic storage management automatically:
+\`\`\`c++
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v;
+
+    for (int i = 0; i < 100; i++) {
+        v.push_back(i * 100);      // appends to the vector, resizes automatically
+    }
+
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i] << endl;
+    }
+
+    for (int val : v) {
+        cout << val << endl;
+    }
+}
+\`\`\`
+Vectors provide dynamic resizing, convenient iteration, and automatic cleanup when they go out of scope. In modern C++, \`std::vector\` is usually the default choice over raw dynamic arrays unless a very specific reason exists to do otherwise.
+## Pointer Arithmetic
+`,
   },
 ];
