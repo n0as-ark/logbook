@@ -192,6 +192,15 @@ int main() {
 }
 \`\`\`
 The key insight is that \`x\` and \`*px\` refer to the same memory cell. Changing one changes the other, because they are the same thing viewed two different ways.
-`,
+## Pointers and the Heap, Dynamic Memory Allocation
+So far, every variable we have used lives on the stack. That is memory that is automatically managed as functions are called and return. Stack variables vanish when their function ends.
+
+The heap, also called the free store, is different. When you use raw \`new\` and \`delete[]\`, memory is requested and released explicitly by the programmer.
+**Allocating with \`new\`**
+\`\`\`c++
+int* ptr = new int;          // allocate one int on the heap
+int* arr = new int[10];      // allocate an array of 10 ints on the heap
+\`\`\`
+\`new\` returns a pointer to the allocated memory. The memory itself has no name, and the only way to reach it is through that pointer.`,
   },
 ];
