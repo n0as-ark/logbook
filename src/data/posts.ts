@@ -208,9 +208,9 @@ Key properties of heap memory when it's managed manually:
 - If the last pointer to it is lost without freeing, that memory becomes inaccessible, which is a **memory leak**.
 **Deallocating with \`delete\`**
 \`\`\`c++
-delete ptr;        \\ free a single object
-delete[] arr;      \\ free an array
-ptr = nullptr;     \\ good practice, reset after deleting
+delete ptr;        // free a single object
+delete[] arr;      // free an array
+ptr = nullptr;     // good practice, reset after deleting
 \`\`\`
 Rules to remember when using \`new\` and \`delete\`:
 - Every \`new\` should have exactly one matching \`delete\`, and every \`new[]\` should have exactly one matching \`delete[]\`.
