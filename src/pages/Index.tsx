@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { posts } from "@/data/posts";
 import PostCard from "@/components/PostCard";
 const Index = () => {
-  const latestPosts = posts.slice(0, 3);
+  const latestPosts = [...posts]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3);
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
       {/* Hero */}
