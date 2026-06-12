@@ -217,6 +217,22 @@ Rules to remember when using \`new\` and \`delete\`:
 - Forgetting \`delete\` leads to a memory leak.
 - Calling \`delete\` twice on the same non null pointer is undefined behavior.
 - Deleting \`nullptr\` is safe and has no effect, so resetting pointers after deletion can help avoid accidental reuse.
-`,
+## Dynamic Arrays
+One practical use of heap allocation is creating arrays whose size is not known until runtime:
+\`\`\`c++
+int size;
+cin >> size;
+int* arr = new int[size];        // size determined at runtime
+
+for (int i = 0; i < size; i++) {
+    arr[i] = i * 2;
+}
+
+delete[] arr;        // freeing arr
+arr = nullptr;
+\`\`\`
+With a heap array, the size can be based on runtime input, not just compile time constants. Once created, that particular array cannot grow on its own. Because it is accessed through a pointer, you can allocate a new larger array, copy the data over, and delete the old one. This is the basic idea behind how resizable arrays are implemented under the hood.
+## What Comes Next
+This first part focuses on the fundamentals: what pointers are, how they behave on the stack, and how they interact with heap allocation and dynamic arrays. The next part covers \`std::vector\`, pointer arithmetic, and the role of pointers in function interfaces and double pointers.`,
   },
 ];
