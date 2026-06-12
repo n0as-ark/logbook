@@ -126,7 +126,7 @@ That is exactly why I think it is worth building from scratch. If you understand
    tags: ["C++"],
    excerpt: "Pointers, heap allocation, dynamic arrays, and pointer arithmetic were some of the challenging topics when I learned C++. This post walks through each topic in detail - mostly for my own benefit, but hopefully useful for anyone struggling with them as well.",
    readTime: "10 min",
-   content: `For a lot of people learning C++, pointers are the first concept that really feels "tricky." That reputation is well-earned, but once the mental model clicks, they become one of the most powerful tools in the language. This post walks through what pointers are, how they live in memory, heap allocation, dynamic arrays, vectors, pointer arithmetic, pointers in functions, and double pointers.
+   content: `For a lot of people learning C++, pointers are the first concept that really feels "tricky." That reputation is well-earned, but once the mental model clicks, they become one of the most powerful tools in the language. This first part covers what pointers are, how they live in memory, how they interact with the heap allocation, and how dynamic arrays work in practice.
 ## What is a Pointer?
 A pointer is a variable that stores the memory address of another object. Why do we need them? Three main reasons:
 - To store a reference to an object, so multiple parts of a program can access the same data without copying it.
@@ -169,6 +169,29 @@ The \`*\` binds to the variable name, not the type. This trips people up:
 int *ptr1, x;       // ptr1 is a pointer, x is a plain int
 int *ptr2, *ptr3;    // both are pointers
 \`\`\`
+## Pointers in Memory
+Let's trace what happens in memory with a concrete example. The exact addresses are illustrative, real programs are free to lay things out differently, but the relationships are what matter.
+\`\`\`c++
+int main() {
+    int x;        // imagine this lives at address 1000
+    int *px;      // imagine this lives at address 1004
+    x = 5;
+    px = &x;
+    
+    cout << x << endl;    // 5, the value of x
+    cout << px << endl;   // 1000, the address px holds (where x lives)
+    cout << *px << endl;  // 5, dereference: value at address 1000
+    cout << &px << endl;  // 1004, the address of px itself
+    
+    x = 10;        // x is now 10, px still points to x
+    *px = 15;      // writes 15 to address 1000, so x is now 15
+    
+    cout << x << endl;    // 15
+    cout << *px << endl;  // 15
+    cout << px << endl;   // 1000, px has not moved
+}
+\`\`\`
+The key insight is that \`x\` and \`*px\` refer to the same memory cell. Changing one changes the other, because they are the same thing viewed two different ways.
 `,
   },
 ];
