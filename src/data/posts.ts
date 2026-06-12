@@ -120,7 +120,7 @@ Even though XOR is weak on its own, it is not useless. XOR still appears inside 
 That is exactly why I think it is worth building from scratch. If you understand how a simple scheme like XOR works, it becomes much easier to see why modern encryption needs things like large key sizes, key derivation, and stronger cipher structure.
 > → **Next up:** We'll look at multi-byte XOR with a repeating key - a step up from single-byte, but still breakable with a technique called frequency analysis.`,
   },
-  {title: "Pointers and Dynamic Memory in C++ - Part 1",
+  {title: "Pointers and Dynamic Memory in C++: Part 1",
    slug: "pointers-and-dynamic-memory-in-cpp-part1",
    date:"2026-05-30",
    tags: ["C++"],
@@ -235,8 +235,8 @@ With a heap array, the size can be based on runtime input, not just compile time
 ## What Comes Next
 This first part focuses on the fundamentals: what pointers are, how they behave on the stack, and how they interact with heap allocation and dynamic arrays. The next part covers \`std::vector\`, pointer arithmetic, and the role of pointers in function interfaces and double pointers.`,
   },
-  {title: "Pointers and Dynamic Memory in C++ - Part 2",
-   slug: "pointers-and-dynamic-memory-in-cpp-part1",
+  {title: "Pointers and Dynamic Memory in C++: Part 2",
+   slug: "pointers-and-dynamic-memory-in-cpp-part2",
    date:"2026-06-07",
    tags: ["C++"],
    excerpt: "This second part looks at how std::vector builds on raw pointers and dynamic arrays, how pointer arithmetic really works, and how pointers are used in function parameters and double pointers.",
