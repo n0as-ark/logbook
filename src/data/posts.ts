@@ -195,12 +195,28 @@ The key insight is that \`x\` and \`*px\` refer to the same memory cell. Changin
 ## Pointers and the Heap, Dynamic Memory Allocation
 So far, every variable we have used lives on the stack. That is memory that is automatically managed as functions are called and return. Stack variables vanish when their function ends.
 
-The heap, also called the free store, is different. When you use raw \`new\` and \`delete[]\`, memory is requested and released explicitly by the programmer.
+The heap, also called the free store, is different. When you use raw \`new\` and \`delete\`, memory is requested and released explicitly by the programmer.
 **Allocating with \`new\`**
 \`\`\`c++
 int* ptr = new int;          // allocate one int on the heap
 int* arr = new int[10];      // allocate an array of 10 ints on the heap
 \`\`\`
-\`new\` returns a pointer to the allocated memory. The memory itself has no name, and the only way to reach it is through that pointer.`,
+\`new\` returns a pointer to the allocated memory. The memory itself has no name, and the only way to reach it is through that pointer.
+Key properties of heap memory when it's managed manually:
+- It persist across function calls, it will not disappear when the current function returns.
+- It stays allocated until it is explicitly freed, or the program ends.
+- If the last pointer to it is lost without freeing, that memory becomes inaccessible, which is a **memory leak**.
+**Deallocating with \`delete\`**
+\`\`\`c++
+delete ptr;        \\ free a single object
+delete[] arr;      \\ free an array
+ptr = nullptr;     \\ good practice, reset after deleting
+\`\`\`
+Rules to remember when using \`new\` and \`delete\`:
+- Every \`new\` should have exactly one matching \`delete\`, and every \`new[]\` should have exactly one matching \`delete[]\`.
+- Forgetting \`delete\` leads to a memory leak.
+- Calling \`delete\` twice on the same non null pointer is undefined behavior.
+- Deleting \`nullptr\` is safe and has no effect, so resetting pointers after deletion can help avoid accidental reuse.
+`,
   },
 ];
