@@ -273,7 +273,7 @@ Target Address = Base Address + (element size x index)
 \`\`\`
 For a \`double\` array, which is 8 bytes per element, starting at address 1000:
 \`\`\`c++
-double * arr = new double[3];        // suppose arr points to address 1000
+double* arr = new double[3];        // suppose arr points to address 1000
 // arr + 1 would conceptually be 1000 + 8*1 = 1008, the next element
 double* x = arr + 1;
 
