@@ -289,6 +289,45 @@ Pointer subtraction between two pointers into the same array gives the distance 
 | arr + 2 | &arr[2] | address of element 2 |
 | arr[0] | *arr | first element |
 | arr[5] | *(arr+5) | sixth element |
+## Pointers and Functions
+Pointers unlock the ability to modify variables in the caller, something you cannot do with plain pass by value.
+**Pass by value (no effect on original)**
+\`\`\`c++
+void func1(int n) {
+    n = n + 1;      // modifies a local copy, caller sees nothing
+}
+
+int main() {
+    int n = 5;
+    func1(n);
+    cout << n << endl;  //still 5
+}
+\`\`\`
+**Pass by reference (modifies original, cleaner syntax)**
+\`\`\`c++
+void func2(int &n) {
+    n = n + 1;      // n is an alias for the caller's variable
+}
+
+int main() {
+    int n = 5;
+    func2(n);
+    cout << n << endl;  // 6
+}
+\`\`\`
+**Pass by pointer (modifies original, explicit)**
+\`\`\`c++
+void func3(int* ptr) {
+    *ptr = *ptr + 1;    // dereference to reach the original variable
+}
+
+int main() {
+    int n = 5;
+    func3(&n);          // pass the address of n
+    cout << n << endl;  // 6
+}
+\`\`\`
+Both pass by reference and pass by pointer can modify the original object, but they feel different at the call site. References are syntactically cleaner, while pointers make the indirection explicit and can also be null.
 `,
   },
 ];
