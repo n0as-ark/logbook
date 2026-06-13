@@ -285,10 +285,10 @@ arr = nullptr;
 Pointer subtraction between two pointers into the same array gives the distance in elements, not bytes. This also explains array indexing. \`arr[i]\` is exactly equivalent to \`*(arr + i)\`, and they compile down to the same thing.
 | Expression | Equivalent | Meaning |
 |------------|------------|---------|
-| \`arr\` | \`&arr[0]\` | base address |
-| \`arr + 2\` | \`&arr[2]\` | address of element 2 |
-| \`arr[0]\` | \`*arr\` | first element |
-| \`arr[5]\` | \`*(arr+5)\` | sixth element |
+| arr | &arr[0] | base address |
+| arr + 2 | &arr[2] | address of element 2 |
+| arr[0] | *arr | first element |
+| arr[5] | *(arr+5) | sixth element |
 `,
   },
 ];
