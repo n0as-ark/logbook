@@ -277,7 +277,7 @@ For a \`double\` array, which is 8 bytes per element, starting at address 1000:
 double* x = arr + 1;
 
 cout << x - arr << endl;        // outputs 1, difference in elements, not bytes
-\`\`\
+\`\`\`
 Pointer subtraction between two pointers into the same array gives the distance in elements, not bytes. This also explains array indexing. \`arr[i]\` is exactly equivalent to \`*(arr + i)\`, and they compile down to the same thing.
 | Expression | Equivalent | Meaning |
 |------------|------------|---------|
