@@ -278,6 +278,7 @@ double * arr = new double[3];        // suppose arr points to address 1000
 double* x = arr + 1;
 
 cout << x - arr << endl;        // outputs 1, difference in elements, not bytes
+
 delete[] arr;
 arr = nullptr;
 \`\`\`
