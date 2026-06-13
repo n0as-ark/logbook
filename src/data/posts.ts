@@ -266,6 +266,25 @@ int main() {
 \`\`\`
 Vectors provide dynamic resizing, convenient iteration, and automatic cleanup when they go out of scope. In modern C++, \`std::vector\` is usually the default choice over raw dynamic arrays unless a very specific reason exists to do otherwise.
 ## Pointer Arithmetic
+C++ allows arithmetic on pointers to elements in an array. Adding 1 to a pointer does not add 1 byte; it advances by the size of the type being pointed to:
+\`\`\`
+Target Address = Base Address + (element size  index)
+\`\`\`
+For a \`double\` array, which is 8 bytes per element, starting at address 1000:
+\`\`\`c++
+     double * arr = new double[3];        // suppose arr points to address 1000
+// arr + 1 would conceptually be 1000 + 8*1 = 1008, the next element
+double* x = arr + 1;
+
+cout << x - arr << endl;        // outputs 1, difference in elements, not bytes
+\`\`\
+Pointer subtraction between two pointers into the same array gives the distance in elements, not bytes. This also explains array indexing. \`arr[i]\` is exactly equivalent to \`*(arr + i)\`, and they compile down to the same thing.
+| Expression | Equivalent | Meaning |
+|------------|------------|---------|
+| \`arr\` | \`&arr[0]\` | base address |
+| \`arr + 2\` | \`&arr[2]\` | address of element 2 |
+| \`arr[0]\` | \`*arr\` | first element |
+| \`arr[5]\` | \`*(arr+5)\` | sixth element |
 `,
   },
 ];
