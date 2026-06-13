@@ -269,7 +269,7 @@ Vectors provide dynamic resizing, convenient iteration, and automatic cleanup wh
 C++ allows arithmetic on pointers to elements in an array. Adding 1 to a pointer does not add 1 byte; it advances by the size of the type being pointed to:
 
 \`\`\`
-Target Address = Base Address + (element size  index)
+Target Address = Base Address + (element size x index)
 \`\`\`
 For a \`double\` array, which is 8 bytes per element, starting at address 1000:
 \`\`\`c++
