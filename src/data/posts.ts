@@ -203,7 +203,7 @@ int* arr = new int[10];      // allocate an array of 10 ints on the heap
 \`\`\`
 \`new\` returns a pointer to the allocated memory. The memory itself has no name, and the only way to reach it is through that pointer.
 Key properties of heap memory when it's managed manually:
-- It persist across function calls, it will not disappear when the current function returns.
+- It persists across function calls, it will not disappear when the current function returns.
 - It stays allocated until it is explicitly freed, or the program ends.
 - If the last pointer to it is lost without freeing, that memory becomes inaccessible, which is a **memory leak**.
 **Deallocating with \`delete\`**
