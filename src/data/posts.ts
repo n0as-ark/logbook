@@ -266,7 +266,7 @@ int main() {
 \`\`\`
 Vectors provide dynamic resizing, convenient iteration, and automatic cleanup when they go out of scope. In modern C++, \`std::vector\` is usually the default choice over raw dynamic arrays unless a very specific reason exists to do otherwise.
 ## Pointer Arithmetic
-C++ allows arithmetic on pointers to elements in an array. Adding 1 to a pointer does not add 1 byte; it advances by the size of the type being pointed to:
+C++ allows arithmetic on pointers to array elements. Adding 1 to a pointer does not add 1 byte; it advances by the size of the type being pointed to:
 
 \`\`\`
 Target Address = Base Address + (element size x index)
