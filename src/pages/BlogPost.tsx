@@ -74,7 +74,7 @@ const BlogPost = () => {
             className={isCoded ? "" : "prose-blog"} 
             style={isCoded 
               ? { background: "#1E1E1E", padding: "1rem", borderRadius: "4px", overflowX: "auto", marginBottom: "1.5rem", marginTop: "1.5rem"} 
-              : undefined}>
+              : { marginTop: "1.5rem", marginBottom: "1.5rem" }}>
             <code style={isCoded ? { fontFamily: "monospace", fontSize: "0.875rem", lineHeight: "1.6", color: "#D4D4D4" } : {}}
               dangerouslySetInnerHTML={{ __html: content }} />
           </pre>
