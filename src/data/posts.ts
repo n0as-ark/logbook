@@ -328,6 +328,13 @@ int main() {
 }
 \`\`\`
 Both pass by reference and pass by pointer can modify the original object, but they feel different at the call site. References are syntactically cleaner, while pointers make the indirection explicit and can also be null.
+Use references when:
+- The argument must always exist, and null should not be allowed.
+- The binding should not be reseated to refer to a different object.
+- Simpler syntax is preferred at the call site.
+Use pointers when:
+- The argument is optional, and you need to represent no object via \`nullptr\`.
+- You may want to reseat the pointer to another object.
 `,
   },
 ];
