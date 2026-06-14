@@ -41,23 +41,44 @@ const BlogPost = () => {
           if (l.trimStart().startsWith("#")) {
             return `<span style="color:#6A9955">${l}</span>`;
           }
-          l = l.replace(/(b?"[^"]*")/g, '<span style="color:#CE9178">$1</span>');
-          l = l.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise|print)\b/g, '<span style="color:#569CD6">$1</span>');
-          l = l.replace(/\b(bytes|int|str|float|bool|list|dict|tuple|set)\b/g, '<span style="color:#4EC9B0">$1</span>');
-          l = l.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
-          l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+
+          const commentMatch = l.match(/#.*$/);
+          let codePart = l;
+          let commentPart = "";
+          if (commentMatch) {
+            codePart = l.slice(0, commentMatch.index);
+            commentPart = `<span style="color:#6A9955">${commentMatch[0]}</span>`;
+          }
+
+          codePart = codePart.replace(/(b?"[^"]*")/g, '<span style="color:#CE9178">$1</span>');
+          codePart = codePart.replace(/\b(def|return|import|from|as|if|else|elif|for|in|while|class|with|pass|break|continue|and|or|not|is|None|True|False|lambda|yield|try|except|finally|raise|print)\b/g, '<span style="color:#569CD6">$1</span>');
+          codePart = codePart.replace(/\b(bytes|int|str|float|bool|list|dict|tuple|set)\b/g, '<span style="color:#4EC9B0">$1</span>');
+          codePart = codePart.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
+          codePart = codePart.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+
+          l = codePart + commentPart;
         }
 
         if (lang === "c++") {
           if (l.trimStart().startsWith("//")) {
             return `<span style="color:#6A9955">${l}</span>`;
           }
-          l = l.replace(/(".*?")/g, '<span style="color:#CE9178">$1</span>');
-          l = l.replace(/\b(int|double|float|char|bool|void|return|new|delete|nullptr|NULL|if|else|for|while|do|class|struct|public|private|protected|const|static|include|using|namespace|cout|cin|endl)\b/g, '<span style="color:#569CD6">$1</span>');
-          l = l.replace(/\b(string|vector|array|auto)\b/g, '<span style="color:#4EC9B0">$1</span>');
-          l = l.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
-          l = l.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
-          l = l.replace(/(\/\/.*)$/, '<span style="color:#6A9955">$1</span>');
+
+          const commentMatch = l.match(/\/\/.*$/);
+          let codePart = l;
+          let commentPart = "";
+          if (commentMatch) {
+            codePart = l.slice(0, commentMatch.index);
+            commentPart = `<span style="color:#6A9955">${commentMatch[0]}</span>`;
+          }
+
+          codePart = codePart.replace(/(".*?")/g, '<span style="color:#CE9178">$1</span>');
+          codePart = codePart.replace(/\b(int|double|float|char|bool|void|return|new|delete|nullptr|NULL|if|else|for|while|do|class|struct|public|private|protected|const|static|include|using|namespace|cout|cin|endl)\b/g, '<span style="color:#569CD6">$1</span>');
+          codePart = codePart.replace(/\b(string|vector|array|auto)\b/g, '<span style="color:#4EC9B0">$1</span>');
+          codePart = codePart.replace(/\b([a-z_][a-z0-9_]*)\s*(?=\()/g, '<span style="color:#DCDCAA">$1</span>');
+          codePart = codePart.replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>');
+
+          l = codePart + commentPart;
         }
 
         return l;
