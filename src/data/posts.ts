@@ -335,6 +335,26 @@ Use references when:
 Use pointers when:
 - The argument is optional, and you need to represent no object via \`nullptr\`.
 - You may want to reseat the pointer to another object.
+## Double Pointers
+A pointer can point to another pointer. This is a double pointer, declared with \`**\`:
+\`\`\`c++
+int n = 5;
+int* pt = &n;
+int** doublePtr = &ptr;
+\`\`\`
+If, for example, \`n\` is at address 1000, \`ptr\` is at 1004, and \`doublePtr\` is at 1012:
+\`\`\`c++
+cout << n << endl;            // 5
+cout << &n << endl;           // 1000, address of n
+cout << ptr << endl;          // 1000, what ptr holds
+cout << &ptr << endl;         // 1004, address of ptr
+cout << *ptr << endl;         // 5, dereference ptr
+cout << doublePtr << endl;    // 1004, what doublePtr holds
+cout << *doublePtr << endl;   // 1000, dereference once to get ptr's value
+cout << **doublePtr << endl;  // 5, dereference twice to get n's value
+cout << &doublePtr << endl;   // 1012, address of doublePtr
+\`\`\`
+Double pointers show up when you need to modify a pointer itself from inside a function or when working with 2D dynamic arrays implemented as a pointer to pointer.
 `,
   },
 ];
