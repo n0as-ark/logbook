@@ -357,12 +357,12 @@ cout << &doublePtr << endl;   // 1012, address of doublePtr
 Double pointers show up when you need to modify a pointer itself from inside a function or when working with 2D dynamic arrays implemented as a pointer to pointer.
 ## Wrapping Up
 Pointers are one of those topics where the definition is simple but the implications are everywhere.
-- A pointer holds an address, and you dereference it with \`*\` to get the value.
-- Use \`&\` to get the address of a variable.
+- A pointer holds an address, and dereferencing with \`*\` to get the value.
+- The operator \`&\` provides the address of a variable.
 - Heap memory allocated with \`new\` lives until it is released with \`delete\`.
 - Resetting pointers to \`nullptr\` after deletion can help avoid double delete and dangling pointer bugs.
 - Pointer arithmetic moves in units of the pointed to type, not bytes, and is only defined within an array plus one past the end.
-- Prefer references when the argument cannot be null and you do not need reseating; use pointers when optionality or explicit indirection is required.
+- References suit cases where null is not allowed and reseating is not needed; pointers suit cases where optionality or explicit indirection is required.
 - In modern C++, prefer \`std::vector\` and other containers over raw dynamic arrays for most use cases.`,
   },
 ];
