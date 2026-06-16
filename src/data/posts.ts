@@ -6,6 +6,7 @@ export interface Post {
   excerpt: string;
   content: string;
   readTime: string;
+  snippet?: string;
 }
 
 export const ALL_TAGS = ["C++", "Python", "Linux", "Network", "Data Structure", "Operating Systems", "Cryptography"] as const;
@@ -18,6 +19,13 @@ export const posts: Post[] = [
     tags: ["Cryptography", "Python"],
     excerpt: "A lot of organizations still lock down sensitive files with nothing more than an Excel or Word password. In this post, I look at why that falls short of real encryption - and walk through a small project I built to make that gap visible.",
     readTime: "4 min",
+    snippet: `# older XOR-based "encryption"
+key = 0x0D
+ciphertext = bytes(
+  b ^ key for b in plaintext
+)
+# 256 possible keys - breakable
+# in milliseconds`,
     content: `Across many industries, sensitive data like employee records, financial documents, personal identifiers often gets shared as Excel or Word files protected only by a simple password.
 
 At first glance, it feels secure. You set a password, the file locks, and you're done.
@@ -53,6 +61,13 @@ In the next post, I'll implement XOR encryption from scratch, walk through exact
    tags: ["Cryptography", "Python"],
    excerpt: "Before jumping into modern cryptography, I want to start with XOR - the weakest possible cipher. Not because it is secure, but because it is the clearest way to see how plaintext becomes ciphertext, and how a weak design can fail very quickly.",
    readTime: "8 min",
+   snippet: `def xor_encrypt(plaintext: bytes, key: int) -> bytes:
+  return bytes(byte ^ key for byte in plaintext)
+
+  xor_decrypt = xor_encrypt
+
+  ciphertext = xor_encrypt(message, 13)
+  recovered  = xor_decrypt(ciphertext, 13)`,
    content: `In the last post, I talked about how a password prompt does not automatically mean strong protection. In modern Office files, a password is usually used to derive a real encryption key for algorithms like AES. But older protection methods could be much weaker, which makes XOR a useful place to start if the goal is to understand what encryption is actually doing behind the scenes.
 So instead of jumping straight into modern cryptography, I want to begin with XOR. Not because it is secure, but because it is one of the clearest ways to see how plaintext becomes ciphertext, and how a weak design can fail very quickly.
 ## What is XOR?
@@ -126,6 +141,12 @@ That is exactly why I think it is worth building from scratch. If you understand
    tags: ["C++"],
    excerpt: "Pointers, heap allocation, dynamic arrays, and pointer arithmetic were some of the challenging topics when I learned C++. This post walks through each topic in detail - mostly for my own benefit, but hopefully useful for anyone struggling with them as well.",
    readTime: "10 min",
+   snippet: `int* p = new int(42);
+if (p) {
+  std::cout << *p << '\\n'; // use
+  delete p;               // free
+  p = nullptr;            // avoid dangling
+}`,
    content: `For a lot of people learning C++, pointers are the first concept that really feels "tricky." That reputation is well-earned, but once the mental model clicks, they become one of the most powerful tools in the language. This first part covers what pointers are, how they live in memory, how they interact with the heap allocation, and how dynamic arrays work in practice.
 ## What is a Pointer?
 A pointer is a variable that stores the memory address of another object. Why do we need them? Three main reasons:
@@ -241,6 +262,12 @@ This first part focuses on the fundamentals: what pointers are, how they behave 
    tags: ["C++"],
    excerpt: "This second part looks at how std::vector builds on raw pointers and dynamic arrays, how pointer arithmetic really works, and how pointers are used in function parameters and double pointers.",
    readTime: "10 min",
+   snippet: `vector<int> v;
+for (int i = 0; i < 100; i++)
+  v.push_back(i * 100);
+
+for (int val : v)
+  cout << val << endl;`,
    content: `The first part covered basic pointers, stack and heap memory, and raw dynamic arrays. This second part looks at how \`std::vector\` builds on those ideas, how pointer arithmetic actually works, and how pointers are used in function interfaces and double pointers.
 ## Vectors, the Standard Library Solution
 Manually managing resizable arrays is error prone. The C++ Standard Library provides \`std::vector\`, which handles dynamic storage management automatically:
