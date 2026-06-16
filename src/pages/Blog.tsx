@@ -22,7 +22,7 @@ const Blog = () => {
   }, [search, activeTag]);
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-16">
+    <div className="max-w-5xl mx-auto px-6 py-16">
       <h1 className="text-3xl font-semibold tracking-tight mb-8">Blog</h1>
 
       <div className="space-y-4 mb-10">
@@ -30,7 +30,7 @@ const Blog = () => {
         <TagFilter activeTag={activeTag} onTagChange={setActiveTag} />
       </div>
 
-      <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {posts.map((post) => (
           <PostCard
             key={post.slug}
