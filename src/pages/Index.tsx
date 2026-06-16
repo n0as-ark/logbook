@@ -99,6 +99,7 @@ const Index = () => {
       </aside>
         
     </div>
+  </div>
   );
 };
 export default Index;
