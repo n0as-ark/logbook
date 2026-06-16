@@ -1,10 +1,18 @@
 import { Link } from "react-router-dom";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus} from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { Post } from "@/data/posts";
 
 interface PostCardProps {
   post: Post;
   redacted?: boolean;
 }
+
+const getLanguage = (tags: string[]) => {
+  if (tags.includes("C++")) return "cpp";
+  if (tags.includes("Python")) return "python";
+  return "text";
+};
 
 const PostCard = ({ post, redacted = false }: PostCardProps) => {
   return (
@@ -19,10 +27,23 @@ const PostCard = ({ post, redacted = false }: PostCardProps) => {
       >
         {/* Code snippet panel */}
         {post.snippet && (
-          <div className="w-56 shrink-0 bg-zinc-950 dark:bg-zinc-900 p-4 hidden sm:block">
-            <pre className="text-xs text-zinc-300 leading-relaxed overflow-hidden font-mono whitespace-pre-wrap break-words">
+          <div className="w-52 shrink-0 hidden sm:block overflow-hidden">
+            <SyntaxHighlighter
+              language={getLanguage(post.tags)}
+              style={vscDarkPlus}
+              customStyle={{
+                margin: 0,
+                padding: "1rem",
+                fontSize: "11px",
+                lineHeight: "1.6",
+                height: "100%",
+                background: "#1e1e1e",
+                borderRadius: 0,
+              }}
+              wrapLongLines
+            >
               {post.snippet}
-            </pre>
+            </SyntaxHighlighter>
           </div>
         )}
 
