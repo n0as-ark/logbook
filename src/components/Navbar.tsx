@@ -29,7 +29,7 @@ const Navbar = () => {
 
   return (
     <nav className="border-b border-border">
-      <div className="max-w-2xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link to="/">
           <img 
             src={dark ? "/logbook/ark-logo-dark.png" : "/logbook/noas_ark_logo.png"}
@@ -84,7 +84,7 @@ const Navbar = () => {
       {/* Mobile menu */}
       {menuOpen &&
       <div className="md:hidden border-t border-border">
-          <div className="max-w-2xl mx-auto px-6 py-3 flex flex-col gap-2">
+          <div className="max-w-5xl mx-auto px-6 py-3 flex flex-col gap-2">
             {navLinks.map((link) =>
           <Link
             key={link.to}
