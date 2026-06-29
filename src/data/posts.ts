@@ -394,19 +394,22 @@ Pointers are one of those topics where the definition is simple but the implicat
 - In modern C++, prefer \`std::vector\` and other containers over raw dynamic arrays for most use cases.`,
   },
   {title: "Multi-Byte XOR Encryption: Why a Longer Key Still Breaks",
-slug: "multi-byte-xor",
-date: "2026-06-12",
-tags: ["Cryptography", "Python"],
-excerpt: "A longer XOR key looks like a fix, with billions of possibilities instead of just 256. But once that multi-byte key repeats, it leaves patterns in the ciphertext that we can attack. In this post I walk through how multi-byte XOR works, how to guess the key length with Hamming distance, and how to recover the key column by column using simple frequency analysis, showing that key length alone does not make this toy cipher secure.",
-readTime: "6 min",
-snippet: `def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
+  slug: "multi-byte-xor",
+  date: "2026-06-12",
+  tags: ["Cryptography", "Python"],
+  excerpt: "A longer XOR key looks like a fix, with billions of possibilities instead of just 256. But once that multi-byte key repeats, it leaves patterns in the ciphertext that we can attack. In this post I walk through how multi-byte XOR works, how to guess the key length with Hamming distance, and how to recover the key column by column using simple frequency analysis, showing that key length alone does not make this toy cipher secure.",
+  readTime: "6 min",
+  snippet: `def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
     return bytes(
         byte ^ key[i % len(key)]
         for i, byte in enumerate(plaintext)
     )
+
 xor_decrypt = xor_encrypt
 ciphertext = xor_encrypt(message, b"SECRET")
 recovered  = xor_decrypt(ciphertext, b"SECRET")`,
-content: ``,
+  content: `In the last post, we built single-byte XOR encryption and broke it in seconds by trying all 256 possible keys. The weakness was obvious: the key space was tiny and brute force was cheap.
+The next natural idea I had was: what if I just use a longer key? One byte gives 256 options; four bytes give 256⁴ ≈ 4.3 billion. That sounds like a big improvement, at least against a naive brute-force attack.
+In this post I'll show how a longer key helps in some ways, but also creates a new kind of weakness once you repeat it. We'll still be able to break it without trying every key, just by looking at patterns in the ciphertext.`,
   },
 ];
