@@ -35,7 +35,7 @@ const About = () => {
       </div>
       {/* Currently learning */}
       <section className="mb-16">
-        <h2 className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-6">
+        <h2 className="font-mono text-sm uppercase tracking-wider text-muted-foreground mb-6">
           Currently learning
         </h2>
         <ul className="space-y-2">
@@ -49,7 +49,7 @@ const About = () => {
       </section>
       {/* Projects */}
       <section className="mb-16">
-        <h2 className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-6">
+        <h2 className="font-mono text-sm uppercase tracking-wider text-muted-foreground mb-6">
           Projects
         </h2>
         <div className="space-y-6">
@@ -65,7 +65,7 @@ const About = () => {
       </section>
       {/* Skills */}
       <section>
-        <h2 className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-6">
+        <h2 className="font-mono text-sm uppercase tracking-wider text-muted-foreground mb-6">
           Skills & Background
         </h2>
         <div className="space-y-4">
