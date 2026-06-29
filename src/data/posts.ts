@@ -393,4 +393,20 @@ Pointers are one of those topics where the definition is simple but the implicat
 - References suit cases where null is not allowed and reseating is not needed; pointers suit cases where optionality or explicit indirection is required.
 - In modern C++, prefer \`std::vector\` and other containers over raw dynamic arrays for most use cases.`,
   },
+  {title: "Multi-Byte XOR Encryption: Why a Longer Key Still Breaks",
+slug: "multi-byte-xor",
+date: "2026-06-12",
+tags: ["Cryptography", "Python"],
+excerpt: "A longer XOR key looks like a fix, with billions of possibilities instead of just 256. But once that multi-byte key repeats, it leaves patterns in the ciphertext that we can attack. In this post I walk through how multi-byte XOR works, how to guess the key length with Hamming distance, and how to recover the key column by column using simple frequency analysis, showing that key length alone does not make this toy cipher secure.",
+readTime: "6 min",
+snippet: `def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
+    return bytes(
+        byte ^ key[i % len(key)]
+        for i, byte in enumerate(plaintext)
+    )
+xor_decrypt = xor_encrypt
+ciphertext = xor_encrypt(message, b"SECRET")
+recovered  = xor_decrypt(ciphertext, b"SECRET")`,
+content: ``,
+  },
 ];
