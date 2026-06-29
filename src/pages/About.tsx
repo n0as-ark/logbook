@@ -27,7 +27,7 @@ const About = () => {
       <div className="space-y-6 mb-16 max-w-5xl">
         <p className="text-muted-foreground leading-relaxed">
           I've been interested in programming since high school, but ended up studying actuarial science and going into financial consulting. The interest never really went away though.
-          If anything, spending a few years working made me realize how much I actually wanted to pursue it — so here I am.
+          If anything, spending a few years working made me realize how much I actually wanted to pursue cybersecurity — so here I am.
         </p>
         <p className="text-muted-foreground leading-relaxed">
           This is where I write through what I'm learning. Systems programming and security are new territory for me, but I'm not starting from zero. Partly to keep track, partly because explaining something is the fastest way to find out if you actually understand it.
