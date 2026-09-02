@@ -416,8 +416,7 @@ Pointers are one of those topics where the definition is simple but the implicat
 xor_decrypt = xor_encrypt
 ciphertext = xor_encrypt(message, b"SECRET")
 recovered  = xor_decrypt(ciphertext, b"SECRET")`,
-  content: `In the last post, we built single-byte XOR encryption and broke it in seconds by trying all 256 possible keys. The weakness was obvious: the key space was tiny and brute force was cheap.
-The next natural idea I had was: what if I just use a longer key? One byte gives 256 options; four bytes give 256⁴ ≈ 4.3 billion. That sounds like a big improvement, at least against a naive brute-force attack.
-In this post I'll show how a longer key helps in some ways, but also creates a new kind of weakness once you repeat it. We'll still be able to break it without trying every key, just by looking at patterns in the ciphertext.`,
+  content: `After breaking single-byte XOR in the last post, my first instinct was, "what if the key were just longer?" One byte gives 256 combinations. Four bytes gives 256⁴ ≈ 4.3 billion. That felt like a real improvement, at least against brute force.
+It took me a while to understand why that thinking misses the point. The number of possible keys is not what determines security. The structure of the cipher is. And once I saw how repeating a key leaves patterns in the ciphertext, it became clear that multi-byte XOR is still fundamentally brokenn, just in a less obvious way.`,
   },
 ];
