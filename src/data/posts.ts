@@ -53,7 +53,8 @@ A computer can try all 256 in milliseconds.
 
 Over the next few weeks, I'm building a PII-aware file encryption tool in Python as a learning project. Instead of jumping straight to modern algorithms like AES, I'm starting with XOR - the weakest possible "encryption" - to show, step by step, how an insecure design collapses.
 
-In the next post, I'll implement XOR encryption from scratch, walk through exactly how it works, and explain why it should never be relied upon to protect real sensitive data.`,
+In the next post, I'll implement XOR encryption from scratch, walk through exactly how it works, and explain why it should never be relied upon to protect real sensitive data.
+> → **Next up:** [XOR Encryption: A Simple Cipher That Breaks Very Easily](https://n0as-ark.github.io/logbook/blog/xor-cipher-basics)`,
   },
   {title: "XOR Encryption: A Simple Cipher That Breaks Very Easily",
    slug: "xor-cipher-basics",
