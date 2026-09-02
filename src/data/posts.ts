@@ -139,8 +139,10 @@ There is another weakness too: if part of the original plaintext is predictable,
 ### Why learn it anyway?
 Even though XOR is weak on its own, it is not useless. XOR still appears inside modern cryptographic algorithms, but there is only one small component inside a much larger design with strong keys, multiple rounds, and carefully constructed transformations.
 That is exactly why I think it is worth building from scratch. If you understand how a simple scheme like XOR works, it becomes much easier to see why modern encryption needs things like large key sizes, key derivation, and stronger cipher structure.
+
+In the next post, we will look at multi-byte XOR with a repeating key. It's a step up from single-byte, but still breakable with a technique called frequency analysis.
 > 🔗 **Code:** The full implementation is available on [GitHub](https://github.com/n0as-ark/XOR-Encryption-In-Python/blob/main/src).
-> → **Next up:** We'll look at multi-byte XOR with a repeating key - a step up from single-byte, but still breakable with a technique called frequency analysis.`,
+> → **Next up:** [Multi-Byte XOR Encryption: Why a Longer Key Still Breaks](https://n0as-ark.github.io/logbook/blog/multi-byte-xor)`,
   },
   {title: "Pointers and Dynamic Memory in C++: Part 1",
    slug: "pointers-and-dynamic-memory-in-cpp-part1",
