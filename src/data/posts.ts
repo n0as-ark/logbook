@@ -426,6 +426,7 @@ Encrypting \`"Hello!"\` with the key \`"KEY"\` looks like this. Each character i
 | Plaintext | H 0x48 | ⊕ | e 0x65 | ⊕ | l 0x6C | ⊕ | l 0x6C | ⊕ | o 0x6F | ⊕ | ! 0x21 |
 | Key (repeating) | K 0x4B | | E 0x45 | | Y 0x59 | | K 0x4B | | E 0x45 | | Y 0x59 |
 | Ciphertext | · 0x03 | = | $ 0x20 | = | 5 0x35 | = | ' 0x27 | = | * 0x2A | = | x 0x78 |
-Positions 0 and 3 were both XORed with \`K\`. Positions 1 and 4 with \`E\`. Positions 2 and 5 with \`Y\`. That repetition is the problem.`,
+Positions 0 and 3 were both XORed with \`K\`. Positions 1 and 4 with \`E\`. Positions 2 and 5 with \`Y\`. That repetition is the problem.
+`,
   },
 ];
