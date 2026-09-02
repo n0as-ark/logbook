@@ -112,7 +112,13 @@ recovered = xor_decrypt(ciphertext, key)
 print(ciphertext)
 print(recovered)
 \`\`\`
-This works exactly as expected. The original message turns into unreadable bytes, and applying the same key again restores it. At a mechanical level, that is encryption.
+This works exactly as expected. 
+| | H | e | l | l | o | , | (space) | W | o | r | l | d | ! |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Plaintext | H | e | l | l | o | , | (space) | W | o | r | l | d | ! |
+| Key | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 |
+| Result | E | h | a | a | b | ! | - | Z | b | \x7f | a | i | , |
+The original message turns into unreadable bytes (b'Ehaab!-Zb\x7fai,'), and applying the same key again restores it. At a mechanical level, that is encryption.
 ### Why it falls apart
 The problem is the size of the key space. A single byte key only has 256 possible values, which means an attacker can simply try every possible key and check which output looks like real text.
 \`\`\`python
