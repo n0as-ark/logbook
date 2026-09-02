@@ -416,7 +416,16 @@ Pointers are one of those topics where the definition is simple but the implicat
 xor_decrypt = xor_encrypt
 ciphertext = xor_encrypt(message, b"SECRET")
 recovered  = xor_decrypt(ciphertext, b"SECRET")`,
-  content: `After breaking single-byte XOR in the last post, my first instinct was, "what if the key were just longer?" One byte gives 256 combinations. Four bytes gives 256⁴ ≈ 4.3 billion. That felt like a real improvement, at least against brute force.
-It took me a while to understand why that thinking misses the point. The number of possible keys is not what determines security. The structure of the cipher is. And once I saw how repeating a key leaves patterns in the ciphertext, it became clear that multi-byte XOR is still fundamentally brokenn, just in a less obvious way.`,
+  content: `After breaking single-byte XOR in the last post, my first instinct was, **"What if the key were just longer?"** One byte gives 256 combinations. Four bytes gives 256⁴ ≈ 4.3 billion. That felt like a real improvement, at least against brute force.
+It took me a while to understand why that thinking misses the point. The number of possible keys is not what determines security. The structure of the cipher is. And once I saw how repeating a key leaves patterns in the ciphertext, it became clear that multi-byte XOR is still fundamentally brokenn, just in a less obvious way.
+## How it works
+Instead of XORing every byte with the same single value, you use a key that is several bytes long and repeat it across the message. Each position gets a different key byte depending on where it falls in the cycle.
+Encrypting \`"Hello!"\` with the key \`"KEY"\` looks like this. Each character is shown as its ASCII value in hex, so \'H\' is \`0x48\` and \`K\` is \`0x4B\`:
+| Row | 0 | | 1 | | 2 | | 3 | | 4 | | 5 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Plaintext | H 0x48 | ⊕ | e 0x65 | ⊕ | l 0x6C | ⊕ | l 0x6C | ⊕ | o 0x6F | ⊕ | ! 0x21 |
+| Key (repeating) | K 0x4B | | E 0x45 | | Y 0x59 | | K 0x4B | | E 0x45 | | Y 0x59 |
+| Ciphertext | · 0x03 | = | $ 0x20 | = | 5 0x35 | = | ' 0x27 | = | * 0x2A | = | x 0x78 |
+Positions 0 and 3 were both XORed with \`K\`. Positions 1 and 4 with \`E\`. Positions 2 and 5 with \`Y\`. That repetition is the problem.`,
   },
 ];
