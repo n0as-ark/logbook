@@ -8,7 +8,7 @@ const BlogPost = () => {
   
   if (!post) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-16">
+      <div className="max-w-3xl mx-auto px-6 py-16">
         <p className="text-muted-foreground">Post not found.</p>
         <Link to="/blog" className="text-primary text-sm hover:underline underline-offset-4 mt-4 inline-block">
           ← Back to blog
