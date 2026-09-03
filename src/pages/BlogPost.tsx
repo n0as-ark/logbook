@@ -210,7 +210,7 @@ const BlogPost = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-16">
+    <div className="max-w-5xl mx-auto px-6 py-16">
       <Link
         to="/blog"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
