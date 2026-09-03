@@ -552,6 +552,22 @@ End users -> Local/regional ISP -> Upper-tier ISP -> Tier 1 ISP <-> Tier 1 ISP (
 \`\`\`
  
 ---
+
+## 5. Delay
+ 
+**Nodal delay** at each node (router):
+ 
+d_node = d_proc + d_queue + d_trans + d_prop
+ 
+- **Processing delay** — checking for errors, determining output port
+- **Queueing delay** — time waiting to be sent on the link
+- **Transmission delay** — time to push bits onto the line
+- **Propagation delay** — time for the signal to reach the next node
+ 
+**Total delay** = sum of nodal delay (∑d_node) across all nodes in the path — matches what a traceroute measures hop by hop.
+
+---
+
 `,
   },
 ];
