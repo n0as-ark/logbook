@@ -515,6 +515,43 @@ Three conceptual layers:
   - Multi-mode: lower cost
 - **Wireless** — Wi-Fi, cellular, Bluetooth, microwave, satellite
  
----`,
+--- 
+
+## 4. Packet Switching
+ 
+Data is transmitted in small units. Large messages are broken into **packets** for transmission. Networks often cap packet size (common limit: **1500 bytes**). Each packet must be addressed correctly.
+ 
+**Circuit vs. Packet switching:**
+- **Circuit switching** — physical/virtual connection set up; all data follows the same path
+- **Packet switching** — path chosen per packet, independent of prior choices
+  - Related packets may follow different paths
+  - Broken links can be routed around quickly
+ 
+**Store and Forward:** Packets transmit only as fast as bandwidth allows. A complete packet must arrive before it can be evaluated and forwarded.
+ 
+**Queueing:** Queueing occurs when the output link is slower than the input link; packets wait temporarily in router RAM. If buffer space is exceeded, packets are discarded. It can also be intentional (administrative delay).
+ 
+**Bandwidth:**
+- Bandwidth is measured in bits per second (**bps**, lowercase b)
+- Prefixes: kbps = 10³, mbps = 10⁶, gbps = 10⁹
+- Time to transmit N bytes over bandwidth R = **N / R**
+ 
+**Tier 1 and Peers:**
+- Home/corporate users pay an ISP for connectivity
+- ISPs buy higher-speed connectivity from upper-tier ISPs
+- Traffic crossing to another ISP's network travels via a **peering agreement**
+- **Backbone / long-haul links** carry data over long distances
+- Large content providers (Fastly, Google, Akamai) peer with many ISPs to stay "closer" to end users
+ 
+**Hop count:** A packet commonly traverses 15+ routers (and many switches) en route to its destination, handled by multiple ISPs along the way.
+ 
+Rough hierarchy:
+ 
+\`\`\`
+End users -> Local/regional ISP -> Upper-tier ISP -> Tier 1 ISP <-> Tier 1 ISP (peering)
+\`\`\`
+ 
+---
+`,
   },
 ];
