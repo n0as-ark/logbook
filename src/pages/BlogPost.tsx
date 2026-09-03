@@ -116,7 +116,7 @@ const BlogPost = () => {
     const flushTable = () => {
       if (tableLines.length < 2) { tableLines=[]; return; }
       const parseRow = (row) =>
-        row.split("|").map(c=>c.trim()).filter(Boolean);
+        row.split("|").map(c=>c.trim()).slice(1,-1);
       const headers = parseRow(tableLines[0]);
       const body = tableLines.slice(2);
       elements.push(
