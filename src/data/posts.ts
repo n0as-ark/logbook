@@ -488,6 +488,33 @@ A **protocol** defines the structure and order of messages sent and received. It
 - **WAN** — Wide Area Network
 - **GAN** — Global Area Network
  
+---
+
+## 3. Internet Structure
+ 
+Three conceptual layers:
+ 
+- **Network Edge** — endpoint devices: home networks, enterprise networks, mobile devices, content provider/datacenter networks
+- **Access Networks** — connects edge devices to the rest of the Internet (local/regional ISPs, mobile carriers)
+- **Core Networks** — backbone infrastructure (national/global ISPs) moving traffic across long distances
+ 
+**Internet parts:**
+- *Endpoints:* personal computers, servers, mobile phones, IoT devices
+- *Infrastructure:* wireless access points, routers, switches, communication links
+ 
+**Connectivity options:**
+- *Home:* dial-up modems, cable modems, fiber to the curb, mesh Wi-Fi, satellite (LEO/GEO)
+- *Corporate:* DS-1 thru DS-4, cable-modem, Ethernet over copper, fiber, free-air optical, satellite
+- *Core:* peering agreements, fiber
+ 
+**Physical links:**
+- **Twisted pair** — copper, usually 8 wires, twisted to reduce interference
+- **Coaxial cable** — 2 copper conductors (center + braided shield)
+- **Fiber optic** — glass, carries light, very low error rates
+  - Single-mode: longer distance, higher speed
+  - Multi-mode: lower cost
+- **Wireless** — Wi-Fi, cellular, Bluetooth, microwave, satellite
+ 
 ---`,
   },
 ];
