@@ -607,14 +607,24 @@ Each layer communicates with the layer directly below it (via OS function calls)
 **Encapsulation:** Each layer adds a header (H) to the message from the layer above it to pass information to the peer layer on the other side. 
 
 \`\`\`
-Application layer:        [        M         ]
-Transport layer:      [  Ht  |      M         ]
-Network layer:     [  Hn  |  Ht  |      M         ]
-Link layer:      [  Hl  |  Hn  |  Ht  |      M         ]
+Application layer:        [        Message         ]
+Transport layer:      [  Ht  |      Message         ]
+Network layer:     [  Hn  |  Ht  |      Message         ]
+Link layer:      [  Hl  |  Hn  |  Ht  |      Message         ]
 \`\`\`
 
 Headers are stripped in reverse order as data moves up the stack on the receiving end.
  
----`,
+---
+
+## Key Points to Remember
+ 
+- Internet = network of interconnected smaller networks; no single entity controls the full path.
+- Packet switching (vs. circuit switching) enables resilience and efficient rerouting.
+- Bandwidth = bps; transmission time = N/R.
+- Nodal delay = processing + queueing + transmission + propagation.
+- Propagation delay has a physical floor set by the speed of light.
+- OSI = 7-layer reference model; TCP/IP implements 5 of the 7 layers in practice.
+- Encapsulation wraps data with headers layer by layer going down the stack, unwraps going up.`,
   },
 ];
