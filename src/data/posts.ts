@@ -455,7 +455,7 @@ print(recovered)  # b'Hello, World! This is a longer message.'
   tags: ["Network"],
   excerpt: "Core fundamentals of computer networking: Internet structure, protocols, packet switching, delay, and the OSI/TCP-IP models.",
   readTime: "7 min",
-  snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi\n",
+  snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi\n\n",
   content: `## 1. The Internet Today
  
 The Internet consists of billions of devices connected together. Key components:
@@ -576,6 +576,36 @@ d_node = d_proc + d_queue + d_trans + d_prop
 
 ---
 
-`,
+## 6. OSI Model
+ 
+The International Organization for Standardization (ISO) developed the **Open Systems Interconnection (OSI)** model in the late 1970s–1980s to classify protocols by responsibility. TCP/IP became dominant due to the Internet's growth, so OSI today is used mainly as a **reference model**.
+ 
+Each layer communicates with the layer directly below it (via OS function calls); it passes information indirectly to its peer layer on the other device.
+ 
+| Layer | Responsibility |
+|-------|----------------|
+| 7. Application | Formatting data for the application |
+| 6. Presentation | Context-neutral data format |
+| 5. Session | Multiplexing sessions within a connection |
+| 4. Transport | Connection-oriented or connection-less delivery |
+| 3. Network | Global addressing and routing |
+| 2. Data-Link | Local addressing and media access |
+| 1. Physical | Transmission of bits |
+ 
+**TCP/IP mapping:**
+ 
+| Layer | TCP/IP Protocols |
+|-------|------------------|
+| 7 – Application | HTTP, DNS, Skype |
+| 6 – Presentation | *not implemented* |
+| 5 – Session | *not implemented* |
+| 4 – Transport | TCP, UDP |
+| 3 – Network | IPv4, IPv6 |
+| 2 – Data-Link | Ethernet and other diverse protocols |
+| 1 – Physical | Fiber, copper, Wi-Fi, etc. |
+ 
+**Encapsulation:** Each layer adds a header (H) to the message from the layer above it to pass information to the peer layer on the other side. Example build-up: M → Ht|M → Hn|Ht|M → Hl|Hn|Ht|M. Headers are stripped in reverse order as data moves up the stack on the receiving end.
+ 
+---`,
   },
 ];
