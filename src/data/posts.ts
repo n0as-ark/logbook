@@ -455,7 +455,7 @@ print(recovered)  # b'Hello, World! This is a longer message.'
   tags: ["Network"],
   excerpt: "Core fundamentals of computer networking: Internet structure, protocols, packet switching, delay, and the OSI/TCP-IP models.",
   readTime: "7 min",
-  snippet: "\n7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link       Ethernet\n1  Physical      Fiber, Wi-Fi\n",
+  snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link       Ethernet\n1  Physical      Fiber, Wi-Fi\n",
   content: `## 1. The Internet Today
  
 The Internet consists of billions of devices connected together. Key components:
