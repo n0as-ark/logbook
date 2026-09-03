@@ -449,4 +449,25 @@ print(recovered)  # b'Hello, World! This is a longer message.'
 \`\`\`
 `,
   },
+  {title: "Introduction to Computer Networking",
+  slug: "introduction-to-computer-networking",
+  date: "2026-09-01",
+  tags: ["Network"],
+  excerpt: "Core fundamentals of computer networking: Internet structure, protocols, packet switching, delay, and the OSI/TCP-IP models.",
+  readTime: "7 min",
+  snippet: "7  Application   HTTP, DNS\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n1  Physical      Fiber, Wi-Fi",
+  content: `## 1. The Internet Today
+ 
+The Internet consists of billions of devices connected together. Key components:
+ 
+- **Hosts (endpoints)** — devices sending/receiving data
+- **Applications** — programs generating/consuming data
+- **Protocols** — rules governing communication
+- **Switching and routing** — how data moves between devices
+- **Communication links** — physical/wireless medium
+
+Definition: a **global network of interconnected smaller networks**, based on standards such as communications protocols and RFCs. Provides application programmers access while abstracting the complexity of communication, hiding challenges behind ease of use.
+ 
+---`,
+  },
 ];
