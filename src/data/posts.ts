@@ -604,7 +604,16 @@ Each layer communicates with the layer directly below it (via OS function calls)
 | 2. Data-Link | Ethernet and other diverse protocols |
 | 1. Physical | Fiber, copper, Wi-Fi, etc. |
  
-**Encapsulation:** Each layer adds a header (H) to the message from the layer above it to pass information to the peer layer on the other side. Example build-up: M → Ht|M → Hn|Ht|M → Hl|Hn|Ht|M. Headers are stripped in reverse order as data moves up the stack on the receiving end.
+**Encapsulation:** Each layer adds a header (H) to the message from the layer above it to pass information to the peer layer on the other side. 
+
+\`\`\`
+Application layer:        [        M         ]
+Transport layer:      [  Ht  |      M         ]
+Network layer:     [  Hn  |  Ht  |      M         ]
+Link layer:      [  Hl  |  Hn  |  Ht  |      M         ]
+\`\`\`
+
+Headers are stripped in reverse order as data moves up the stack on the receiving end.
  
 ---`,
   },
