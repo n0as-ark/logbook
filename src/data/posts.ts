@@ -482,7 +482,7 @@ A **protocol** defines the structure and order of messages sent and received. It
 | "Do you know where the library is?" ↔ "Yes, it's on Main Street!" | DHCP Discover ↔ DHCP Offer |
  
 **Network sizes** (by geographic scope):
-- **PAN** — Personal Area Network
+- **PAN** - Personal Area Network
 - **LAN** — Local Area Network
 - **MAN** — Metropolitan Area Network
 - **WAN** — Wide Area Network
