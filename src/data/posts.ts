@@ -423,8 +423,8 @@ Single-byte XOR uses one number as the key for every byte. Multi-byte XOR uses a
 If your key is \`[3, 7, 1]\`, the first byte gets XORed with \`3\`, the second with \`7\`, the third with \`1\`, and then it starts over. The fourth byte gets \`3\` again, the fifth gets \`7\`.
 The way the code handles this is just \`i % len(key)\`. Position 0 goes to key byte 0. Position 3 goes to key byte 0 again. Position 4 goes to key byte 1. That one line is the whole repeating mechanism.
 Here is what that looks like with a real example, encrypting \`"Hello!"\` with the key \`"KEY"\`. Each character is shown as its ASCII value in hex, so \`H\` is \`0x48\` and \`K\` is \`0x4B\`:
-|                 | 0 | 1 | 2 | 3 | 4 | 5 |
-|-----------------|---|---|---|---|---|---|
+|           | 0 | 1 | 2 | 3 | 4 | 5 |
+|-----------|---|---|---|---|---|---|
 | Plaintext | H | e | l | l | o | ! |
 | Key (repeating) | K | E | Y | K | E | Y |
 | Ciphertext | · | $ | 5 | ' | * | x |
