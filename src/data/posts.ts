@@ -466,7 +466,27 @@ The Internet consists of billions of devices connected together. Key components:
 - **Switching and routing** — how data moves between devices
 - **Communication links** — physical/wireless medium
 
-Definition: a **global network of interconnected smaller networks**, based on standards such as communications protocols and RFCs. Provides application programmers access while abstracting the complexity of communication, hiding challenges behind ease of use.
+Definition: a **global network of interconnected smaller networks**, based on standards such as communications protocols and RFCs. It provides application programmers access while abstracting the complexity of communication, hiding challenges behind ease of use.
+ 
+---
+
+## 2. Protocols and Definitions
+ 
+A **protocol** defines the structure and order of messages sent and received. It includes detail on formatting and timing (who communicates when). It is often implemented as a "back-and-forth" conversation.
+ 
+**Human vs. Computer protocols:**
+ 
+| Human Protocol | Computer Protocol |
+|---|---|
+| "Hello" ↔ "Hello" | DNS Request ↔ DNS Response |
+| "Do you know where the library is?" ↔ "Yes, it's on Main Street!" | DHCP Discover ↔ DHCP Offer |
+ 
+**Network sizes** (by geographic scope):
+- **PAN** — Personal Area Network
+- **LAN** — Local Area Network
+- **MAN** — Metropolitan Area Network
+- **WAN** — Wide Area Network
+- **GAN** — Global Area Network
  
 ---`,
   },
