@@ -423,12 +423,30 @@ Single-byte XOR uses one number as the key for every byte. Multi-byte XOR uses a
 If your key is \`[3, 7, 1]\`, the first byte gets XORed with \`3\`, the second with \`7\`, the third with \`1\`, and then it starts over. The fourth byte gets \`3\` again, the fifth gets \`7\`.
 The way the code handles this is just \`i % len(key)\`. Position 0 goes to key byte 0. Position 3 goes to key byte 0 again. Position 4 goes to key byte 1. That one line is the whole repeating mechanism.
 Here is what that looks like with a real example, encrypting \`"Hello!"\` with the key \`"KEY"\`. Each character is shown as its ASCII value in hex, so \`H\` is \`0x48\` and \`K\` is \`0x4B\`:
-|   | H | e | l | l | o | ! |
-|---|---|---|---|---|---|---|
-| Plaintext | 0x48 | 0x65 | 0x6C | 0x6C | 0x6F | 0x21 |
-| Key (repeating) | K 0x4B | E 0x45 | Y 0x59 | K 0x4B | E 0x45 | Y 0x59 |
-| Ciphertext | · 0x03 | $ 0x20 | 5 0x35 | ' 0x27 | * 0x2A | x 0x78 |
+|                 | 0 | 1 | 2 | 3 | 4 | 5 |
+|-----------------|---|---|---|---|---|---|
+| Plaintext | H | e | l | l | o | ! |
+| Key (repeating) | K | E | Y | K | E | Y |
+| Ciphertext | · | $ | 5 | ' | * | x |
 Positions 0 and 3 were both XORed with \`K\`. Positions 1 and 4 with \`E\`. Positions 2 and 5 with \`Y\`. That repetition is the problem.
+The implementation is almost identical to the single-byte version. The only real change is that the key is now a \`bytes\` object and \`i % len(key)\` handles the cycling:
+\`\`\`python
+def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
+    return bytes(
+        byte ^ key[i % len(key)]
+        for i, byte in enumerate(plaintext)
+    )
+ 
+xor_decrypt = xor_encrypt
+ 
+key     = b"SECRET"
+message = b"Hello, World! This is a longer message."
+ 
+ciphertext = xor_encrypt(message, key)
+recovered  = xor_decrypt(ciphertext, key)
+ 
+print(recovered)  # b'Hello, World! This is a longer message.'
+\`\`\`
 `,
   },
 ];
