@@ -627,4 +627,19 @@ Headers are stripped in reverse order as data moves up the stack on the receivin
 - OSI = 7-layer reference model; TCP/IP implements 5 of the 7 layers in practice.
 - Encapsulation wraps data with headers layer by layer going down the stack, unwraps going up.`,
   },
+  {title: "Application Layer: Network App Fundamentals",
+slug: "application-layer-network-app-fundamentals",
+date: "2026-09-03",
+tags: [Network],
+excerpt: "Client-server vs. P2P architectures, sockets and addressing, what an application-layer protocol defines, and the transport service requirements behind TCP, UDP, and TLS.",
+readTime: "5 min read",
+snippet: `Identifying a process:
+IP address + port number
+ 
+HTTP server  ->  port 80
+Mail server  ->  port 25
+ 
+www.example.com : 108.138.85.55 : 80`,
+content: ``,
+  }
 ];
