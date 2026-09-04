@@ -25,7 +25,8 @@ ciphertext = bytes(
   b ^ key for b in plaintext
 )
 # 256 possible keys - breakable
-# in milliseconds`,
+# in milliseconds
+ `,
     content: `Across many industries, sensitive data like employee records, financial documents, personal identifiers often gets shared as Excel or Word files protected only by a simple password.
 
 At first glance, it feels secure. You set a password, the file locks, and you're done.
