@@ -640,6 +640,27 @@ HTTP server  ->  port 80
 Mail server  ->  port 25
  
 www.example.com : 108.138.85.55 : 80`,
-content: ``,
+content: `## 1. Creating a Network App
+ 
+A network application consists of programs that run on different end systems and communicate over the network (e.g., web server software communicating with browser software). Since network-core devices (routers, switches) don't run user applications, all the logic lives at the network's edge. This split is what allows rapid app development and propagation: a new app only needs to be installed on end systems, with no changes required to the core.
+ 
+**Client-server paradigm:**
+- Server: **always-on** host, permanent IP address, often hosted in data centers for scaling
+- Clients: contact and communicate with the server, may be intermittently connected, may have dynamic IP addresses, do not communicate directly with each other
+- Examples: HTTP (client: browser; server: web server), IMAP (client: mail app; server: mail server), FTP (client: FTP client; server: FTP server)
+ 
+**Peer-to-peer (P2P) architecture:**
+- No always-on server; arbitrary end systems communicate directly
+- Peers request service from other peers and provide service in return. This gives self-scalability, since new peers bring both new capacity and new demand
+- Peers are intermittently connected and change IP addresses, which makes management more complex
+- Example: P2P file sharing (BitTorrent)
+ 
+**Processes communicating:**
+- A process is a program running within a host. Two processes on the same host communicate via inter-process communication (defined by the OS); processes on different hosts communicate by exchanging messages.
+- Client process: initiates communication.
+- Service (server) process: waits to be contacted.
+- Note: applications with P2P architectures still have both client and server processes internally — a peer acts as a client when requesting and as a server when serving.
+ 
+---`,
   }
 ];
