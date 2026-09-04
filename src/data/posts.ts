@@ -632,7 +632,7 @@ slug: "application-layer-network-app-fundamentals",
 date: "2026-09-03",
 tags: ["Network"],
 excerpt: "Client-server vs. P2P architectures, sockets and addressing, what an application-layer protocol defines, and the transport service requirements behind TCP, UDP, and TLS.",
-readTime: "5 min read",
+readTime: "10 min read",
 snippet: `Identifying a process:
 IP address + port number
  
