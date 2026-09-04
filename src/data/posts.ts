@@ -630,7 +630,7 @@ Headers are stripped in reverse order as data moves up the stack on the receivin
   {title: "Application Layer: Network App Fundamentals",
 slug: "application-layer-network-app-fundamentals",
 date: "2026-09-03",
-tags: [Network],
+tags: ["Network"],
 excerpt: "Client-server vs. P2P architectures, sockets and addressing, what an application-layer protocol defines, and the transport service requirements behind TCP, UDP, and TLS.",
 readTime: "5 min read",
 snippet: `Identifying a process:
