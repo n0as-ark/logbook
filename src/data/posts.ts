@@ -455,7 +455,7 @@ print(recovered)  # b'Hello, World! This is a longer message.'
   tags: ["Network"],
   excerpt: "Core fundamentals of computer networking: Internet structure, protocols, packet switching, delay, and the OSI/TCP-IP models.",
   readTime: "7 min",
-  snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi\n\n\n",
+  snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi\n\n\n\n",
   content: `## 1. The Internet Today
  
 The Internet consists of billions of devices connected together. Key components:
@@ -674,6 +674,20 @@ Example port numbers:
 - Mail server: port 25
  
 To send an HTTP message to \`www.example.com\`: IP address \`108.138.85.55\`, port number \`80\`.
+ 
+---
+ 
+## 3. What an Application-Layer Protocol Defines
+ 
+An application-layer protocol specifies:
+- **Types of messages exchanged** (e.g., request, response)
+- **Message syntax** — what fields exist in a message and how those fields are delineated (marked/separated) from each other
+- **Message semantics** — the meaning of the information carried in each field
+- **Rules** for when and how processes send and respond to messages
+ 
+**Open protocols** are defined in RFCs (Request for Comments — publicly available technical documents), so everyone has access to the protocol definition. Because the spec is public, any company or developer can build software that correctly implements it, and all correct implementations can talk to each other — this is what allows **interoperability**. Examples: HTTP, SMTP.
+ 
+**Proprietary protocols** are owned/controlled by a specific company and are not documented in the same open way - only that company knows the exact internal workings. Examples: Skype, Zoom.
  
 ---`,
   }
