@@ -689,6 +689,29 @@ An application-layer protocol specifies:
  
 **Proprietary protocols** are owned/controlled by a specific company and are not documented in the same open way - only that company knows the exact internal workings. Examples: Skype, Zoom.
  
+---
+ 
+## 4. Transport Service Requirements
+ 
+What an application needs from the transport layer:
+- **Data integrity** (whether the app can tolerate losing data): some apps (file transfer, web transactions) require 100% reliable transfer — even one missing or corrupted byte breaks the file. Other apps (audio) can tolerate some loss.
+- **Timing** (how much delay the app can tolerate): apps like Internet telephony and interactive games need low delay to be usable.
+- **Throughput** (how much bandwidth/data rate the app needs to function well): some apps (multimedia) need a minimum throughput to work correctly; "elastic apps" simply make use of whatever throughput is available. Throughput is the *actual* rate data is successfully transferred, which is different from bandwidth — the theoretical maximum capacity of a link.
+- **Security**: encryption, data integrity guarantees, etc.
+ 
+**TCP (Transmission Control Protocol) service:**
+- Reliable transport — guarantees data actually arrives
+- Flow control — makes sure the sender doesn't overwhelm the receiver
+- Congestion control — throttles the sender automatically when the network is overloaded
+- Connection-oriented — requires setup between client and server before data flows
+- Does not provide: timing, minimum throughput guarantee, or security
+ 
+**UDP (User Datagram Protocol) service:**
+- Unreliable, minimal transfer between sending and receiving processes
+- Does not provide reliability, flow control, congestion control, timing, throughput guarantees, security, or connection setup — it strips away nearly everything TCP does in exchange for speed
+ 
+**Securing TCP:** vanilla (plain, unmodified) TCP and UDP sockets have no encryption, so cleartext passwords sent into the socket traverse the Internet in cleartext. **Transport Layer Security (TLS)** provides encrypted TCP connections, data integrity, and end-point authentication. TLS is implemented at the application layer — apps use TLS libraries, which in turn use TCP — so what enters the "socket" is already encrypted before it crosses the Internet.
+ 
 ---`,
   }
 ];
