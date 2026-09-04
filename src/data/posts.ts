@@ -712,6 +712,16 @@ What an application needs from the transport layer:
  
 **Securing TCP:** vanilla (plain, unmodified) TCP and UDP sockets have no encryption, so cleartext passwords sent into the socket traverse the Internet in cleartext. **Transport Layer Security (TLS)** provides encrypted TCP connections, data integrity, and end-point authentication. TLS is implemented at the application layer — apps use TLS libraries, which in turn use TCP — so what enters the "socket" is already encrypted before it crosses the Internet.
  
----`,
+---
+ 
+## Key Points to Remember
+ 
+- Network applications run entirely on end systems; the core just moves bits — this is what makes rapid, permissionless app development possible.
+- Client-server: always-on server, intermittently-connected clients. P2P: no always-on server, peers serve each other, self-scaling but harder to manage.
+- A socket is the interface an application uses to hand data to (and receive data from) the transport layer.
+- A host needs both an IP address and a port number to fully identify a specific process.
+- Open protocols (RFC-defined) enable interoperability; proprietary protocols don't.
+- TCP trades speed for reliability, flow control, and congestion control; UDP is minimal and fast but guarantees nothing.
+- TLS adds encryption, integrity, and authentication on top of TCP at the application layer.`,
   }
 ];
