@@ -659,7 +659,21 @@ A network application consists of programs that run on different end systems and
 - A process is a program running within a host. Two processes on the same host communicate via inter-process communication (defined by the OS); processes on different hosts communicate by exchanging messages.
 - Client process: initiates communication.
 - Service (server) process: waits to be contacted.
-- Note: applications with P2P architectures still have both client and server processes internally — a peer acts as a client when requesting and as a server when serving.
+- Note: applications with P2P architectures still have both client and server processes internally where a peer acts as a client when requesting and as a server when serving.
+ 
+---
+ 
+## 2. Sockets and Addressing
+ 
+A process sends and receives messages through its **socket**, which acts like a door: the sending process pushes a message out the door and trusts the transport infrastructure on the other side to deliver it to the socket at the receiving process. Two sockets are always involved, one on each end. The socket itself is created and controlled from the application layer, but everything after that (reliability, routing, etc.) is handled by the lower layers, controlled by the OS rather than the app developer.
+ 
+**Addressing processes:** an IP address alone identifies a *host*, not a specific process on that host — a host can run many processes at once. To receive messages, a process needs an identifier made up of both an **IP address** and a **port number**.
+ 
+Example port numbers:
+- HTTP server: port 80
+- Mail server: port 25
+ 
+To send an HTTP message to \`www.example.com\`: IP address \`108.138.85.55\`, port number \`80\`.
  
 ---`,
   }
