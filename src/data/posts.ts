@@ -872,5 +872,12 @@ Total: 2 RTTs before data                Total: 1 RTT before data
 TLS + TCP  -->  merged into QUIC, which now sits on UDP instead of TCP
 \`\`\`
  
----` },
+---
+
+## Key Points to Remember
+ 
+- HTTP is stateless by design; cookies are the mechanism sites use to layer state back on top of it.
+- Persistent HTTP (HTTP/1.1) cuts connection overhead versus non-persistent HTTP by reusing one TCP connection for multiple objects.
+- HTTP/3 (QUIC, over UDP) removes head-of-line blocking across streams and shortens the handshake to 1-RTT (or 0-RTT on reconnect).
+`},
 ];
