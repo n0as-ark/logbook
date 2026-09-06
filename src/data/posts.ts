@@ -764,5 +764,16 @@ content: `## 1. HTTP
 | Connection | Opened, at most one object sent, then closed | Opened once; stays open |
 | Objects per connection | One | Multiple objects over the same connection |
 | Result | Downloading multiple objects requires multiple connections | Client sends new requests as soon as it encounters a new referenced object |
+
+Non-persistent HTTP:
+- Requires **2 round trips (RTTs)** per object (one to set up the TCP connection, one for the request/response)
+- Adds OS overhead per connection
+- Pushes browsers to open **multiple parallel TCP connections** just to reduce the resulting delay
+
+Persistent HTTP needs as little as **one RTT total** for all referenced objects, cutting response time roughly in half
+ 
+**RTT (Round Trip Time)** is the time for a small packet to travel from client to server and back. 
+Non-persistent HTTP response time per object breaks down into: 
+one RTT to initiate the TCP connection + one RTT for the HTTP request + the first few bytes of the response to come back + the actual object/file transmission time.
 ` },
 ];
