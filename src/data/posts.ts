@@ -511,9 +511,7 @@ Three conceptual layers:
 **Physical links:**
 - **Twisted pair** — copper, usually 8 wires, twisted to reduce interference
 - **Coaxial cable** — 2 copper conductors (center + braided shield)
-- **Fiber optic** — glass, carries light, very low error rates
-    - Single-mode: longer distance, higher speed
-    - Multi-mode: lower cost
+- **Fiber optic** — glass, carries light, very low error rates (**single-mode**: longer distance, higher speed; **multi-mode**: lower cost)
 - **Wireless** — Wi-Fi, cellular, Bluetooth, microwave, satellite
  
 --- 
