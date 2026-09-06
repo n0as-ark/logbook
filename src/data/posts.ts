@@ -733,13 +733,13 @@ excerpt: "HTTP request/response mechanics, cookies and HTTP/3 (QUIC), how SMTP a
 readTime: "9 min read",
 snippet: `HTTP/2 over TCP                    HTTP/3 (QUIC)
 ----------------                   ----------------
-+--------+--------+                +-----------+--------+
-| HTTP/2 |  TLS   |   Application  | H2 (slim) |  QUIC  |
-+--------+--------+                +-----------+--------+
-|       TCP       |    Transport   |          UDP        |
-+------------------+               +----------------------+
-|        IP        |    Network    |          IP          |
-+------------------+               +----------------------+`,
++--------+---------+                +-----------+--------+
+| HTTP/2 |   TLS   |   Application  | H2 (slim) |  QUIC  |
++--------+---------+                +-----------+--------+
+|        TCP       |    Transport   |         UDP        |
++------------------+                +--------------------+
+|        IP        |    Network     |         IP         |
++------------------+                +--------------------+`,
 content: `## 1. HTTP
  
 **Basics:** a web page consists of objects (an HTML file, JPEG images, a Java applet, audio files, etc.), which can be stored across different web servers. A web page consists of a base HTML file that references several objects, each addressable by a URL, e.g. \`www.example.com/media/pic.gif\`, where \`www.example.com\` is the host name and \`media/pic.gif\` is the path name.
@@ -756,5 +756,13 @@ content: `## 1. HTTP
 - There's no need to track state across a multi-step exchange
 - Every request is independent, and there's no need to recover from a transaction that partially completed but never finished
 - Tradeoff: any protocol that *does* maintain state is inherently more complex. History has to be tracked, and if the client or server crashes, their two views of that state may become inconsistent and need to be reconciled.
+
+**Non-persistent vs. persistent HTTP:**
+ 
+| | Non-persistent HTTP | Persistent HTTP (HTTP/1.1) |
+|---|---|---|
+| Connection | Opened, at most one object sent, then closed | Opened once; stays open |
+| Objects per connection | One | Multiple objects over the same connection |
+| Result | Downloading multiple objects requires multiple connections | Client sends new requests as soon as it encounters a new referenced object |
 ` },
 ];
