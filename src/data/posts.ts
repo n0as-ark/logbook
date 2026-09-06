@@ -770,10 +770,13 @@ Non-persistent HTTP:
 - Adds OS overhead per connection
 - Pushes browsers to open **multiple parallel TCP connections** just to reduce the resulting delay
 
-Persistent HTTP needs as little as **one RTT total** for all referenced objects, cutting response time roughly in half
+Persistent HTTP needs as little as **one RTT total** for all referenced objects, cutting response time roughly in half.
  
 **RTT (Round Trip Time)** is the time for a small packet to travel from client to server and back. 
 Non-persistent HTTP response time per object breaks down into: 
-one RTT to initiate the TCP connection + one RTT for the HTTP request + the first few bytes of the response to come back + the actual object/file transmission time.
+- one RTT to initiate the TCP connection
+- one RTT for the HTTP request
+- the first few bytes of the response to come back
+- the actual object/file transmission time
 ` },
 ];
