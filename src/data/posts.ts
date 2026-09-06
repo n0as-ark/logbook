@@ -746,8 +746,15 @@ content: `## 1. HTTP
  
 **HTTP (HyperText Transfer Protocol)** is the Web's application-layer protocol, following a client-server model: the client (browser) requests, receives, and displays web objects using HTTP; the server (web server software, e.g. Apache) sends objects in response to those requests.
  
-**HTTP uses TCP:** the client initiates a TCP connection (creating a socket) to the server on **port 80**, the server accepts the connection, HTTP messages are exchanged between browser (HTTP client) and web server (HTTP server), and the TCP connection is closed afterward.
+**HTTP uses TCP:** 
+1. The client initiates a TCP connection (creating a socket) to the server on **port 80**
+2. The server accepts the connection
+3. HTTP messages are exchanged between browser (HTTP client) and web server (HTTP server)
+4. The TCP connection is closed afterward.
  
-**HTTP is stateless** — the server keeps no memory of past client requests. This keeps the protocol simple: there's no need to track state across a multi-step exchange, every request is independent, and there's no need to recover from a transaction that partially completed but never finished. The tradeoff is that any protocol that *does* maintain state is inherently more complex. History has to be tracked, and if the client or server crashes, their two views of that state may become inconsistent and need to be reconciled.
+**HTTP is stateless** — the server keeps no memory of past client requests. This keeps the protocol simple: 
+- There's no need to track state across a multi-step exchange
+- Every request is independent, and there's no need to recover from a transaction that partially completed but never finished
+- Tradeoff: any protocol that *does* maintain state is inherently more complex. History has to be tracked, and if the client or server crashes, their two views of that state may become inconsistent and need to be reconciled.
 ` },
 ];
