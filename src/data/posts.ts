@@ -523,10 +523,11 @@ Three conceptual layers:
 Data is transmitted in small units. Large messages are broken into **packets** for transmission. Networks often cap packet size (common limit: **1500 bytes**). Each packet must be addressed correctly.
  
 **Circuit vs. Packet switching:**
-- **Circuit switching** — physical/virtual connection set up; all data follows the same path
-- **Packet switching** — path chosen per packet, independent of prior choices
-  - Related packets may follow different paths
-  - Broken links can be routed around quickly
+**Circuit switching** — physical/virtual connection set up; all data follows the same path
+**Packet switching**
+— path chosen per packet, independent of prior choices
+- related packets may follow different paths
+- broken links can be routed around quickly
  
 **Store and Forward:** Packets transmit only as fast as bandwidth allows. A complete packet must arrive before it can be evaluated and forwarded.
  
