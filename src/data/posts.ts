@@ -725,11 +725,11 @@ What an application needs from the transport layer:
 - TCP trades speed for reliability, flow control, and congestion control; UDP is minimal and fast but guarantees nothing.
 - TLS adds encryption, integrity, and authentication on top of TCP at the application layer.`,
   },
-  {title: "Application Layer: HTTP, E-Mail, and DNS",
-slug: "application-layer-http-email-dns",
+  {title: "Application Layer: HTTP and E-Mail",
+slug: "application-layer-http-and-email",
 date: "2026-09-04",
 tags: ["Network"],
-excerpt: "HTTP request/response mechanics, cookies and HTTP/3 (QUIC), how SMTP and IMAP move e-mail, and the distributed hierarchy behind DNS — plus Python socket examples.",
+excerpt: "HTTP request/response mechanics, persistent connections, cookies, HTTP/3 (QUIC), and how SMTP and IMAP move e-mail between mail servers.",
 readTime: "9 min read",
 snippet: `HTTP/2 over TCP                   HTTP/3 (QUIC)
 ----------------                    ----------------
@@ -771,12 +771,42 @@ Non-persistent HTTP:
 - Pushes browsers to open **multiple parallel TCP connections** just to reduce the resulting delay
 
 Persistent HTTP needs as little as **one RTT total** for all referenced objects, cutting response time roughly in half.
- 
+
+
 **RTT (Round Trip Time)** is the time for a small packet to travel from client to server and back. 
 Non-persistent HTTP response time per object breaks down into: 
 - one RTT to initiate the TCP connection
 - one RTT for the HTTP request
 - the first few bytes of the response to come back
 - the actual object/file transmission time
+
+**HTTP request message format:** plain ASCII (human-readable), for example:
+ 
+\`\`\`
+GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:80.0) Gecko/20100101 Firefox/80.0
+Accept: text/html,application/xhtml+xml
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip,deflate
+Connection: keep-alive
+ 
+\`\`\`
+ 
+General structure: a request line (method, full path, HTTP version), followed by header lines, a blank line (carriage-return/line-feed at the start of the line marks the end of the headers), and an optional body.
+\`\`\`
+┌────────────────────────────────────────────┐
+│  method   SP   URL   SP   version   CRLF   │  ← request line
+├────────────────────────────────────────────┤
+│  header-name : value                CRLF   │  ⎫
+│  header-name : value                CRLF   │  ⎬ header lines
+│  ...                                       │  ⎪
+│  header-name : value                CRLF   │  ⎭
+├────────────────────────────────────────────┤
+│  CRLF                                      │  ← blank line (end of headers)
+├────────────────────────────────────────────┤
+│  entity body (optional)                    │
+└────────────────────────────────────────────┘
+\`\`\`
 ` },
 ];
