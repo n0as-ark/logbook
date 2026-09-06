@@ -827,10 +827,16 @@ A cookie system has four parts:
 - a cookie header line in subsequent HTTP requests
 - a cookie file kept on the user's machine (managed by the browser)
 - a back-end database at the site
-On a user's first visit, the site creates a unique ID (the cookie) and a matching entry in its backend database; every later request from that user to the same site carries the cookie value in its header, letting the site "recognize" the user.
+On a user's first visit, the site creates **a unique ID (the cookie)** and a matching entry in its backend database; every later request from that user to the same site carries the cookie value in its header, letting the site "recognize" the user.
  
 Cookies are used for authorization, shopping carts, recommendations, and maintaining session state (e.g., webmail). The underlying challenge cookies solve is keeping state at the protocol endpoints across multiple transactions, using the messages themselves as the carrier.
  
 A related privacy note: **third-party (tracking) cookies** — set by a domain the user did not directly choose to visit, such as an ad network embedded in a page — let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
+
+**HTTP/2 to HTTP/3 (QUIC):** HTTP/2 multiplexes many independent request/response streams over a single TCP connection, each with its own stream ID. This still has a weakness: because it's one TCP connection, a single lost packet stalls *every* stream sharing that connection — data that has already safely arrived can't be delivered to the application because the system is waiting on some other piece that hasn't arrived yet. Browsers therefore still have an incentive to open multiple parallel TCP connections, just as with HTTP/1.1, to reduce stalling and increase overall throughput. HTTP/2 also has no built-in security over a vanilla TCP connection.
+ 
+**HTTP/3** solves this by moving to **QUIC (Quick UDP Internet Connections)**, an application-layer protocol built on top of UDP. QUIC rebuilds the reliable-delivery features TCP normally provides (reliability, congestion control, authentication, crypto state) itself, but per-stream rather than per-connection, so one lost packet only stalls the stream it belongs to — not the whole connection. This is deployed widely by Google (Chrome, mobile YouTube app).
+ 
+Connection setup is also faster: standard TCP + TLS requires **two serial handshakes** (a transport-layer TCP handshake, then a security-layer TLS handshake) before any data flows. QUIC folds reliability, congestion control, authentication, and crypto state into a **single handshake** (1-RTT). If a client has connected to the same server before, it can reuse the cached TLS session ticket from that prior connection for encryption and authentication on the new connection — giving **0-RTT** handshake delay, since no new negotiation is needed.
 ` },
 ];
