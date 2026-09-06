@@ -790,7 +790,6 @@ Accept: text/html,application/xhtml+xml
 Accept-Language: en-us,en;q=0.5
 Accept-Encoding: gzip,deflate
 Connection: keep-alive
- 
 \`\`\`
  
 General structure: a request line (method, full path, HTTP version), followed by header lines, a blank line (carriage-return/line-feed at the start of the line marks the end of the headers), and an optional body.
@@ -808,5 +807,18 @@ General structure: a request line (method, full path, HTTP version), followed by
 │  entity body (optional)                    │
 └────────────────────────────────────────────┘
 \`\`\`
+
+**HTTP methods:**
+- **GET** — the most common method; can send small amounts of data to the server by appending it to the URL after a \`?\` (e.g. \`www.somesite.com/animalsearch?monkeys&banana\`)
+- **POST** — used when a web page includes form input; user input is sent from client to server in the entity body of the request rather than the URL
+- **HEAD** — requests only the headers that would be returned for a GET on that URL, without downloading the actual file — useful for getting information about a file without transferring it
+- **PUT** — uploads a new object to the server, completely replacing whatever file already exists at that URL, with the new content carried in the entity body
+ 
+**HTTP response status codes** appear on the first line of the server's response:
+- **200 OK** — request succeeded, requested object follows in the message
+- **301 Moved Permanently** — requested object has moved; the new location is given later in the message (\`Location:\` field)
+- **400 Bad Request** — the request message wasn't understood by the server
+- **404 Not Found** — the requested document wasn't found on this server
+- **505 HTTP Version Not Supported**
 ` },
 ];
