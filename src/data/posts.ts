@@ -820,5 +820,17 @@ General structure: a request line (method, full path, HTTP version), followed by
 - **400 Bad Request** — the request message wasn't understood by the server
 - **404 Not Found** — the requested document wasn't found on this server
 - **505 HTTP Version Not Supported**
+
+**Cookies:** since HTTP is stateless by design (no multi-step tracking, independent requests, nothing to recover), sites that need to remember a user across visits use cookies instead. 
+A cookie system has four parts: 
+- a cookie header line in the HTTP response
+- a cookie header line in subsequent HTTP requests
+- a cookie file kept on the user's machine (managed by the browser)
+- a back-end database at the site
+On a user's first visit, the site creates a unique ID (the cookie) and a matching entry in its backend database; every later request from that user to the same site carries the cookie value in its header, letting the site "recognize" the user.
+ 
+Cookies are used for authorization, shopping carts, recommendations, and maintaining session state (e.g., webmail). The underlying challenge cookies solve is keeping state at the protocol endpoints across multiple transactions, using the messages themselves as the carrier.
+ 
+A related privacy note: **third-party (tracking) cookies** — set by a domain the user did not directly choose to visit, such as an ad network embedded in a page — let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
 ` },
 ];
