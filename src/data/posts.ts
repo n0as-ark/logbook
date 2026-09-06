@@ -724,5 +724,21 @@ What an application needs from the transport layer:
 - Open protocols (RFC-defined) enable interoperability; proprietary protocols don't.
 - TCP trades speed for reliability, flow control, and congestion control; UDP is minimal and fast but guarantees nothing.
 - TLS adds encryption, integrity, and authentication on top of TCP at the application layer.`,
-  }
+  },
+  {title: "Application Layer: HTTP, E-Mail, and DNS",
+slug: "application-layer-http-email-dns",
+date: "2026-09-04",
+tags: ["Network"],
+excerpt: "HTTP request/response mechanics, cookies and HTTP/3 (QUIC), how SMTP and IMAP move e-mail, and the distributed hierarchy behind DNS — plus Python socket examples.",
+readTime: "9 min read",
+snippet: `HTTP/2 over TCP                    HTTP/3 (QUIC)
+----------------                   ----------------
++--------+--------+                +-----------+--------+
+| HTTP/2 |  TLS   |   Application  | H2 (slim) |  QUIC  |
++--------+--------+                +-----------+--------+
+|       TCP       |    Transport   |          UDP        |
++------------------+               +----------------------+
+|        IP        |    Network    |          IP          |
++------------------+               +----------------------+`,
+content: ` ` },
 ];
