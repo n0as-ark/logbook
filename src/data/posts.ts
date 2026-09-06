@@ -725,11 +725,11 @@ What an application needs from the transport layer:
 - TCP trades speed for reliability, flow control, and congestion control; UDP is minimal and fast but guarantees nothing.
 - TLS adds encryption, integrity, and authentication on top of TCP at the application layer.`,
   },
-  {title: "Application Layer: HTTP and E-Mail",
-slug: "application-layer-http-and-email",
+  {title: "Application Layer: HTTP",
+slug: "application-layer-http",
 date: "2026-09-04",
 tags: ["Network"],
-excerpt: "HTTP request/response mechanics, persistent connections, cookies, HTTP/3 (QUIC), and how SMTP and IMAP move e-mail between mail servers.",
+excerpt: "HTTP request/response mechanics, persistent vs. non-persistent connections, cookies, how HTTP/3 (QUIC)replaces TCP+TLS with a single faster handshake.",
 readTime: "9 min read",
 snippet: `HTTP/2 over TCP                   HTTP/3 (QUIC)
 ----------------                    ----------------
@@ -740,7 +740,7 @@ snippet: `HTTP/2 over TCP                   HTTP/3 (QUIC)
 +------------------+                +--------------------+
 |        IP        |    Network     |         IP         |
 +------------------+                +--------------------+`,
-content: `## 1. HTTP
+content: `## HTTP
  
 **Basics:** a web page consists of objects (an HTML file, JPEG images, a Java applet, audio files, etc.), which can be stored across different web servers. A web page consists of a base HTML file that references several objects, each addressable by a URL, e.g. \`www.example.com/media/pic.gif\`, where \`www.example.com\` is the host name and \`media/pic.gif\` is the path name.
  
@@ -838,5 +838,39 @@ A related privacy note: **third-party (tracking) cookies** — set by a domain t
 **HTTP/3** solves this by moving to **QUIC (Quick UDP Internet Connections)**, an application-layer protocol built on top of UDP. QUIC rebuilds the reliable-delivery features TCP normally provides (reliability, congestion control, authentication, crypto state) itself, but per-stream rather than per-connection, so one lost packet only stalls the stream it belongs to — not the whole connection. This is deployed widely by Google (Chrome, mobile YouTube app).
  
 Connection setup is also faster: standard TCP + TLS requires **two serial handshakes** (a transport-layer TCP handshake, then a security-layer TLS handshake) before any data flows. QUIC folds reliability, congestion control, authentication, and crypto state into a **single handshake** (1-RTT). If a client has connected to the same server before, it can reuse the cached TLS session ticket from that prior connection for encryption and authentication on the new connection — giving **0-RTT** handshake delay, since no new negotiation is needed.
-` },
+
+\`\`\`
+  TCP + TLS handshake                        QUIC handshake
+  --------------------                     --------------------
+Client            Server                 Client            Server
+  |                  |                     |                  |
+  |------ SYN ------>|                     |---- Initial ---->|
+  |                  |                     |                  |
+  |<---- SYN-ACK ----|      RTT 1          |<- Handshake done -|      RTT 1
+  |                  |                     |                  |
+  |-- ClientHello -->|                     |----- Data ------>|
+  |                  |
+  |<- ServerHello, --|      RTT 2
+  |    Finished -----|
+  |                  |
+  |----- Data ------>|
+ 
+Total: 2 RTTs before data                Total: 1 RTT before data
+\`\`\`
+ 
+\`\`\`
+  HTTP/2 over TCP                       HTTP/3 (QUIC)
+ ----------------                     ----------------
++--------+--------+                +-----------+--------+
+| HTTP/2 |  TLS   |   Application  | H2 (slim) |  QUIC  |
++--------+--------+                +-----------+--------+
+|       TCP       |    Transport   |          UDP       |
++-----------------+                +--------------------+
+|        IP       |    Network     |          IP        |
++-----------------+                +--------------------+
+ 
+TLS + TCP  -->  merged into QUIC, which now sits on UDP instead of TCP
+\`\`\`
+ 
+---` },
 ];
