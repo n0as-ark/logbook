@@ -512,8 +512,8 @@ Three conceptual layers:
 - **Twisted pair** — copper, usually 8 wires, twisted to reduce interference
 - **Coaxial cable** — 2 copper conductors (center + braided shield)
 - **Fiber optic** — glass, carries light, very low error rates
-  - Single-mode: longer distance, higher speed
-  - Multi-mode: lower cost
+    - Single-mode: longer distance, higher speed
+    - Multi-mode: lower cost
 - **Wireless** — Wi-Fi, cellular, Bluetooth, microwave, satellite
  
 --- 
@@ -524,10 +524,9 @@ Data is transmitted in small units. Large messages are broken into **packets** f
  
 **Circuit vs. Packet switching:**
 **Circuit switching** — physical/virtual connection set up; all data follows the same path
-**Packet switching**
-— path chosen per packet, independent of prior choices
-- related packets may follow different paths
-- broken links can be routed around quickly
+**Packet switching** — path chosen per packet, independent of prior choices
+    - related packets may follow different paths
+    - broken links can be routed around quickly
  
 **Store and Forward:** Packets transmit only as fast as bandwidth allows. A complete packet must arrive before it can be evaluated and forwarded.
  
