@@ -731,8 +731,8 @@ date: "2026-09-04",
 tags: ["Network"],
 excerpt: "HTTP request/response mechanics, cookies and HTTP/3 (QUIC), how SMTP and IMAP move e-mail, and the distributed hierarchy behind DNS — plus Python socket examples.",
 readTime: "9 min read",
-snippet: `HTTP/2 over TCP                    HTTP/3 (QUIC)
-----------------                   ----------------
+snippet: `HTTP/2 over TCP                   HTTP/3 (QUIC)
+----------------                    ----------------
 +--------+---------+                +-----------+--------+
 | HTTP/2 |   TLS   |   Application  | H2 (slim) |  QUIC  |
 +--------+---------+                +-----------+--------+
