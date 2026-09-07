@@ -913,7 +913,7 @@ Like HTTP, it's a command/response interaction: commands are sent as ASCII text,
 4. The SMTP client sends Noa's message over that connection.
 5. Danny's mail server places the message into Danny's mailbox.
 6. Danny invokes his user agent to read the message.
-
+\n
  
 **Sample SMTP interaction:**
 \`\`\`
@@ -933,7 +933,7 @@ S: 250 Message accepted for delivery
 C: QUIT
 S: 221 burgerplace.com closing connection
 \`\`\`
-
+\n
 
 **SMTP vs. HTTP:**
 - HTTP is client **pull**; SMTP is client **push**.
@@ -942,6 +942,23 @@ S: 221 burgerplace.com closing connection
 - SMTP uses persistent connections.
 - SMTP requires the message (header and body) to be in 7-bit ASCII.
 - The SMTP server uses \`CRLF.CRLF\` (carriage-return + line-feed, i.e. a blank line, followed by a period) to determine the end of a message. This also lets multiple messages headed to the same server be sent one right after another over the same connection, e.g. the same message being sent to several recipients.
-`
+
+**Message format (RFC 2822)** defines the syntax of the e-mail message itself (the way HTML defines syntax for web documents), separately from RFC 5321, which defines the SMTP protocol used to exchange those messages. A message consists of a **header** (with lines like \`To:\`, \`From:\`, \`Subject:\`), a blank line, then the **body** (the actual message, ASCII characters only). 
+Important distinction: these header lines live *inside* the body of what SMTP transmits — they are different from the SMTP-level \`MAIL FROM:\` / \`RCPT TO:\` commands used during the handshake.
+ 
+**Retrieving mail — mail access protocols:** SMTP only handles delivery/storage of a message to the *receiver's* mail server; it says nothing about how the receiver later pulls that message down to a device. 
+A separate **mail access protocol** handles retrieval:
+- **IMAP (Internet Mail Access Protocol, RFC 3501)** — messages stay stored on the server; IMAP provides retrieval, deletion, and folder management for messages that remain server-side.
+- **HTTP** — services like Gmail, Hotmail, and Yahoo!Mail provide a web-based interface layered on top of SMTP (for sending) and IMAP or POP (for retrieving).
+ 
+**Problems with SMTP:**
+- Communication happens between servers; client-to-server communication is left undefined by the protocol itself.
+- There's **no authentication** between servers.
+- A single \`MAIL FROM\` can be paired with multiple \`RCPT TO\` commands.
+- The **envelope** (the SMTP-level sender/recipient info) differs from the message's own header content — this is how BCC works, since a BCC'd recipient is in the envelope but not shown in any header seen by other recipients.
+- The end of the \`DATA\` section is marked by a line containing only a period — which raises the question of what happens if a user's actual message needs to contain a line that's just a period.
+- SMTP was designed to carry ASCII text, not binary data, so non-text content like photos and videos has to be encoded into text and wrapped using MIME, which specifies the data type being carried.
+ 
+---`
   },
 ];
