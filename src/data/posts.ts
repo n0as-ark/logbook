@@ -459,8 +459,8 @@ print(recovered)  # b'Hello, World! This is a longer message.'
   snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi\n\n\n",
   content: `## 1. The Internet Today
  
-The Internet consists of billions of devices connected together. Key components:
- 
+The Internet consists of billions of devices connected together. 
+Key components: 
 - **Hosts (endpoints)** — devices sending/receiving data
 - **Applications** — programs generating/consuming data
 - **Protocols** — rules governing communication
