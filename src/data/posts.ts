@@ -878,4 +878,31 @@ TLS + TCP  -->  merged into QUIC, which now sits on UDP instead of TCP
 - Persistent HTTP (HTTP/1.1) cuts connection overhead versus non-persistent HTTP by reusing one TCP connection for multiple objects.
 - HTTP/3 (QUIC, over UDP) removes head-of-line blocking across streams and shortens the handshake to 1-RTT (or 0-RTT on reconnect).
 `},
+  {title: "Application Layer: E-Mail (SMTP and IMAP)",
+slug: "application-layer-email-smtp-imap",
+date: "2026-09-05",
+tags: ["Network"],
+excerpt: "How SMTP pushes mail between servers, why it has no built-in authentication, and how IMAP is what actually lets a device retrieve mail afterward.",
+readTime: "5 min",
+snippet: `S: 220 burgerplace.com
+C: HELO crepes.fr
+S: 250  Hello crepes.fr, pleased to meet you
+C: MAIL FROM: <alice@crepes.fr>
+S: 250 alice@crepes.fr... Sender ok
+C: RCPT TO: <bob@burgerplace.com>
+S: 250 bob@burgerplace.com ... Recipient ok`,
+content: `## 2. E-Mail: SMTP and IMAP
+ 
+E-mail has three major components:
+- **User agents** — the "mail readers" used to compose, edit, and read mail (e.g., Outlook, Gmail, an iPhone mail client); outgoing and incoming messages are stored on the server, not just locally.
+- **Mail servers** — hold a **mailbox** containing a user's incoming messages, and a **message queue** of outgoing mail waiting to be sent.
+- **SMTP (Simple Mail Transfer Protocol)** — the protocol mail servers use to send messages to one another.
+
+**SMTP (RFC 5321)** uses TCP to reliably transfer a message from a client (the mail server initiating the connection) to a server, on port 25. This is a direct transfer, with the sending server acting as the client toward the receiving server. 
+There are three phases: 
+- SMTP handshaking (greeting)
+- SMTP transfer of messages
+- SMTP closure. 
+Like HTTP, it's a command/response interaction: commands are sent as ASCII text, and responses carry a status code plus a phrase. Notably, there is **no authentication** built into this server-to-server handshake.`
+  },
 ];
