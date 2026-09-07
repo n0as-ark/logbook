@@ -6,27 +6,28 @@ import TagFilter from "@/components/TagFilter";
 
 const POSTS_PER_PAGE = 8;
 
+const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
 const Blog = () => {
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [page, setPage] = useState(1);
 
-  const filteredSlugs = useMemo(() => {
-    return posts
-      .filter((post) => {
+  const filteredPosts = useMemo(() => {
+    const query = normalize(search);
+    return posts.filter((post) => {
         const matchesSearch =
-          search === "" ||
-          post.title.toLowerCase().includes(search.toLowerCase()) ||
-          post.excerpt.toLowerCase().includes(search.toLowerCase());
+          query === "" ||
+          normalize(post.title).includes(query) ||
+          normalize(post.excerpt).includes(query);
         const matchesTag = activeTag === null || post.tags.includes(activeTag);
         return matchesSearch && matchesTag;
       })
-      .map((p) => p.slug);
   }, [search, activeTag]);
 
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
   const startIndex = (page - 1) * POSTS_PER_PAGE;
-  const visiblePosts = posts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+  const visiblePosts = filteredPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
 
   useEffect(() => {
     setPage(1);
@@ -41,16 +42,21 @@ const Blog = () => {
         <TagFilter activeTag={activeTag} onTagChange={setActiveTag} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {visiblePosts.map((post) => (
-          <PostCard
-            key={post.slug}
-            post={post}
-            redacted={!filteredSlugs.includes(post.slug)}
-          />
-        ))}
-      </div>
-
+      {filteredPosts.length === 0 ? (
+        <p className="text-sm text-muted-foreground text-center py-16">
+          No posts found.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {visiblePosts.map((post) => (
+            <PostCard
+              key={post.slug}
+              post={post}
+            />
+          ))}
+        </div>
+      )}
+      
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-4 mt-10">
           <button
