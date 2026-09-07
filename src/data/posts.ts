@@ -959,6 +959,12 @@ A separate **mail access protocol** handles retrieval:
 - The end of the \`DATA\` section is marked by a line containing only a period — which raises the question of what happens if a user's actual message needs to contain a line that's just a period.
 - SMTP was designed to carry ASCII text, not binary data, so non-text content like photos and videos has to be encoded into text and wrapped using MIME, which specifies the data type being carried.
  
----`
-  },
+---
+
+## Key Points to Remember
+ 
+- SMTP pushes mail server-to-server; this is the opposite of HTTP's client-pull model.
+- There's no authentication built into SMTP's server-to-server handshake.
+- A separate access protocol (IMAP, or HTTP-based webmail) is needed to actually retrieve mail down to a device — SMTP only handles delivery to the receiver's server.
+`},
 ];
