@@ -25,8 +25,7 @@ ciphertext = bytes(
   b ^ key for b in plaintext
 )
 # 256 possible keys - breakable
-# in milliseconds
- `,
+# in milliseconds`,
     content: `Across many industries, sensitive data like employee records, financial documents, personal identifiers often gets shared as Excel or Word files protected only by a simple password.
 
 At first glance, it feels secure. You set a password, the file locks, and you're done.
@@ -456,7 +455,7 @@ print(recovered)  # b'Hello, World! This is a longer message.'
   tags: ["Network"],
   excerpt: "Core fundamentals of computer networking: Internet structure, protocols, packet switching, delay, and the OSI/TCP-IP models.",
   readTime: "7 min",
-  snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi\n\n\n",
+  snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi",
   content: `## 1. The Internet Today
  
 The Internet consists of billions of devices connected together. 
@@ -638,7 +637,7 @@ IP address + port number
 HTTP server  ->  port 80
 Mail server  ->  port 25
  
-www.example.com : 108.138.85.55 : 80\n\n`,
+www.example.com : 108.138.85.55 : 80`,
 content: `## 1. Creating a Network App
  
 A network application consists of programs that run on different end systems and communicate over the network (e.g., web server software communicating with browser software). Since network-core devices (routers, switches) don't run user applications, all the logic lives at the network's edge. This split is what allows rapid app development and propagation: a new app only needs to be installed on end systems, with no changes required to the core.
