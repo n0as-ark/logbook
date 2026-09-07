@@ -903,6 +903,34 @@ There are three phases:
 - SMTP handshaking (greeting)
 - SMTP transfer of messages
 - SMTP closure. 
-Like HTTP, it's a command/response interaction: commands are sent as ASCII text, and responses carry a status code plus a phrase. Notably, there is **no authentication** built into this server-to-server handshake.`
+Like HTTP, it's a command/response interaction: commands are sent as ASCII text, and responses carry a status code plus a phrase. Notably, there is **no authentication** built into this server-to-server handshake.
+
+**Scenario — Noa sends e-mail to Danny:**
+1. Noa uses her user agent to compose a message addressed to \`danny@example.com\`.
+2. Noa's user agent sends the message to her mail server using SMTP; it's placed in the outgoing message queue.
+3. The client side of SMTP at Noa's mail server opens a TCP connection to Danny's mail server.
+4. The SMTP client sends Noa's message over that connection.
+5. Danny's mail server places the message into Danny's mailbox.
+6. Danny invokes his user agent to read the message.
+ 
+**Sample SMTP interaction:**
+ 
+\`\`\`
+S: 220 burgerplace.com
+C: HELO crepes.fr
+S: 250  Hello crepes.fr, pleased to meet you
+C: MAIL FROM: <noa@crepes.fr>
+S: 250 noa@crepes.fr... Sender ok
+C: RCPT TO: <danny@burgerplace.com>
+S: 250 danny@burgerplace.com ... Recipient ok
+C: DATA
+S: 354 Enter mail, end with "." on a line by itself
+C: Do you like ketchup?
+C: How about pickles?
+C: .
+S: 250 Message accepted for delivery
+C: QUIT
+S: 221 burgerplace.com closing connection
+\`\`\``
   },
 ];
