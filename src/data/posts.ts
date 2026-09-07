@@ -905,6 +905,7 @@ There are three phases:
 - SMTP closure. 
 Like HTTP, it's a command/response interaction: commands are sent as ASCII text, and responses carry a status code plus a phrase. Notably, there is **no authentication** built into this server-to-server handshake.
 
+
 **Scenario — Noa sends e-mail to Danny:**
 1. Noa uses her user agent to compose a message addressed to \`danny@example.com\`.
 2. Noa's user agent sends the message to her mail server using SMTP; it's placed in the outgoing message queue.
@@ -912,9 +913,9 @@ Like HTTP, it's a command/response interaction: commands are sent as ASCII text,
 4. The SMTP client sends Noa's message over that connection.
 5. Danny's mail server places the message into Danny's mailbox.
 6. Danny invokes his user agent to read the message.
+
  
 **Sample SMTP interaction:**
- 
 \`\`\`
 S: 220 burgerplace.com
 C: HELO crepes.fr
@@ -931,6 +932,16 @@ C: .
 S: 250 Message accepted for delivery
 C: QUIT
 S: 221 burgerplace.com closing connection
-\`\`\``
+\`\`\`
+
+
+**SMTP vs. HTTP:**
+- HTTP is client **pull**; SMTP is client **push**.
+- Both use ASCII command/response interaction with status codes.
+- HTTP encapsulates each object in its own response message; SMTP sends multiple objects together in a single **multipart** message (using the **MIME**, Multipart Internet Mail Extensions, protocol — which is how one message ends up with separate bodies for the text and for an attachment).
+- SMTP uses persistent connections.
+- SMTP requires the message (header and body) to be in 7-bit ASCII.
+- The SMTP server uses \`CRLF.CRLF\` (carriage-return + line-feed, i.e. a blank line, followed by a period) to determine the end of a message. This also lets multiple messages headed to the same server be sent one right after another over the same connection, e.g. the same message being sent to several recipients.
+`
   },
 ];
