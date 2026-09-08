@@ -447,6 +447,27 @@ recovered  = xor_decrypt(ciphertext, key)
  
 print(recovered)  # b'Hello, World! This is a longer message.'
 \`\`\`
+## Guessing the key length
+Before breaking the cipher, we need to know how long the key is. One way to figure this out is the Hamming distance test - the Hamming distance between two byte sequences is the count of bit positions where they differ. 
+The idea relies on a property of XOR: if two ciphertext bytes were encrypted with the same key byte, XORing them cancels the key out and leaves just the XOR of the original plaintext bytes. Natural language bytes — letters, spaces, punctuation — share a similar structure at the bit level, so XORing any two of them tends to flip only a few bits. Bytes from different key positions do not share a key byte, so the key does not cancel out, leaving a more random result with more bits flipped on average.
+By comparing chunks of ciphertext at different guessed key lengths and finding the length with the smallest average distance, we get a good estimate of the real key length without trying a single key.
+\`\`\`python
+def hamming_distance(a: bytes, b: bytes) -> int:
+    return sum(
+        bin(x ^ y)   # XOR the two bytes to find differing bits
+        .count("1")  # count how many bits are different
+        for x, y in zip(a, b)  # pair up corresponding bytes
+    )
+ 
+def guess_key_length(ciphertext: bytes, max_len: int = 40) -> int:
+    scores = []
+    for klen in range(2, max_len + 1):
+        a = ciphertext[:klen]        # first chunk of guessed key length
+        b = ciphertext[klen:klen*2]  # second chunk right after
+        score = hamming_distance(a, b) / klen  # normalize by key length
+        scores.append((score, klen))
+    return min(scores)[1]  # key length with smallest distance is most likely correct
+\`\`\`
 `,
   },
   {title: "Introduction to Computer Networking",
