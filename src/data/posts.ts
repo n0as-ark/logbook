@@ -417,7 +417,7 @@ xor_decrypt = xor_encrypt
 ciphertext = xor_encrypt(message, b"SECRET")
 recovered  = xor_decrypt(ciphertext, b"SECRET")`,
   content: `After breaking single-byte XOR in the last post, my first instinct was, **"What if the key were just longer?"** One byte gives 256 combinations. Four bytes gives 256⁴ ≈ 4.3 billion. That felt like a real improvement, at least against brute force.
-It took me a while to understand why that thinking misses the point. The number of possible keys is not what determines security. The structure of the cipher is. And once I saw how repeating a key leaves patterns in the ciphertext, it became clear that multi-byte XOR is still fundamentally brokenn, just in a less obvious way.
+It took me a while to understand why that thinking misses the point. The number of possible keys is not what determines security. The structure of the cipher is. And once I saw how repeating a key leaves patterns in the ciphertext, it became clear that multi-byte XOR is still fundamentally broken, just in a less obvious way.
 ## How it works
 Single-byte XOR uses one number as the key for every byte. Multi-byte XOR uses a sequence of numbers instead, and repeats it across the message.
 If your key is \`[3, 7, 1]\`, the first byte gets XORed with \`3\`, the second with \`7\`, the third with \`1\`, and then it starts over. The fourth byte gets \`3\` again, the fifth gets \`7\`.
