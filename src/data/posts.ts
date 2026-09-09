@@ -493,7 +493,7 @@ message = b"In cryptography, a cipher is an algorithm for performing encryption 
 ciphertext = xor_encrypt(message, b"SECRET")
 print(guess_key_length(ciphertext))  # 6
 \`\`\`
-One limitation of this approach is that it needs a reasonably long ciphertext to work reliably. The Hamming distance test is a statistical method — the more data it has, the more confident the estimate. It also tends to struggle with short keys (2 to 3 bytes), since multiples of the key length produce similarly low distances, making it hard to identify the true key length.
+One limitation of this approach is that it needs a reasonably long ciphertext to work reliably. The Hamming distance test is a statistical method, meaning the more data it has, the more confident the estimate. It also tends to struggle with short keys (2 to 3 bytes), since multiples of the key length produce similarly low distances, making it hard to identify the true key length.
 For short messages or short keys, a simpler approach works better. If the key is short (say 1 to 4 bytes), we can just brute force it — try every possible key and check if the result looks like readable text. A 3-byte key has 256³ = 16 million combinations, which a modern computer can go through in seconds.
 `,
   },
