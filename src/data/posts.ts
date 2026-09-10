@@ -517,7 +517,12 @@ def break_repeating_xor(ciphertext: bytes, key_len: int) -> bytes:
         for i in range(key_len)  # repeat for each key position
     )
 \`\`\`
-The slice \`ciphertext[i::key_len]\` pulls out exactly the bytes that share a key position. Do this for every column and the full key falls out.`,
+The slice \`ciphertext[i::key_len]\` pulls out exactly the bytes that share a key position. Do this for every column and the full key falls out.
+## What this taught me
+The thing I kept coming back to was how the attack never needed to try every possible key. It just needed the structure of the cipher to leak information, and a repeating key always does that no matter how long it is.
+That is when it started making sense why real encryption does not just use a longer XOR key. AES applies multiple rounds of substitution, permutation, and mixing so that no single output byte has a simple relationship to any single input byte. There is no column to isolate, no pattern to exploit at that level.
+Building this made the gap between a toy cipher and a real one feel concrete in a way that reading about it did not.
+> 🔗 **Code:** The full implementation is available on [GitHub](https://github.com/n0as-ark/XOR-Encryption-In-Python/blob/main/src/multi_byte_xor.py).`,
   },
   {title: "Introduction to Computer Networking",
   slug: "introduction-to-computer-networking",
