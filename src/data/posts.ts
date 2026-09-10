@@ -498,7 +498,26 @@ For short messages or short keys, a simpler approach works better. If the key is
 
 ## Breaking it column by column
 Once the key length is known, the attack reduces to something we already covered. If the key is six bytes long, then positions 0, 6, 12, 18... in the ciphertext were all encrypted with the same byte. Pull those out as a column and it is just single-byte XOR again, breakable with the same frequency analysis from the last post.
-`,
+\`\`\`python
+def break_single_byte(data: bytes) -> int:
+    best_score, best_key = -1, 0
+    for k in range(256):  # try every possible single-byte key
+        decrypted = bytes(b ^ k for b in data)
+        score = sum(
+            1 for b in decrypted
+            if chr(b).lower() in "etaoin shrdlu"  # count common English characters
+        )
+        if score > best_score:
+            best_score, best_key = score, k  # keep the key that produces the most readable text
+    return best_key  # most likely key byte
+ 
+def break_repeating_xor(ciphertext: bytes, key_len: int) -> bytes:
+    return bytes(
+        break_single_byte(ciphertext[i::key_len])  # slice out every nth byte (same key position)
+        for i in range(key_len)  # repeat for each key position
+    )
+\`\`\`
+The slice \`ciphertext[i::key_len]\` pulls out exactly the bytes that share a key position. Do this for every column and the full key falls out.`,
   },
   {title: "Introduction to Computer Networking",
   slug: "introduction-to-computer-networking",
