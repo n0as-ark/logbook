@@ -1074,7 +1074,7 @@ content: `## 1. Transport Services and Protocols
 - Every IP datagram carries source/destination IP addresses; every segment inside carries source/destination port numbers. Both together route a segment to the correct socket.
 
 \`\`\`
-        32 bits
+                32 bits
 +------------------+------------------+
 |  source port #   |    dest port #   |
 +------------------+------------------+
@@ -1084,7 +1084,7 @@ content: `## 1. Transport Services and Protocols
 |      application data (payload)     |
 |                                      |
 +--------------------------------------+
-       TCP/UDP segment format
+         TCP/UDP segment format
 \`\`\`
 
 **Connectionless demultiplexing (UDP):**
@@ -1117,7 +1117,7 @@ content: `## 1. Transport Services and Protocols
 **UDP header fields:**
  
 \`\`\`
-        32 bits
+                32 bits
 +------------------+------------------+
 |  source port #   |    dest port #   |
 +------------------+------------------+
@@ -1127,7 +1127,7 @@ content: `## 1. Transport Services and Protocols
 |      application data (payload)     |
 |                                      |
 +--------------------------------------+
-         UDP segment format
+            UDP segment format
  
 length   = bytes in the segment, including header
 checksum = detects bit errors
