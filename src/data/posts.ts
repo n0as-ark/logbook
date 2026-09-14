@@ -1041,11 +1041,11 @@ A separate **mail access protocol** handles retrieval:
 - There's no authentication built into SMTP's server-to-server handshake.
 - A separate access protocol (IMAP, or HTTP-based webmail) is needed to actually retrieve mail down to a device — SMTP only handles delivery to the receiver's server.
 `},
-  {title: "Transport Layer",
-slug: "transport-layer",
+  {title: "Transport Layer: Multiplexing, UDP, and Reliable Data Transfer",
+slug: "transport-layer-multiplexing-udp-rdt",
 date: "2026-09-09",
 tags: ["Network"],
-excerpt: "Multiplexing and demultiplexing, UDP, the rdt1.0-3.0 progression with Go-Back-N and Selective Repeat, TCP segment structure and connection management, and a QUIC comparison.",
+excerpt: "Multiplexing and demultiplexing, UDP's no-frills header and checksum, and the rdt1.0-3.0 progression through Go-Back-N and Selective Repeat pipelining.",
 readTime: "11 min",
 snippet: `Go-Back-N: Sender
 [A][A][S][S][S][S][U][U][ ]
@@ -1138,5 +1138,76 @@ checksum = detects bit errors
 - Receiver repeats the addition and compares to the checksum field.
 - Mismatch → error detected, segment discarded. Match → probably fine, but not a guarantee (some error patterns can cancel out).
  
----`},
+---
+
+## 4. Principles of Reliable Data Transfer (RDT)
+ 
+- Applications hand data to a "reliable channel" abstraction; the real channel (built on IP) offers no delivery, ordering, or duplication guarantee.
+- Protocol complexity depends on how the channel misbehaves — loses data, corrupts data, reorders it?
+- Sender and receiver don't know each other's state directly — has to be communicated via messages.
+ 
+**rdt1.0** — reliable channel: no bit errors, no loss. Sender sends, receiver reads.
+ 
+**rdt2.0** — channel with bit errors:
+- Checksum detects errors.
+- **ACK** = "got it OK," **NAK** = "had errors, resend" — like asking "what?" on a noisy call.
+- **Stop-and-wait**: one packet sent, then wait for response before sending the next.
+- Fatal flaw: a corrupted ACK/NAK leaves the sender unsure what happened, and blind retransmission risks a duplicate.
+ 
+**rdt2.1** — fix via sequence numbers:
+- Adds a sequence number (0/1, alternating — enough since only one packet is in flight at a time).
+- Corrupted ACK/NAK → retransmit current packet; receiver checks sequence number to discard duplicates.
+- Doubles the states each side tracks (must remember expected 0 or 1).
+- Receiver can never be fully sure its last ACK/NAK arrived — sequence numbers make that harmless.
+ 
+**rdt2.2** — NAK-free:
+- Same as rdt2.1, ACKs only.
+- Receiver re-ACKs the last correctly received packet's sequence number instead of sending a NAK.
+- Duplicate ACK at sender = same trigger as a NAK: retransmit. TCP uses this approach.
+ 
+**rdt3.0** — channel with errors *and* loss:
+- New problem: packets (data or ACKs) can be lost outright.
+- Sender waits a "reasonable" time for an ACK, retransmits if none arrives — via a countdown **timer** / **timeout**.
+- Delayed-not-lost packets still work correctly, since sequence numbers catch the resulting duplicate.
+- Scenarios: no loss; data lost (timeout + resend); ACK lost (redundant resend, sequence numbers prevent double delivery); premature timeout/delayed ACK (duplicate ACK just gets ignored).
+ 
+**Performance (stop-and-wait):**
+- *U*sender = fraction of time the sender is actually transmitting.
+- Example: 1 Gbps link, 15 ms one-way delay, 8000-bit packet.
+- *D*trans = 8000 bits / 10⁹ bps = 8 microseconds.
+- *U*sender = (L/R) / (RTT + L/R) = 0.008 / 30.008 ≈ **0.00027**.
+- Link sits idle almost the whole time — the protocol itself is the bottleneck.
+ 
+**Pipelining:**
+- Allows multiple in-flight, unACKed packets at once instead of stopping after each one.
+- Needs a larger sequence-number range and buffering at sender/receiver.
+- 3-packet pipelining triples utilization (~0.00081 in the example above) — better, but still far from saturating the link.
+ 
+**Go-Back-N (GBN):**
+- Sender window of up to *N* unACKed packets, tracked with a *k*-bit sequence number.
+- ACKs are **cumulative**: ACK(n) covers everything up through n; window slides to n+1 on receipt.
+- One timer for the oldest in-flight packet; on timeout, resend packet n *and everything after it* in the window.
+- Receiver: ACKs the highest in-order sequence number so far (duplicates possible); out-of-order packets are discarded or buffered but not accepted out of order.
+- Example (N=4): losing packet 2 causes repeated ACK-1 responses as 3/4/5 arrive and get discarded; timeout on packet 2 resends 2 through 5, even though 3–5 already arrived once.
+ 
+**Selective Repeat (SR):**
+- Receiver **individually ACKs** every correctly received packet and buffers out-of-order ones for in-order delivery later.
+- Sender keeps a (conceptual) separate timer per unACKed packet; timeout resends only that one packet.
+- Sender window over N consecutive sequence numbers limits in-flight packets.
+- Sender logic: send if next seq # is in window; on timeout(n), resend only n; on ACK(n) in window, mark received, slide window base forward if n was the smallest unACKed.
+- Receiver logic: packet in [rcvbase, rcvbase+N-1] → ACK it, buffer if out of order or deliver (plus any buffered ones) if it fills the gap; packet in [rcvbase-N, rcvbase-1] → re-ACK (covers a possibly-lost prior ACK); anything else → ignore.
+- Example (N=4): losing packet 2 causes 3/4/5 to get buffered individually (ack3, ack4, ack5); once 2 finally arrives, 2 through 5 all deliver at once.
+- Tradeoff vs. GBN: SR needs receiver buffering for up to N packets but avoids re-sending packets that already arrived.
+- Cumulative ACKs are more resilient to ACK loss in general — one ACK implicitly confirms everything up to that point.
+ 
+---
+## Key Points to Remember
+ 
+- Ports identify processes; sockets are the live (IP, port)-bound objects processes read/write through.
+- UDP demultiplexes on destination (IP, port); TCP demultiplexes on the full 4-tuple.
+- UDP trades reliability for speed/simplicity — no handshake, no state, no congestion control.
+- RDT builds up piece by piece: checksums catch corruption, sequence numbers catch duplicates, ACKs/NAKs report status, timeouts catch loss.
+- Stop-and-wait wastes bandwidth; pipelining (GBN or SR) keeps multiple packets in flight to improve utilization.
+- GBN: cumulative ACKs, simple receiver, resends everything after a loss. SR: individual ACKs + buffering, resends only what's lost.
+`},
 ];
