@@ -1056,11 +1056,7 @@ Go-Back-N: Receiver
        ^base
  
 A=ACKed S=sent U=usable X=out-of-order`,
-content: `# Transport Layer
- 
----
- 
-## 1. Transport Services and Protocols
+content: `## 1. Transport Services and Protocols
  
 - Provides **logical communication** between application processes on different hosts — end-to-end from the application's point of view, even though data physically passes through every router in between.
 - Sender: breaks application messages into **segments**, passes them to the network layer.
