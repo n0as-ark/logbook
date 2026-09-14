@@ -1048,12 +1048,12 @@ tags: ["Network"],
 excerpt: "Multiplexing and demultiplexing, UDP, the rdt1.0-3.0 progression with Go-Back-N and Selective Repeat, TCP segment structure and connection management, and a QUIC comparison.",
 readTime: "11 min",
 snippet: `Go-Back-N: Sender
-[A][A][S][S][S][U][U][ ]
-       ^base      ^next
+[A][A][S][S][S][S][U][U][ ]
+      ^send_base  ^nextseqnum
  
 Go-Back-N: Receiver
-[A][A][ ][X][X][ ][ ][ ]
-       ^base
+[A][A][ ][X][X][X][ ][ ][ ]
+      ^rcv_base
  
 A=ACKed S=sent U=usable X=out-of-order`,
 content: `## 1. Transport Services and Protocols
