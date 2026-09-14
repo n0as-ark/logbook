@@ -1041,4 +1041,106 @@ A separate **mail access protocol** handles retrieval:
 - There's no authentication built into SMTP's server-to-server handshake.
 - A separate access protocol (IMAP, or HTTP-based webmail) is needed to actually retrieve mail down to a device — SMTP only handles delivery to the receiver's server.
 `},
+  {title: "Transport Layer",
+slug: "transport-layer",
+date: "2026-09-09",
+tags: ["Network"],
+excerpt: "Multiplexing and demultiplexing, UDP, the rdt1.0-3.0 progression with Go-Back-N and Selective Repeat, TCP segment structure and connection management, and a QUIC comparison.",
+readTime: "11 min",
+snippet: `Go-Back-N: Sender
+[A][A][S][S][S][U][U][ ]
+       ^base      ^next
+ 
+Go-Back-N: Receiver
+[A][A][ ][X][X][ ][ ][ ]
+       ^base
+ 
+A=ACKed S=sent U=usable X=out-of-order`,
+content: `# Transport Layer
+ 
+---
+ 
+## 1. Transport Services and Protocols
+ 
+- Provides **logical communication** between application processes on different hosts — end-to-end from the application's point of view, even though data physically passes through every router in between.
+- Sender: breaks application messages into **segments**, passes them to the network layer.
+- Receiver: reassembles segments into messages, passes them up to the application layer.
+- Two transport protocols available to Internet applications: **TCP** and **UDP**.
+- Sender-side steps: message arrives from application → header fields determined (ports, etc.) → segment created → handed to IP.
+- Receiver-side steps: segment arrives from IP → header checked → application message extracted → demultiplexed up to the correct socket.
+ 
+---
+
+## 2. Multiplexing and Demultiplexing
+ 
+- **Demultiplexing** — sorting incoming data to the correct process/socket on the receiving side.
+- **Multiplexing** — combining multiple sessions/streams from different sockets onto one connection on the sending side.
+- Every IP datagram carries source/destination IP addresses; every segment inside carries source/destination port numbers. Both together route a segment to the correct socket.
+
+\`\`\`
+        32 bits
++------------------+------------------+
+|  source port #   |    dest port #   |
++------------------+------------------+
+|         other header fields         |
++--------------------------------------+
+|                                      |
+|      application data (payload)     |
+|                                      |
++--------------------------------------+
+       TCP/UDP segment format
+\`\`\`
+
+**Connectionless demultiplexing (UDP):**
+- Socket identified by just the local (IP, port) pair — \`socket(AF_INET, SOCK_DGRAM)\`, then \`.bind(myaddr, port)\`.
+- Sending requires specifying a destination IP and port.
+- Destination IP + destination port is the *only* thing that decides which socket gets a segment — different source IPs/ports with the same destination still land in the same socket.
+ 
+**Connection-oriented demultiplexing (TCP):**
+- Socket identified by a full **4-tuple**: source IP, source port, dest IP, dest port.
+- One listening port can serve many simultaneous sockets, each tied to a different client via its own 4-tuple.
+- \`SOCK_DGRAM\` = UDP, \`SOCK_STREAM\` = TCP. Binding = assigning a socket its local (IP, port).
+- Example: three segments all addressed to the same server IP/port can still demux to three different sockets, since the full 4-tuples differ.
+ 
+---
+
+## 3. Connectionless Transport: UDP
+ 
+- RFC 768 (1980) — "no frills," **best-effort service**, no delivery guarantee.
+- Segments may be lost or delivered out of order.
+- **Connectionless**: no handshaking, each segment handled independently.
+ 
+**Why UDP exists:**
+- No connection setup → no extra RTT delay before data flows.
+- Simple — no connection state at sender or receiver. (**Connection state** = sequence/ACK numbers, unACKed data, the advertised receive window, buffered out-of-order segments, and active timers that both sides track for the life of a connection — TCP keeps this; UDP skips it entirely.)
+- Small header → less overhead.
+- No congestion control — sends as fast as the app wants, keeps working under congestion.
+ 
+**Typical uses:** streaming multimedia (loss-tolerant, rate-sensitive), DNS, SNMP, HTTP/3. Reliability/congestion control for these gets added at the **application layer**, not the transport layer.
+ 
+**UDP header fields:**
+ 
+\`\`\`
+        32 bits
++------------------+------------------+
+|  source port #   |    dest port #   |
++------------------+------------------+
+|      length      |     checksum     |
++--------------------------------------+
+|                                      |
+|      application data (payload)     |
+|                                      |
++--------------------------------------+
+         UDP segment format
+ 
+length   = bytes in the segment, including header
+checksum = detects bit errors
+\`\`\`
+ 
+**Internet checksum:**
+- Sender treats the segment (header + IP addresses) as a sequence of 16-bit integers, adds them (one's-complement sum), stores the result in the checksum field.
+- Receiver repeats the addition and compares to the checksum field.
+- Mismatch → error detected, segment discarded. Match → probably fine, but not a guarantee (some error patterns can cancel out).
+ 
+---`
 ];
