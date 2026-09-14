@@ -1142,5 +1142,5 @@ checksum = detects bit errors
 - Receiver repeats the addition and compares to the checksum field.
 - Mismatch → error detected, segment discarded. Match → probably fine, but not a guarantee (some error patterns can cancel out).
  
----`
+---`},
 ];
