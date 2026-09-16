@@ -1257,7 +1257,7 @@ Core characteristics:
 - **Sequence number** = byte-stream number of the first byte in a segment (e.g., seq 0 + 100 bytes → next segment starts at seq 100)
 - **ACK number** = next expected byte, cumulative
 - Out-of-order handling is left to the implementor by spec
-- Telnet example: Host A sends 'C' at seq 42, ACK 79; Host B echoes 'C' at seq 79, ACK 43; Host A ACKs at seq 43 (= seq 42 + 1 byte for 'C'), ACK 80
+- Telnet example: Host A sends 'C' at seq 42, ACK 79; Host B echoes 'C' at seq 79, ACK 43; Host A ACKs at seq 43 \`(= seq 42 + 1 byte for 'C')\`, ACK 80
 - Each direction gets its own random initial sequence number; numbering never crosses between directions
  
 **RTT and timeout:**
@@ -1287,5 +1287,23 @@ Core characteristics:
 - Three duplicate ACKs (four total with the same number) → strong signal of loss, even before timeout
 - Sender immediately resends the smallest unACKed sequence number, skipping the wait for timeout
 
-`},
+**Flow control:**
+- Problem: network layer could deliver data faster than the application reads it out, overflowing the receiver's buffer
+- Receiver advertises free buffer space via **rwnd** in every TCP header
+- **RcvBuffer** size set by OS/socket options (e.g., 4096 bytes)
+- Sender limits unACKed in-flight data to **rwnd** bytes
+- Application draining the buffer frees space, growing rwnd again over time — dynamically matches transmission rate to receiver capacity
+ 
+**Connection management — three-way handshake:**
+1. Client picks initial seq *x*, sends SYNbit=1, Seq=x
+2. Server picks initial seq *y*, replies SYNbit=1, Seq=y, ACKbit=1, ACKnum=x+1 (SYNACK; the SYN itself consumes one sequence number)
+3. Client replies ACKbit=1, ACKnum=y+1 — may already carry data
+Note: Sequence number 0 is never actually used as a real initial value
+ 
+**Closing a connection:**
+- Each side sends a segment with **FIN bit = 1** to close its own direction
+- A received FIN gets ACKed; that ACK can combine with the receiver's own FIN ("FINACK") if it's also ready to close
+- Simultaneous FIN exchanges from both sides are handled correctly
+ 
+---`},
 ];
