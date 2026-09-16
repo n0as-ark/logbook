@@ -1210,4 +1210,45 @@ checksum = detects bit errors
 - Stop-and-wait wastes bandwidth; pipelining (GBN or SR) keeps multiple packets in flight to improve utilization.
 - GBN: cumulative ACKs, simple receiver, resends everything after a loss. SR: individual ACKs + buffering, resends only what's lost.
 `},
+  {title: "Transport Layer: TCP and QUIC",
+slug: "transport-layer-tcp-quic",
+date: "2026-09-14",
+tags: ["Network"],
+excerpt: "TCP segment structure, sequence/ACK numbers, RTT and retransmission, flow control, the three-way handshake and connection close, plus a QUIC comparison.",
+readTime: "8 min",
+snippet: `TCP + TLS handshake       QUIC handshake
+--------------------      --------------------
+Client      Server        Client      Server
+  |            |            |            |
+  |-- SYN ---->|            |- Initial ->|
+  |<- SYNACK --|  RTT 1     |<- done ----|  RTT 1
+  |-ClientHello|            |--- Data -->|
+  |<-ServerHello RTT 2
+  |--- Data -->|`,
+content: `## 1. Connection-Oriented Transport: TCP
+ 
+TCP's behavior is defined across RFCs 793, 1122, 2018, 5681, and 7323. Core characteristics:
+- **Point-to-point**: one sender, one receiver.
+- **Reliable, in-order byte stream** — no "message boundaries."
+- **Full duplex** — data flows both ways over one connection; MSS caps segment size.
+- **Pipelined** — congestion/flow control set the sender's window size.
+- **Cumulative ACKs.**
+- **Connection-oriented** — handshake before data, explicit termination after.
+- **Flow controlled** — sender can't overwhelm the receiver.
+ 
+**Segment structure:**
+ 
+| Field | Purpose |
+|---|---|
+| Source/dest port # | Socket identification |
+| Sequence number | Counts *bytes* into the stream, not segments |
+| Acknowledgement number | Next expected byte; ACK bit marks a valid ACK |
+| Header length | Length of the TCP header |
+| C, E bits | Congestion notification |
+| RST, SYN, FIN bits | Connection management (restart / start / finish) |
+| Receive window (rwnd) | Flow control — bytes receiver can accept |
+| Checksum | Internet checksum |
+| Options | Variable-length options |
+| Application data | Payload |
+`},
 ];
