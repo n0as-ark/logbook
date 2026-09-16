@@ -1216,15 +1216,16 @@ date: "2026-09-14",
 tags: ["Network"],
 excerpt: "TCP segment structure, sequence/ACK numbers, RTT and retransmission, flow control, the three-way handshake and connection close, plus a QUIC comparison.",
 readTime: "8 min",
-snippet: `TCP + TLS handshake       QUIC handshake
---------------------      --------------------
-Client      Server        Client      Server
-  |            |            |            |
-  |-- SYN ---->|            |- Initial ->|
-  |<- SYNACK --|  RTT 1     |<- done ----|  RTT 1
-  |-ClientHello|            |--- Data -->|
-  |<-ServerHello RTT 2
-  |--- Data -->|`,
+snippet: `
+TCP + TLS handshake            QUIC handshake
+--------------------        --------------------
+Client      Server           Client      Server
+  |              |             |            |
+  |---- SYN ---->|             |- Initial ->|
+  |<-- SYNACK ---|  RTT 1      |<-- done ---|  RTT 1
+  |-ClientHello->|             |--- Data -->|
+  |<-ServerHello-|  RTT 2
+  |---- Data --->|`,
 content: `## 1. Connection-Oriented Transport: TCP
  
 TCP's behavior is defined across RFCs 793, 1122, 2018, 5681, and 7323. Core characteristics:
