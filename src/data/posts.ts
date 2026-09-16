@@ -1254,15 +1254,38 @@ Core characteristics:
 | Application data | Payload |
 
 **Sequence numbers and ACKs:**
-- Sequence number = byte-stream number of the first byte in a segment (e.g., seq 0 + 100 bytes → next segment starts at seq 100)
-- ACK number = next expected byte, cumulative
+- **Sequence number** = byte-stream number of the first byte in a segment (e.g., seq 0 + 100 bytes → next segment starts at seq 100)
+- **ACK number** = next expected byte, cumulative
 - Out-of-order handling is left to the implementor by spec
-- Telnet example: Host A sends 'C' at seq 42, ACK 79; Host B echoes 'C' at seq 79, ACK 43; Host A ACKs at seq 43, ACK 80
+- Telnet example: Host A sends 'C' at seq 42, ACK 79; Host B echoes 'C' at seq 79, ACK 43; Host A ACKs at seq 43 (= seq 42 + 1 byte for 'C'), ACK 80
 - Each direction gets its own random initial sequence number; numbering never crosses between directions
  
 **RTT and timeout:**
 - Timeout must exceed RTT, but RTT varies. Too short → premature timeouts; too long → slow reaction to real loss
 - **SampleRTT** = time from segment sent to its ACK received (retransmissions excluded)
 - **EstimatedRTT** smooths SampleRTT by averaging recent measurements rather than reacting to one sample
+ 
+**TCP sender (simplified):**
+- Data from application → create segment with seq #, start timer if not running (tracks oldest unACKed segment), expiration = TimeOutInterval
+- Timeout → retransmit the segment that timed out, restart timer
+- ACK received → update what's ACKed; restart timer if segments remain unACKed
+ 
+**TCP receiver — ACK generation (RFC 5681):**
+| Event | Action |
+|---|---|
+| In-order segment, nothing else pending | Delayed ACK — wait up to 500ms, then ACK |
+| In-order segment, one other pending | Send one cumulative ACK for both |
+| Out-of-order (gap detected) | Immediate duplicate ACK for next expected byte |
+| Segment fills a gap | Immediate ACK, if it starts at the gap's lower end |
+
+**Retransmission scenarios:**
+- Lost ACK → sender's timer expires, resends; receiver re-ACKs the duplicate
+- Premature timeout → a later cumulative ACK covers the resent data anyway; SendBase advances, further duplicate ACKs get ignored
+- Cumulative ACK covering an earlier lost ACK → the loss becomes irrelevant once a later ACK covers the same ground
+ 
+**Fast retransmit:**
+- Three duplicate ACKs (four total with the same number) → strong signal of loss, even before timeout
+- Sender immediately resends the smallest unACKed sequence number, skipping the wait for timeout
+
 `},
 ];
