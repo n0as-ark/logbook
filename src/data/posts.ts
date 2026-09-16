@@ -1305,5 +1305,21 @@ Note: Sequence number 0 is never actually used as a real initial value
 - A received FIN gets ACKed; that ACK can combine with the receiver's own FIN ("FINACK") if it's also ready to close
 - Simultaneous FIN exchanges from both sides are handled correctly
  
+---
+
+## 2. QUIC: A Reliable Transport Built on UDP
+ 
+- Developed by Google (2012), later standardized by the Internet Engineering Task Force (IETF)
+- Runs over UDP, adds **TCP-level reliability**, **TLS encryption**, and **stream multiplexing**
+ 
+| TCP + TLS limitation | QUIC improvement |
+|---|---|
+| Setup needs multiple round trips (separate TCP + TLS handshakes) | 1- or 0-RTT handshake |
+| One lost packet delays every stream | Streams are independent — loss in one doesn't block others |
+| TCP lives in the OS kernel — slow to update | QUIC lives in user space — easy to evolve |
+| TLS runs above TCP as a separate layer | TLS 1.3 encryption built in |
+ 
+Motivation: TCP resends data on any detected loss, sometimes unnecessarily; QUIC's independent streams and faster handshake cut down that overhead
+ 
 ---`},
 ];
