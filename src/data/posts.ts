@@ -1252,5 +1252,17 @@ Core characteristics:
 | Checksum | Internet checksum |
 | Options | Variable-length options |
 | Application data | Payload |
+
+**Sequence numbers and ACKs:**
+- Sequence number = byte-stream number of the first byte in a segment (e.g., seq 0 + 100 bytes → next segment starts at seq 100)
+- ACK number = next expected byte, cumulative
+- Out-of-order handling is left to the implementor by spec
+- Telnet example: Host A sends 'C' at seq 42, ACK 79; Host B echoes 'C' at seq 79, ACK 43; Host A ACKs at seq 43, ACK 80
+- Each direction gets its own random initial sequence number; numbering never crosses between directions
+ 
+**RTT and timeout:**
+- Timeout must exceed RTT, but RTT varies. Too short → premature timeouts; too long → slow reaction to real loss
+- **SampleRTT** = time from segment sent to its ACK received (retransmissions excluded)
+- **EstimatedRTT** smooths SampleRTT by averaging recent measurements rather than reacting to one sample
 `},
 ];
