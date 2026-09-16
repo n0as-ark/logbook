@@ -1219,7 +1219,7 @@ readTime: "8 min",
 snippet: `
 TCP + TLS handshake            QUIC handshake
 --------------------        --------------------
-Client      Server           Client      Server
+ Client      Server          Client      Server
   |              |             |            |
   |---- SYN ---->|             |- Initial ->|
   |<-- SYNACK ---|  RTT 1      |<-- done ---|  RTT 1
@@ -1228,14 +1228,15 @@ Client      Server           Client      Server
   |---- Data --->|`,
 content: `## 1. Connection-Oriented Transport: TCP
  
-TCP's behavior is defined across RFCs 793, 1122, 2018, 5681, and 7323. Core characteristics:
-- **Point-to-point**: one sender, one receiver.
-- **Reliable, in-order byte stream** — no "message boundaries."
-- **Full duplex** — data flows both ways over one connection; MSS caps segment size.
-- **Pipelined** — congestion/flow control set the sender's window size.
-- **Cumulative ACKs.**
-- **Connection-oriented** — handshake before data, explicit termination after.
-- **Flow controlled** — sender can't overwhelm the receiver.
+TCP's behavior is defined across RFCs 793, 1122, 2018, 5681, and 7323. 
+Core characteristics:
+- **Point-to-point**: one sender, one receiver
+- **Reliable, in-order byte stream** — no "message boundaries"
+- **Full duplex**: data flows both ways over one connection; Maximum Segment Size (MSS) caps segment size
+- **Pipelined**: doesn't wait for an ACK before sending the next chunk of data; congestion/flow control set the sender's window size
+- **Cumulative ACKs**
+- **Connection-oriented**: handshake before data, explicit termination after
+- **Flow controlled** — sender can't overwhelm the receiver
  
 **Segment structure:**
  
