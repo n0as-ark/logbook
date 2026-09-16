@@ -1321,5 +1321,13 @@ Note: Sequence number 0 is never actually used as a real initial value
  
 Motivation: TCP resends data on any detected loss, sometimes unnecessarily; QUIC's independent streams and faster handshake cut down that overhead
  
----`},
+---
+
+## Key Points to Remember
+- TCP sequence numbers count bytes, not segments; ACKs are cumulative and NAK-free
+- Triple duplicate ACKs trigger fast retransmit, skipping the timeout wait
+- Flow control (rwnd) protects the receiver's buffer; congestion control protects the network itself
+- Three-way handshake opens a TCP connection; independent FIN exchanges close it
+- QUIC reimplements TCP-like reliability over UDP, trading kernel-level stability for faster handshakes and per-stream loss isolation
+`},
 ];
