@@ -1380,9 +1380,9 @@ content: `## Overview
 - Switching rate ideally reaches **N × the line rate** for N inputs
 - **Fabric types**
 
-  - **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
-  - **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
-  - **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
+    - **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
+    - **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
+    - **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
 - **Longest prefix matching**: when multiple table entries match, <u>pick the most specific (longest) prefix</u>. Implemented via ternary content addressable memories (TCAMs), giving **constant time lookup** regardless of table size (about 1M entries on Cisco Catalyst).
 
 ## Queuing
@@ -1399,5 +1399,18 @@ content: `## Overview
  2. **Priority**: classified and queued by class, always serve the highest nonempty priority queue, FCFS within a class
  3. **Round robin**: cycle through class queues, sending one packet per class per turn
  4. **Weighted fair queuing (WFQ)**: extends round robin by giving each class a service share proportional to its assigned weight, so every class is **assured some minimum bandwidth**
+
+## Internet Protocol (IP)
+ 
+- The IP protocol defines datagram format, addressing, and packet handling; Internet Control Message Protocol (ICMP) handles error reporting and router signaling
+- Datagram header fields: IP protocol version, header length, type of service, total length, fragmentation fields (identifier, flags, offset), **time to live (decremented at each hop, drops the packet at zero to guard against loops)**, upper layer protocol (TCP or UDP), header checksum, source and destination address, options, payload
+ 
+## IP Addressing
+ 
+- An IP address is **a 32 bit identifier** tied to an **interface (connection between host/router and physical link)**, not a device Routers typically have multiple interfaces; hosts usually have one or two.
+- **Subnet**: a group of interfaces that can communicate directly, with no router in between. An address splits into a subnet portion (shared upper bits within the group) and a host portion (remaining lower bits that pick out one device)
+- Subnet mask (for example /26) states how many high order bits mark the subnet part.
+- The **network address (all host bits zero)** and **broadcast address (all host bits one)** are reserved and not assignable to a device
+- **Classless InterDomain Routing (CIDR)**: address written as a.b.c.d/x, where x is the number of bits in the subnet mask, also called the prefix length (arbitrary, not tied to fixed classes)
 `},
 ];
