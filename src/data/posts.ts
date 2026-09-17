@@ -1378,7 +1378,7 @@ content: `## Overview
 - **Switching rate**: how quickly packets can move through the fabric from inputs to outputs, typically expressed as a multiple of a single port's line speed
 - **Line rate**: the speed of an individual physical link connected to one port
 - Switching rate ideally reaches **N × the line rate** for N inputs
-- **Fabric types**:
+- **Fabric types**
   - **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
   - **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
   - **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
