@@ -1337,17 +1337,17 @@ tags: ["Network"],
 excerpt: "Forwarding vs. routing, router architecture, switching fabrics, queuing and scheduling, IP addressing, DHCP, NAT, and IPv6",
 readTime: "x min",
 snippet: `
- Arriving         DHCP Server 
-  Client         (192.168.1.1)
-    │                   │
-    │── DHCP Discover ─▶│  (broadcast)
-    │                   │
-    │◀─── DHCP Offer ───│  (offers 192.168.1.42)
-    │                   │
-    │── DHCP Request ──▶│  (request to use offered address)
-    │                   │
-    │◀──── DHCP ACK ────│  (confirms)
-    │                   │`,
+Arriving         DHCP Server 
+ Client         (192.168.1.1)
+   │                   │
+   │── DHCP Discover ─▶│  (broadcast)
+   │                   │
+   │◀─── DHCP Offer ───│  (offers 192.168.1.42)
+   │                   │
+   │── DHCP Request ──▶│  (request to use offered address)
+   │                   │
+   │◀──── DHCP ACK ────│  (confirms)
+   │                   │`,
 content: `## Overview
  
 * Network layer moves segments from sending host to receiving host; every host and router runs network layer protocols
