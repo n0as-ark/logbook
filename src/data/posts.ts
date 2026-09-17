@@ -1416,16 +1416,16 @@ content: `## Overview
 - DHCP exchange has four steps: **discover, offer, request, ack** (discover and offer can be skipped if the host reuses a remembered address, per RFC 2131)
  
 \`\`\`
-     Arriving Client                    DHCP Server (192.168.1.1)
-          │                                    │
-          │──────── DHCP Discover ────────────▶│  (broadcast: any DHCP server out there?)
-          │                                    │
-          │◀─────────  DHCP Offer  ────────────│  (offers 192.168.1.42, lifetime 3600s)
-          │                                    │
-          │──────── DHCP Request ─────────────▶│  (client asks to use offered address)
-          │                                    │
-          │◀──────────   DHCP ACK   ───────────│  (confirms: address is yours)
-          │                                    │
+Arriving Client                    DHCP Server (192.168.1.1)
+      │                                    │
+      │──────── DHCP Discover ────────────▶│  (broadcast: any DHCP server out there?)
+      │                                    │
+      │◀─────────  DHCP Offer  ────────────│  (offers 192.168.1.42, lifetime 3600s)
+      │                                    │
+      │──────── DHCP Request ─────────────▶│  (client asks to use offered address)
+      │                                    │
+      │◀──────────   DHCP ACK   ───────────│  (confirms: address is yours)
+      │                                    │
 \`\`\`
  
 - DHCP can also supply the **first hop router address**, **a DNS server**, and **a network mask** (indicating network vs. host portion of address)
@@ -1445,6 +1445,5 @@ content: `## Overview
 * Mechanism: outgoing datagrams are rewritten to **(NAT IP address, new port #)**; the mapping is **stored in a NAT translation table**; incoming datagrams are rewritten back using that table
 * Criticism: it touches port numbers at a layer 3 device, seen as **breaking the end to end argument**; it is a workaround rather than a true fix for address scarcity; it complicates NAT traversal for inbound connections
 * Still used widely: home and institutional networks, 4G and 5G
- 
 `},
 ];
