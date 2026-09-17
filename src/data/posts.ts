@@ -1400,16 +1400,42 @@ content: `## Overview
  4. **Weighted fair queuing (WFQ)**: extends round robin by giving each class a service share proportional to its assigned weight, so every class is **assured some minimum bandwidth**
 
 ## Internet Protocol (IP)
- 
 - The IP protocol defines datagram format, addressing, and packet handling; Internet Control Message Protocol (ICMP) handles error reporting and router signaling
 - Datagram header fields: IP protocol version, header length, type of service, total length, fragmentation fields (identifier, flags, offset), **time to live (decremented at each hop, drops the packet at zero to guard against loops)**, upper layer protocol (TCP or UDP), header checksum, source and destination address, options, payload
  
 ## IP Addressing
- 
 - An IP address is **a 32 bit identifier** tied to an **interface (connection between host/router and physical link)**, not a device Routers typically have multiple interfaces; hosts usually have one or two.
 - **Subnet**: a group of interfaces that can communicate directly, with no router in between. An address splits into a subnet portion (shared upper bits within the group) and a host portion (remaining lower bits that pick out one device)
 - Subnet mask (for example /26) states how many high order bits mark the subnet part.
 - The **network address (all host bits zero)** and **broadcast address (all host bits one)** are reserved and not assignable to a device
 - **Classless InterDomain Routing (CIDR)**: address written as a.b.c.d/x, where x is the number of bits in the subnet mask, also called the prefix length (arbitrary, not tied to fixed classes)
+
+## Obtaining an IP Address
+- Host part: assigned manually **by hard coding**, or **dynamically via** **Dynamic Host Configuration Protocol (DHCP)** ("plug and play")
+- DHCP addresses are leased for a period; renewal typically begins around half the lease time; the DHCP server is often located inside a router
+- DHCP exchange has four steps: **discover, offer, request, ack** (discover and offer can be skipped if the host reuses a remembered address, per RFC 2131)
+ 
+\`\`\`
+     Arriving Client                    DHCP Server (192.168.1.1)
+          │                                    │
+          │──────── DHCP Discover ────────────▶│  (broadcast: any DHCP server out there?)
+          │                                    │
+          │◀─────────  DHCP Offer  ────────────│  (offers 192.168.1.42, lifetime 3600s)
+          │                                    │
+          │──────── DHCP Request ─────────────▶│  (client asks to use offered address)
+          │                                    │
+          │◀──────────   DHCP ACK   ───────────│  (confirms: address is yours)
+          │                                    │
+\`\`\`
+ 
+- DHCP can also supply the **first hop router address**, **a DNS server**, and **a network mask** (indicating network vs. host portion of address)
+- Unlike hosts which get their address via hard coding or DHCP, a network itself gets the subnet part of its address through its provider ISP's address space
+ 
+## Route Aggregation
+- Hierarchical addressing lets an **ISP advertise one aggregated block** (such as a /20) instead of many small ones
+- If an organization switches ISPs, the new ISP advertises a more specific route just for that organization's block
+- Routers **always prefer the longest, most specific prefix match** when forwarding
+- **Internet Corporation for Assigned Names and Numbers (ICANN)** allocates address blocks through **five regional registries** and also manages the DNS root zone and TLD delegation
+- The IPv4 pool is exhausted: ICANN allocated its last block in 2011 Two responses are **NAT (stretching existing space)** and **IPv6 (a new 128 bit space)**
 `},
 ];
