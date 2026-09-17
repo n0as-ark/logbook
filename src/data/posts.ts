@@ -1379,9 +1379,9 @@ content: `## Overview
 - **Line rate**: the speed of an individual physical link connected to one port
 - Switching rate ideally reaches **N × the line rate** for N inputs
 - **Fabric types**:
-  * **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
-  * **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
-  * **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
+  - **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
+  - **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
+  - **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
 - **Longest prefix matching**: when multiple table entries match, <u>pick the most specific (longest) prefix</u>. Implemented via ternary content addressable memories (TCAMs), giving **constant time lookup** regardless of table size (about 1M entries on Cisco Catalyst).
 
 ## Queuing
@@ -1393,5 +1393,10 @@ content: `## Overview
 - **Drop policies**: tail drop (drop arriving packet); priority based drop
 - **Marking**: instead of dropping a packet outright, the router marks a field in its header **to signal that congestion is building**; the receiving endpoint **can then react and slow down before real loss occurs**. RED (Random Early Detection) decides probabilistically which packets to mark as the queue starts to fill, while ECN (Explicit Congestion Notification) is the header bit actually used to carry that signal
 
+### Packet Scheduling Disciplines
+ 1. **FCFS / FIFO**: transmit in arrival order
+ 2. **Priority**: classified and queued by class, always serve the highest nonempty priority queue, FCFS within a class
+ 3. **Round robin**: cycle through class queues, sending one packet per class per turn
+ 4. **Weighted fair queuing (WFQ)**: extends round robin by giving each class a service share proportional to its assigned weight, so every class is **assured some minimum bandwidth**
 `},
 ];
