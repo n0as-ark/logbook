@@ -23,14 +23,18 @@ const BlogPost = () => {
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
       .replace(/\*([^*]+)\*/g, '<em>$1</em>')
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 hover:opacity-70">$1</a>');
-  
+
+  const LIST_LINE_RE = /^(\s*)([-*]|\d+\.)\s+(.*)$/;
+
+  type ListLine = { level: number; type: "ul" | "ol"; html: string };
+
   const renderContent = (content: string) => {
     const lines = content.split("\n");
     const elements: JSX.Element[] = [];
     let inCodeBlock = false;
     let codeLines: string[] = [];
     let currentLang = "";
-    let listItems: JSX.Element[] = [];
+    let pendingListLines: ListLine[] = [];
     let tableLines: string[] = [];
     let key = 0;
     
@@ -106,16 +110,50 @@ const BlogPost = () => {
       }
     };
 
+    const buildList = (linesRun: ListLine[], start: number, level: number): [JSX.Element, number] => {
+      const type = linesRun[start].type;
+      const Tag = type === "ol" ? "ol" : "ul";
+      const listClass =
+        type === "ol"
+          ? "prose-blog list-decimal pl-5 space-y-1 mb-4"
+          : "prose-blog list-disc pl-5 space-y-1 mb-4";
+
+      const items: JSX.Element[] = [];
+      let i = start;
+
+      while (i < linesRun.length && linesRun[i].level === level && linesRun[i].type === type) {
+        const html = linesRun[i].html;
+        i++;
+
+        let child: JSX.Element | null = null;
+        if (i < linesRun.length && linesRun[i].level > level) {
+          const [nested, nextI] = buildList(linesRun, i, linesRun[i].level);
+          child = nested;
+          i = nextI;
+        }
+
+        items.push(
+          <li key={key++}>
+            <span dangerouslySetInnerHTML={{ __html: html }} />
+            {child}
+          </li>
+        );
+      }
+
+      return [<Tag key={key++} className={listClass}>{items}</Tag>, i];
+    };
+
     const flushList = () => {
-      if (listItems.length > 0) {
-        elements.push(<ul key={key++} className="prose-blog list-disc pl-5 space-y-1 mb-4">{listItems}</ul>);
-        listItems = [];
+      if (pendingListLines.length > 0) {
+        const [rootList] = buildList(pendingListLines, 0, pendingListLines[0].level);
+        elements.push(rootList);
+        pendingListLines = [];
       }
     };
 
     const flushTable = () => {
       if (tableLines.length < 2) { tableLines=[]; return; }
-      const parseRow = (row) =>
+      const parseRow = (row: string) =>
         row.split("|").map(c=>c.trim()).slice(1,-1);
       const headers = parseRow(tableLines[0]);
       const body = tableLines.slice(2);
@@ -167,7 +205,9 @@ const BlogPost = () => {
       } else if (tableLines.length > 0 ) {
         flushTable();
       }
-      
+
+      const listMatch = line.match(LIST_LINE_RE);
+
       if (line.startsWith("> ")) {
         flushList();
         elements.push(
@@ -181,11 +221,11 @@ const BlogPost = () => {
       } else if (line.startsWith("### ")) {
         flushList();
         elements.push(<h3 key={key++} className="prose-blog">{line.slice(4)}</h3>);
-      } else if (line.startsWith("- ")) {
-        listItems.push(
-          <li dangerouslySetInnerHTML=
-            {{__html: renderInline(line.slice(2))}} />
-          );
+      } else if (listMatch) {
+        const [, indent, marker, rest] = listMatch;
+        const level = Math.floor(indent.length / 2);
+        const type: "ul" | "ol" = /^\d+\.$/.test(marker) ? "ol" : "ul";
+        pendingListLines.push({ level, type, html: renderInline(rest) });
       } else if (line.trim() === "") {
         flushList();
         continue;
