@@ -110,13 +110,12 @@ const BlogPost = () => {
       }
     };
 
-    const buildList = (linesRun: ListLine[], start: number, level: number): [JSX.Element, number] => {
+    const buildList = (linesRun: ListLine[], start: number, level: number, isRoot = false): [JSX.Element, number] => {
       const type = linesRun[start].type;
       const Tag = type === "ol" ? "ol" : "ul";
       const listClass =
-        type === "ol"
-          ? "prose-blog list-decimal pl-5 space-y-1 mb-4"
-          : "prose-blog list-disc pl-5 space-y-1 mb-4";
+        (type === "ol" ? "prose-blog list-decimal pl-5 space-y-1" : "prose-blog list-disc pl-5 space-y-1") +
+        (isRoot ? " mb-4" : "");
 
       const items: JSX.Element[] = [];
       let i = start;
@@ -127,7 +126,7 @@ const BlogPost = () => {
 
         let child: JSX.Element | null = null;
         if (i < linesRun.length && linesRun[i].level > level) {
-          const [nested, nextI] = buildList(linesRun, i, linesRun[i].level);
+          const [nested, nextI] = buildList(linesRun, i, linesRun[i].level, false);
           child = nested;
           i = nextI;
         }
@@ -145,7 +144,7 @@ const BlogPost = () => {
 
     const flushList = () => {
       if (pendingListLines.length > 0) {
-        const [rootList] = buildList(pendingListLines, 0, pendingListLines[0].level);
+        const [rootList] = buildList(pendingListLines, 0, pendingListLines[0].level, true);
         elements.push(rootList);
         pendingListLines = [];
       }
