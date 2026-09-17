@@ -1437,5 +1437,14 @@ content: `## Overview
 - Routers **always prefer the longest, most specific prefix match** when forwarding
 - **Internet Corporation for Assigned Names and Numbers (ICANN)** allocates address blocks through **five regional registries** and also manages the DNS root zone and TLD delegation
 - The IPv4 pool is exhausted: ICANN allocated its last block in 2011 Two responses are **NAT (stretching existing space)** and **IPv6 (a new 128 bit space)**
+
+## Network Address Translation (NAT)
+* Local network devices **share one public IPv4 address** and are **distinguished externally by port number**
+* Private address ranges, never publicly routed (RFC 1918): **10/8, 172.16/12, 192.168/16**
+* Advantages: **only one public address is needed**; internal addresses can change freely; the ISP can change without renumbering internal devices; **internal devices are not directly addressable or visible externally (security)**
+* Mechanism: outgoing datagrams are rewritten to **(NAT IP address, new port #)**; the mapping is **stored in a NAT translation table**; incoming datagrams are rewritten back using that table
+* Criticism: it touches port numbers at a layer 3 device, seen as **breaking the end to end argument**; it is a workaround rather than a true fix for address scarcity; it complicates NAT traversal for inbound connections
+* Still used widely: home and institutional networks, 4G and 5G
+ 
 `},
 ];
