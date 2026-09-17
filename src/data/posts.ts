@@ -1374,7 +1374,7 @@ content: `## Overview
 - **Destination based forwarding**: forwards based on destination IP only (traditional)
 - **Generalized forwarding**: forwards based on any header fields
 
-### Switching Fabrics
+## Switching Fabrics
 - **Switching rate**: how quickly packets can move through the fabric from inputs to outputs, typically expressed as a multiple of a single port's line speed
 - **Line rate**: the speed of an individual physical link connected to one port
 - Switching rate ideally reaches **N × the line rate** for N inputs
@@ -1393,7 +1393,7 @@ content: `## Overview
 - **Drop policies**: tail drop (drop arriving packet); priority based drop
 - **Marking**: instead of dropping a packet outright, the router marks a field in its header **to signal that congestion is building**; the receiving endpoint **can then react and slow down before real loss occurs**. RED (Random Early Detection) decides probabilistically which packets to mark as the queue starts to fill, while ECN (Explicit Congestion Notification) is the header bit actually used to carry that signal
 
-### Packet Scheduling Disciplines
+## Packet Scheduling Disciplines
  1. **FCFS / FIFO**: transmit in arrival order
  2. **Priority**: classified and queued by class, always serve the highest nonempty priority queue, FCFS within a class
  3. **Round robin**: cycle through class queues, sending one packet per class per turn
