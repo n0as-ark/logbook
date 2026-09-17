@@ -1334,9 +1334,19 @@ Motivation: TCP resends data on any detected loss, sometimes unnecessarily; QUIC
 slug: "network-layer-data-plane",
 date: "2026-09-16",
 tags: ["Network"],
-excerpt: "",
+excerpt: "Forwarding vs. routing, router architecture, switching fabrics, queuing and scheduling, IP addressing, DHCP, NAT, and IPv6",
 readTime: "x min",
-snippet: ``,
+snippet: `
+    Arriving Client                DHCP Server (192.168.1.1)
+          │                                 │
+          │──────── DHCP Discover ─────────▶│  (broadcast)
+          │                                 │
+          │◀─────────  DHCP Offer  ─────────│  (offers 192.168.1.42)
+          │                                 │
+          │──────── DHCP Request ──────────▶│  (request to use offered address)
+          │                                 │
+          │◀─────────   DHCP ACK   ─────────│  (confirms)
+          │                                 │`,
 content: ``
   },
 ];
