@@ -524,7 +524,7 @@ That is when it started making sense why real encryption does not just use a lon
 Building this made the gap between a toy cipher and a real one feel concrete in a way that reading about it did not.
 > 🔗 **Code:** The full implementation is available on [GitHub](https://github.com/n0as-ark/XOR-Encryption-In-Python/blob/main/src/multi_byte_xor.py).`,
   },
-  {title: "Introduction to Computer Networking",
+  {title: "Study Notes: Introduction to Computer Networking",
   slug: "introduction-to-computer-networking",
   date: "2026-09-01",
   tags: ["Network"],
@@ -700,7 +700,7 @@ Headers are stripped in reverse order as data moves up the stack on the receivin
 - OSI = 7-layer reference model; TCP/IP implements 5 of the 7 layers in practice.
 - Encapsulation wraps data with headers layer by layer going down the stack, unwraps going up.`,
   },
-  {title: "Application Layer: Network App Fundamentals",
+  {title: "Study Notes: Application Layer - Network App Fundamentals",
 slug: "application-layer-network-app-fundamentals",
 date: "2026-09-03",
 tags: ["Network"],
@@ -797,7 +797,7 @@ What an application needs from the transport layer:
 - TCP trades speed for reliability, flow control, and congestion control; UDP is minimal and fast but guarantees nothing.
 - TLS adds encryption, integrity, and authentication on top of TCP at the application layer.`,
   },
-  {title: "Application Layer: HTTP",
+  {title: "Study Notes: Application Layer - HTTP",
 slug: "application-layer-http",
 date: "2026-09-04",
 tags: ["Network"],
@@ -952,7 +952,7 @@ TLS + TCP  -->  merged into QUIC, which now sits on UDP instead of TCP
 - Persistent HTTP (HTTP/1.1) cuts connection overhead versus non-persistent HTTP by reusing one TCP connection for multiple objects.
 - HTTP/3 (QUIC, over UDP) removes head-of-line blocking across streams and shortens the handshake to 1-RTT (or 0-RTT on reconnect).
 `},
-  {title: "Application Layer: E-Mail (SMTP and IMAP)",
+  {title: "Study Notes: Application Layer - E-Mail (SMTP and IMAP)",
 slug: "application-layer-email-smtp-imap",
 date: "2026-09-05",
 tags: ["Network"],
@@ -1041,7 +1041,7 @@ A separate **mail access protocol** handles retrieval:
 - There's no authentication built into SMTP's server-to-server handshake.
 - A separate access protocol (IMAP, or HTTP-based webmail) is needed to actually retrieve mail down to a device — SMTP only handles delivery to the receiver's server.
 `},
-  {title: "Transport Layer: Multiplexing, UDP, and Reliable Data Transfer",
+  {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
 slug: "transport-layer-multiplexing-udp-rdt",
 date: "2026-09-09",
 tags: ["Network"],
@@ -1210,7 +1210,7 @@ checksum = detects bit errors
 - Stop-and-wait wastes bandwidth; pipelining (GBN or SR) keeps multiple packets in flight to improve utilization.
 - GBN: cumulative ACKs, simple receiver, resends everything after a loss. SR: individual ACKs + buffering, resends only what's lost.
 `},
-  {title: "Transport Layer: TCP and QUIC",
+  {title: "Study Notes: Transport Layer - TCP and QUIC",
 slug: "transport-layer-tcp-quic",
 date: "2026-09-14",
 tags: ["Network"],
@@ -1330,4 +1330,13 @@ Motivation: TCP resends data on any detected loss, sometimes unnecessarily; QUIC
 - Three-way handshake opens a TCP connection; independent FIN exchanges close it
 - QUIC reimplements TCP-like reliability over UDP, trading kernel-level stability for faster handshakes and per-stream loss isolation
 `},
+  {title: "Study Notes: Network Layer - Data Plane",
+slug: "network-layer-data-plane",
+date: "2026-09-16",
+tags: ["Network"],
+excerpt: "",
+readTime: "x min",
+snippet: ``,
+content: ``
+  },
 ];
