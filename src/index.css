@@ -139,13 +139,13 @@
   .prose-blog pre code {
     @apply bg-transparent p-0 rounded-none;
   }
-  .prose-blog ul, .prose-blog ol {
+  .prose-blog > ul, .prose-blog > ol {
     @apply mb-6 pl-6 space-y-2 text-foreground/85 mt-0;
   }
-  .prose-blog ul {
+  .prose-blog > ul {
     @apply list-disc;
   }
-  .prose-blog ol {
+  .prose-blog > ol {
     @apply list-decimal;
   }
   .prose-blog blockquote {
