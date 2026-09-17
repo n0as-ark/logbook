@@ -1360,17 +1360,15 @@ content: `## Overview
 - Best effort has succeeded because its mechanism is simple and easy to deploy; sufficient bandwidth makes real time apps "good enough" most of the time; CDNs and datacenters replicate services near clients; congestion control in elastic apps helps overall behavior
 
 ## Inside a Router
- 
-\\\`\\\`\\\`
+\`\`\`
               Input Port
- ┌───────────────┐  ┌───────────────┐  ┌────────────────────┐
+ ┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐
  │      Line     │  │   Link Layer  │  │  Lookup, Forwarding │
  │  Termination  │─▶│    Protocol   │─▶│     & Queueing      │
  │ (physical     │  │ (e.g.,        │  │ (forwarding table,  │
  │  layer)       │  │  Ethernet)    │  │  "match + action")  │
- └───────────────┘  └───────────────┘  └────────────────────┘
-\\\`\\\`\\\`
- 
+ └───────────────┘  └───────────────┘  └─────────────────────┘
+\`\`\`
 - Architecture: input ports feed a switching fabric which feeds output ports, all coordinated by a routing processor
 - Input port stages: line termination (physical layer) then link layer protocol then lookup, forwarding, and queueing (uses a forwarding table, "match plus action")
 - **Destination based forwarding**: forwards based on destination IP only (traditional)
