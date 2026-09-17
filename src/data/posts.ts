@@ -1347,6 +1347,15 @@ snippet: `
           │                                 │
           │◀─────────   DHCP ACK   ─────────│  (confirms)
           │                                 │`,
-content: ``
+content: `## Overview
+ 
+* Network layer moves segments from sending host to receiving host; every host and router runs network layer protocols
+* **Encapsulation**: application data becomes a segment (transport layer, adds ports), then a datagram (network layer, adds IP addresses), then a frame (link layer, adds a header). The frame wrapper survives only one hop; the datagram survives the whole trip
+* **Forwarding**: local, per router action — moving a packet from input port to output port (like navigating one interchange)
+* **Routing**: end to end — computing the path from source to destination (like planning a trip)
+* **Data plane**: local, hardware, nanosecond scale; *decides how an arriving datagram is forwarded*
+* **Control plane**: network wide, software, millisecond scale; *decides the **end to end route***. Implemented via traditional routing algorithms in each router, or SDN (logic placed on remote servers)
+* **Service model**: the Internet uses **best effort**: <u>no guarantees</u> on delivery, order, timing, or bandwidth
+* Best effort has succeeded because its mechanism is simple and easy to deploy; sufficient bandwidth makes real time apps "good enough" most of the time; CDNs and datacenters replicate services near clients; congestion control in elastic apps helps overall behavior`
   },
 ];
