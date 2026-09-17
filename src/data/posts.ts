@@ -1361,17 +1361,27 @@ content: `## Overview
 
 ## Inside a Router
 \`\`\`
-              Input Port
- ┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐
- │      Line     │  │   Link Layer  │  │  Lookup, Forwarding │
- │  Termination  │─▶│    Protocol   │─▶│     & Queueing      │
- │ (physical     │  │ (e.g.,        │  │ (forwarding table,  │
- │  layer)       │  │  Ethernet)    │  │  "match + action")  │
- └───────────────┘  └───────────────┘  └─────────────────────┘
+                                 Input Port
+           ┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐
+           │     Line      │  │   Link Layer  │  │  Lookup, Forwarding │
+           │  Termination  │─▶│    Protocol   │─▶│     & Queueing      │
+           │   (physical   │  │(e.g.,Ethernet)│  │ (forwarding table,  │
+           │    layer)     │  │               │  │  "match + action")  │
+           └───────────────┘  └───────────────┘  └─────────────────────┘
 \`\`\`
 - Architecture: input ports feed a switching fabric which feeds output ports, all coordinated by a routing processor
 - Input port stages: line termination (physical layer) then link layer protocol then lookup, forwarding, and queueing (uses a forwarding table, "match plus action")
 - **Destination based forwarding**: forwards based on destination IP only (traditional)
 - **Generalized forwarding**: forwards based on any header fields
+
+### Switching Fabrics
+- **Switching rate**: how quickly packets can move through the fabric from inputs to outputs, typically expressed as a multiple of a single port's line speed
+- **Line rate**: the speed of an individual physical link connected to one port
+- Switching rate ideally reaches **N × the line rate** for N inputs
+- **Fabric types**:
+ 1. **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
+ 2. **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
+ 3. **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
+- **Longest prefix matching**: when multiple table entries match, <u>pick the most specific (longest) prefix</u>. Implemented via ternary content addressable memories (TCAMs), giving **constant time lookup** regardless of table size (about 1M entries on Cisco Catalyst).
 `},
 ];
