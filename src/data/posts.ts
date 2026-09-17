@@ -1361,13 +1361,13 @@ content: `## Overview
 
 ## Inside a Router
 \`\`\`
-                                 Input Port
-           ┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐
-           │     Line      │  │   Link Layer  │  │  Lookup, Forwarding │
-           │  Termination  │─▶│    Protocol   │─▶│     & Queueing      │
-           │   (physical   │  │(e.g.,Ethernet)│  │ (forwarding table,  │
-           │    layer)     │  │               │  │  "match + action")  │
-           └───────────────┘  └───────────────┘  └─────────────────────┘
+                               Input Port
+         ┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐
+         │     Line      │  │   Link Layer  │  │  Lookup, Forwarding │
+         │  Termination  │─▶│    Protocol   │─▶│     & Queueing      │
+         │   (physical   │  │(e.g.,Ethernet)│  │ (forwarding table,  │
+         │    layer)     │  │               │  │  "match + action")  │
+         └───────────────┘  └───────────────┘  └─────────────────────┘
 \`\`\`
 - Architecture: input ports feed a switching fabric which feeds output ports, all coordinated by a routing processor
 - Input port stages: line termination (physical layer) then link layer protocol then lookup, forwarding, and queueing (uses a forwarding table, "match plus action")
@@ -1379,9 +1379,19 @@ content: `## Overview
 - **Line rate**: the speed of an individual physical link connected to one port
 - Switching rate ideally reaches **N × the line rate** for N inputs
 - **Fabric types**:
- 1. **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
- 2. **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
- 3. **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
+    1. **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
+    2. **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
+    3. **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
 - **Longest prefix matching**: when multiple table entries match, <u>pick the most specific (longest) prefix</u>. Implemented via ternary content addressable memories (TCAMs), giving **constant time lookup** regardless of table size (about 1M entries on Cisco Catalyst).
+
+## Queuing
+- **Input queuing**: occurs if the fabric is slower than the combined input rate, causing delay and loss
+- **Head-of-the-Line (HOL) blocking**: a blocked packet at the front of a queue **stalls every packet behind it**, even ones headed to a free output
+- **Output queuing**: occurs if the arrival rate via the fabric exceeds the output link rate, causing delay and loss
+- **Buffering** is required when datagrams arrive from the fabric faster than the link transmission rate; datagrams can be lost due to congestion when no buffer space remains
+- Buffer sizing rule of thumb (RFC 3439): **RTT (about 250ms) × link capacity C**. Too much buffering causes excess delay and a slow TCP response
+- **Drop policies**: tail drop (drop arriving packet); priority based drop
+- **Marking**: instead of dropping a packet outright, the router marks a field in its header **to signal that congestion is building**; the receiving endpoint **can then react and slow down before real loss occurs**. RED (Random Early Detection) decides probabilistically which packets to mark as the queue starts to fill, while ECN (Explicit Congestion Notification) is the header bit actually used to carry that signal
+
 `},
 ];
