@@ -1175,9 +1175,10 @@ checksum = detects bit errors
 - Example (N=4): losing packet 2 causes repeated ACK-1 responses as 3/4/5 arrive and get discarded; timeout on packet 2 resends 2 through 5, even though 3–5 already arrived once.
  
 **Selective Repeat (SR):**
-- Receiver **individually ACKs** every correctly received packet and buffers out-of-order ones for in-order delivery later.
-- Sender keeps a (conceptual) separate timer per unACKed packet; timeout resends only that one packet.
-- Sender window over N consecutive sequence numbers limits in-flight packets.
+- Also a pipelined protocol with a window of N packets, but it fixes Go-Back-N's weakness.
+- Sender resends only the packets that were **actually lost**.
+- Receiver **individually ACKs** every correctly received packet and **buffers out-of-order ones** for in-order delivery later.
+- Each packet gets its own timer, unlike GBN with a single timer; timeout resends only that one packet.
 - Sender logic: send if next seq # is in window; on timeout(n), resend only n; on ACK(n) in window, mark received, slide window base forward if n was the smallest unACKed.
 - Receiver logic: packet in [rcvbase, rcvbase+N-1] → ACK it, buffer if out of order or deliver (plus any buffered ones) if it fills the gap; packet in [rcvbase-N, rcvbase-1] → re-ACK (covers a possibly-lost prior ACK); anything else → ignore.
 - Example (N=4): losing packet 2 causes 3/4/5 to get buffered individually (ack3, ack4, ack5); once 2 finally arrives, 2 through 5 all deliver at once.
