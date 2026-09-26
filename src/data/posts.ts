@@ -1058,9 +1058,9 @@ Go-Back-N: Receiver
 A=ACKed S=sent U=usable X=out-of-order`,
 content: `## 1. Transport Services and Protocols
  
-- Provides **logical communication** between application processes on different hosts — end-to-end from the application's point of view, even though data physically passes through every router in between.
-- Sender: breaks application messages into **segments**, passes them to the network layer.
-- Receiver: reassembles segments into messages, passes them up to the application layer.
+- Provides **logical communication** between application processes on different hosts; end-to-end from the application's point of view, even though data physically passes through every router in between.
+- **Sender**: **breaks** application messages **into segments**, passes them to the network layer.
+- **Receiver**: **reassembles** segments **into messages**, passes them up to the application layer.
 - Two transport protocols available to Internet applications: **TCP** and **UDP**.
 - Sender-side steps: message arrives from application → header fields determined (ports, etc.) → segment created → handed to IP.
 - Receiver-side steps: segment arrives from IP → header checked → application message extracted → demultiplexed up to the correct socket.
@@ -1079,38 +1079,39 @@ content: `## 1. Transport Services and Protocols
 |  source port #   |    dest port #   |
 +------------------+------------------+
 |         other header fields         |
-+--------------------------------------+
-|                                      |
++-------------------------------------+
+|                                     |
 |      application data (payload)     |
-|                                      |
-+--------------------------------------+
+|                                     |
++-------------------------------------+
          TCP/UDP segment format
 \`\`\`
 
 **Connectionless demultiplexing (UDP):**
 - Socket identified by just the local (IP, port) pair — \`socket(AF_INET, SOCK_DGRAM)\`, then \`.bind(myaddr, port)\`.
 - Sending requires specifying a destination IP and port.
-- Destination IP + destination port is the *only* thing that decides which socket gets a segment — different source IPs/ports with the same destination still land in the same socket.
+- **Destination IP + destination port** is the *only* thing that decides which socket gets a segment — different source IPs/ports with the same destination still land in the same socket.
  
 **Connection-oriented demultiplexing (TCP):**
-- Socket identified by a full **4-tuple**: source IP, source port, dest IP, dest port.
+- Socket identified by a full **4-tuple**: **source IP, source port, dest IP, dest port**.
 - One listening port can serve many simultaneous sockets, each tied to a different client via its own 4-tuple.
-- \`SOCK_DGRAM\` = UDP, \`SOCK_STREAM\` = TCP. Binding = assigning a socket its local (IP, port).
 - Example: three segments all addressed to the same server IP/port can still demux to three different sockets, since the full 4-tuples differ.
- 
+
+\`SOCK_DGRAM\` = UDP, \`SOCK_STREAM\` = TCP. Binding = assigning a socket its local (IP, port)
+
 ---
 
 ## 3. Connectionless Transport: UDP
  
-- RFC 768 (1980) — "no frills," **best-effort service**, no delivery guarantee.
+- RFC 768 (1980) — "no frills," **best-effort service**, **no delivery guarantee**.
 - Segments may be lost or delivered out of order.
 - **Connectionless**: no handshaking, each segment handled independently.
  
 **Why UDP exists:**
-- No connection setup → no extra RTT delay before data flows.
+- No connection setup → **no extra RTT delay** before data flows.
 - Simple — no connection state at sender or receiver. (**Connection state** = sequence/ACK numbers, unACKed data, the advertised receive window, buffered out-of-order segments, and active timers that both sides track for the life of a connection — TCP keeps this; UDP skips it entirely.)
 - Small header → less overhead.
-- No congestion control — sends as fast as the app wants, keeps working under congestion.
+- No congestion control — sends as **fast** as the app wants, keeps working under congestion.
  
 **Typical uses:** streaming multimedia (loss-tolerant, rate-sensitive), DNS, SNMP, HTTP/3. Reliability/congestion control for these gets added at the **application layer**, not the transport layer.
  
@@ -1122,11 +1123,11 @@ content: `## 1. Transport Services and Protocols
 |  source port #   |    dest port #   |
 +------------------+------------------+
 |      length      |     checksum     |
-+--------------------------------------+
-|                                      |
++-------------------------------------+
+|                                     |
 |      application data (payload)     |
-|                                      |
-+--------------------------------------+
+|                                     |
++-------------------------------------+
             UDP segment format
  
 length   = bytes in the segment, including header
