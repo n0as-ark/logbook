@@ -1191,9 +1191,10 @@ checksum = detects bit errors
 - Ports identify processes; sockets are the live (IP, port)-bound objects processes read/write through.
 - UDP demultiplexes on destination (IP, port); TCP demultiplexes on the full 4-tuple.
 - UDP trades reliability for speed/simplicity — no handshake, no state, no congestion control.
-- RDT builds up piece by piece: checksums catch corruption, sequence numbers catch duplicates, ACKs/NAKs report status, timeouts catch loss.
-- Stop-and-wait wastes bandwidth; pipelining (GBN or SR) keeps multiple packets in flight to improve utilization.
-- GBN: cumulative ACKs, simple receiver, resends everything after a loss. SR: individual ACKs + buffering, resends only what's lost.
+- RDT builds up piece by piece: **checksums catch corruption, sequence numbers catch duplicates, ACKs/NAKs report status, timeouts catch loss**.
+- Stop-and-wait wastes bandwidth; **pipelining (GBN or SR) keeps multiple packets in flight to improve utilization**.
+- GBN: cumulative ACKs, simple receiver, **resends everything after a loss**.
+- SR: individual ACKs + buffering, **resends only what's lost**.
 `},
   {title: "Study Notes: Transport Layer - TCP and QUIC",
 slug: "transport-layer-tcp-quic",
