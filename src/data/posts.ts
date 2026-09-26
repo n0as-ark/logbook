@@ -1158,10 +1158,8 @@ checksum = detects bit errors
 \`\`\`
  
 **Performance (stop-and-wait):**
-- *U*sender = fraction of time the sender is actually transmitting.
-- Example: 1 Gbps link, 15 ms one-way delay, 8000-bit packet.
-- *D*trans = 8000 bits / 10⁹ bps = 8 microseconds.
-- *U*sender = (L/R) / (RTT + L/R) = 0.008 / 30.008 ≈ **0.00027**.
+- Transmission time = Packet Size (in bits) / Link Bandwidth (in bps)
+- Utilization time = fraction of time the sender is actually transmitting = (L/R) / (RTT + L/R)
 - Link sits idle almost the whole time — the protocol itself is the bottleneck.
  
 **Pipelining:**
