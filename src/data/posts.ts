@@ -1240,16 +1240,18 @@ Core characteristics:
 | Application data | Payload |
 
 **Sequence numbers and ACKs:**
-- **Sequence number** = byte-stream number of the first byte in a segment (e.g., seq 0 + 100 bytes → next segment starts at seq 100)
-- **ACK number** = next expected byte, cumulative
+- **Sequence number** = byte-stream number of the **first byte in a segment** (e.g., seq 0 + 100 bytes → next segment starts at seq 100)
+- **ACK number** = **next expected byte**, cumulative
 - Out-of-order handling is left to the implementor by spec
-- Telnet example: Host A sends 'C' at seq 42, ACK 79; Host B echoes 'C' at seq 79, ACK 43; Host A ACKs at seq 43 \`(= seq 42 + 1 byte for 'C')\`, ACK 80
-- Each direction gets its own random initial sequence number; numbering never crosses between directions
+- Telnet example: Host A sends 'C' at seq # 42, ACK # 79; Host B echoes 'C' at seq # 79, ACK # 43; Host A ACKs at seq # 43 \`(= seq # 42 + 1 byte for 'C')\`, ACK # 80
+- Each direction gets its own **random initial sequence number**; numbering never crosses between directions
  
 **RTT and timeout:**
-- Timeout must exceed RTT, but RTT varies. Too short → premature timeouts; too long → slow reaction to real loss
+- Timeout must exceed RTT, but RTT varies. 
+  - Too short → premature timeouts (timer expiring before the ACK arrives, even though nothing was actually lost)
+  - Too long → slow reaction to real loss
 - **SampleRTT** = time from segment sent to its ACK received (retransmissions excluded)
-- **EstimatedRTT** smooths SampleRTT by averaging recent measurements rather than reacting to one sample
+- **EstimatedRTT** smooths SampleRTT by **averaging recent measurements** rather than reacting to one sample
  
 **TCP sender (simplified):**
 - Data from application → create segment with seq #, start timer if not running (tracks oldest unACKed segment), expiration = TimeOutInterval
@@ -1270,12 +1272,12 @@ Core characteristics:
 - Cumulative ACK covering an earlier lost ACK → the loss becomes irrelevant once a later ACK covers the same ground
  
 **Fast retransmit:**
-- Three duplicate ACKs (four total with the same number) → strong signal of loss, even before timeout
+- Upon receiving three additional duplicate ACKs (four total with the same number) → strong signal of loss, even before timeout
 - Sender immediately resends the smallest unACKed sequence number, skipping the wait for timeout
 
 **Flow control:**
 - Problem: network layer could deliver data faster than the application reads it out, overflowing the receiver's buffer
-- Receiver advertises free buffer space via **rwnd** in every TCP header
+- Receiver advertises free buffer space via **rwnd (receive window)** in every TCP header
 - **RcvBuffer** size set by OS/socket options (e.g., 4096 bytes)
 - Sender limits unACKed in-flight data to **rwnd** bytes
 - Application draining the buffer frees space, growing rwnd again over time — dynamically matches transmission rate to receiver capacity
@@ -1296,7 +1298,7 @@ Note: Sequence number 0 is never actually used as a real initial value
 ## 2. QUIC: A Reliable Transport Built on UDP
  
 - Developed by Google (2012), later standardized by the Internet Engineering Task Force (IETF)
-- Runs over UDP, adds **TCP-level reliability**, **TLS encryption**, and **stream multiplexing**
+- **Runs over UDP**, adds **TCP-level reliability**, **TLS encryption**, and **stream multiplexing**
  
 | TCP + TLS limitation | QUIC improvement |
 |---|---|
@@ -1310,10 +1312,11 @@ Motivation: TCP resends data on any detected loss, sometimes unnecessarily; QUIC
 ---
 
 ## Key Points to Remember
-- TCP sequence numbers count bytes, not segments; ACKs are cumulative and NAK-free
+- TCP sequence numbers **count bytes**, not segments; ACKs are cumulative and NAK-free
 - Triple duplicate ACKs trigger fast retransmit, skipping the timeout wait
-- Flow control (rwnd) protects the receiver's buffer; congestion control protects the network itself
-- Three-way handshake opens a TCP connection; independent FIN exchanges close it
+- Flow control (rwnd) **protects the receiver's buffer**
+- Congestion control **protects the network itself**
+- Three-way handshake **opens a TCP connection**; independent FIN exchanges close it
 - QUIC reimplements TCP-like reliability over UDP, trading kernel-level stability for faster handshakes and per-stream loss isolation
 `},
   {title: "Study Notes: Network Layer - Data Plane",
