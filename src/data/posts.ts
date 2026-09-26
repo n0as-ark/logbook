@@ -1147,30 +1147,15 @@ checksum = detects bit errors
 - Protocol complexity depends on how the channel misbehaves — loses data, corrupts data, reorders it?
 - Sender and receiver don't know each other's state directly — has to be communicated via messages.
  
-**rdt1.0** — reliable channel: no bit errors, no loss. Sender sends, receiver reads.
- 
-**rdt2.0** — channel with bit errors:
-- Checksum detects errors.
-- **ACK** = "got it OK," **NAK** = "had errors, resend" — like asking "what?" on a noisy call.
-- **Stop-and-wait**: one packet sent, then wait for response before sending the next.
-- Fatal flaw: a corrupted ACK/NAK leaves the sender unsure what happened, and blind retransmission risks a duplicate.
- 
-**rdt2.1** — fix via sequence numbers:
-- Adds a sequence number (0/1, alternating — enough since only one packet is in flight at a time).
-- Corrupted ACK/NAK → retransmit current packet; receiver checks sequence number to discard duplicates.
-- Doubles the states each side tracks (must remember expected 0 or 1).
-- Receiver can never be fully sure its last ACK/NAK arrived — sequence numbers make that harmless.
- 
-**rdt2.2** — NAK-free:
-- Same as rdt2.1, ACKs only.
-- Receiver re-ACKs the last correctly received packet's sequence number instead of sending a NAK.
-- Duplicate ACK at sender = same trigger as a NAK: retransmit. TCP uses this approach.
- 
-**rdt3.0** — channel with errors *and* loss:
-- New problem: packets (data or ACKs) can be lost outright.
-- Sender waits a "reasonable" time for an ACK, retransmits if none arrives — via a countdown **timer** / **timeout**.
-- Delayed-not-lost packets still work correctly, since sequence numbers catch the resulting duplicate.
-- Scenarios: no loss; data lost (timeout + resend); ACK lost (redundant resend, sequence numbers prevent double delivery); premature timeout/delayed ACK (duplicate ACK just gets ignored).
+\`\`\`
+| Version | Channel assumption | What it adds | Key detail |
+|---|---|---|---|
+| rdt1.0 | Perfect channel: no errors, no loss | Nothing; sender sends, receiver reads | Baseline only; fails silently on a real channel |
+| rdt2.0 | Bits can be corrupted | Checksum; ACK ("got it OK") / NAK ("had errors, resend"); stop-and-wait (send one packet, wait for the response before the next) | Fatal flaw: a corrupted ACK/NAK leaves the sender unsure, and blind resends risk duplicates |
+| rdt2.1 | Same, but ACKs/NAKs can be corrupted too | Sequence numbers (0/1, alternating; enough since only one packet is in flight) | Garbled reply → resend; receiver discards duplicates by seq number; doubles the states each side tracks; receiver never knows if its last ACK/NAK arrived, but seq numbers make that harmless |
+| rdt2.2 | Same as 2.1 | NAK-free: ACKs only | Receiver re-ACKs the last good packet's seq number; a duplicate ACK triggers a resend, like a NAK (TCP's approach) |
+| rdt3.0 | Packets (data or ACKs) can be corrupted **or lost** | Countdown timer; resend if no ACK within a "reasonable" time | Delayed-not-lost packets still work, since seq numbers catch duplicates. Scenarios: no loss; data lost (timeout + resend); ACK lost (redundant resend, no double delivery); premature timeout (duplicate ACK ignored) |
+\`\`\`
  
 **Performance (stop-and-wait):**
 - *U*sender = fraction of time the sender is actually transmitting.
