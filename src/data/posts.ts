@@ -1364,9 +1364,9 @@ content: `## Overview
 - **Generalized forwarding**: forwards based on any header fields
 
 ## Switching Fabrics
-- **Switching rate**: how quickly packets can move through the fabric from inputs to outputs, typically expressed as a multiple of a single port's line speed
+- **Switching rate**: **how quickly packets can move** through the fabric from inputs to outputs, typically expressed as a multiple of a single port's line speed
 - **Line rate**: the speed of an individual physical link connected to one port
-- Switching rate ideally reaches **N × the line rate** for N inputs
+- Switching rate ideally reaches **N × Line Rate** for N inputs
 - **Fabric types**:
   - **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
   - **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
