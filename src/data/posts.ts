@@ -1350,16 +1350,16 @@ content: `## Overview
 
 ## Inside a Router
 \`\`\`
-                               Input Port
-         ┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐
-         │     Line      │  │   Link Layer  │  │  Lookup, Forwarding │
-         │  Termination  │─▶│    Protocol   │─▶│     & Queueing      │
-         │   (physical   │  │(e.g.,Ethernet)│  │ (forwarding table,  │
-         │    layer)     │  │               │  │  "match + action")  │
-         └───────────────┘  └───────────────┘  └─────────────────────┘
+                      Input Port
+┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐   │
+│     Line      │  │   Link Layer  │  │                     │   │
+│  Termination  │─▶│    Protocol   │─▶│  Lookup, Forwarding │─▶ │  Switching
+│   (physical   │  │(e.g.,Ethernet)│  │     & Queueing      │   │    Fabric
+│    layer)     │  │               │  │                     │   │
+└───────────────┘  └───────────────┘  └─────────────────────┘   │
 \`\`\`
 - Architecture: input ports feed a switching fabric which feeds output ports, all coordinated by a routing processor
-- Input port stages: line termination (physical layer) then link layer protocol then lookup, forwarding, and queueing (uses a forwarding table, "match plus action")
+- **Decentralized switching**: each input port has its own copy of the forwarding table and does the lookup itself, locally. No central processor is involved per packet
 - **Destination based forwarding**: forwards based on destination IP only (traditional)
 - **Generalized forwarding**: forwards based on any header fields
 
