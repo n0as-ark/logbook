@@ -1163,15 +1163,15 @@ checksum = detects bit errors
 - Link sits idle almost the whole time — the protocol itself is the bottleneck.
  
 **Pipelining:**
-- Allows multiple in-flight, unACKed packets at once instead of stopping after each one.
+- Allows **multiple in-flight, unACKed packets at once** instead of stopping after each one.
 - Needs a larger sequence-number range and buffering at sender/receiver.
 - 3-packet pipelining triples utilization (~0.00081 in the example above) — better, but still far from saturating the link.
  
 **Go-Back-N (GBN):**
-- Sender window of up to *N* unACKed packets, tracked with a *k*-bit sequence number.
-- ACKs are **cumulative**: ACK(n) covers everything up through n; window slides to n+1 on receipt.
+- can have up to **N unacknowledged packets in flight at once**; N is the window size.
+- ACKs are **cumulative**: ACK(n) covers everything up through n; window slides to n+1 on receipt of ACK(n).
 - One timer for the oldest in-flight packet; on timeout, resend packet n *and everything after it* in the window.
-- Receiver: ACKs the highest in-order sequence number so far (duplicates possible); out-of-order packets are discarded or buffered but not accepted out of order.
+- Receiver: ACKs the highest in-order sequence number so far (duplicates possible); out-of-order packets are either discarded or buffered, but never delivered to the application out of order.
 - Example (N=4): losing packet 2 causes repeated ACK-1 responses as 3/4/5 arrive and get discarded; timeout on packet 2 resends 2 through 5, even though 3–5 already arrived once.
  
 **Selective Repeat (SR):**
