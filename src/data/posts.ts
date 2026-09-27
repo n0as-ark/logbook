@@ -1418,14 +1418,14 @@ Arriving Client                    DHCP Server (192.168.1.1)
 \`\`\`
  
 - DHCP can also supply the **first hop router address**, **a DNS server**, and **a network mask** (indicating network vs. host portion of address)
-- Unlike hosts which get their address via hard coding or DHCP, a network itself gets the subnet part of its address through its provider ISP's address space
+- Unlike hosts which get their address via hard coding or DHCP, a **network itself gets the subnet part of its address through its provider ISP's address space**
  
 ## Route Aggregation
 - Hierarchical addressing lets an **ISP advertise one aggregated block** (such as a /20) instead of many small ones
 - If an organization switches ISPs, the new ISP advertises a more specific route just for that organization's block
 - Routers **always prefer the longest, most specific prefix match** when forwarding
 - **Internet Corporation for Assigned Names and Numbers (ICANN)** allocates address blocks through **five regional registries** and also manages the DNS root zone and TLD delegation
-- The IPv4 pool is exhausted: ICANN allocated its last block in 2011 Two responses are **NAT (stretching existing space)** and **IPv6 (a new 128 bit space)**
+- The IPv4 pool is exhausted: ICANN allocated its last block in 2011. Two responses are **NAT (stretching existing space)** and **IPv6 (a new 128 bit space)**
 
 ## Network Address Translation (NAT)
 * Local network devices **share one public IPv4 address** and are **distinguished externally by port number**
@@ -1434,5 +1434,11 @@ Arriving Client                    DHCP Server (192.168.1.1)
 * Mechanism: outgoing datagrams are rewritten to **(NAT IP address, new port #)**; the mapping is **stored in a NAT translation table**; incoming datagrams are rewritten back using that table
 * Criticism: it touches port numbers at a layer 3 device, seen as **breaking the end to end argument**; it is a workaround rather than a true fix for address scarcity; it complicates NAT traversal for inbound connections
 * Still used widely: home and institutional networks, 4G and 5G
+
+## IPv6
+- Motivation: IPv4 exhaustion, plus faster processing through a fixed 40 byte header, plus support for per flow treatment
+- Header adds: a priority field (identifies priority among datagrams flow), a flow label (identifies datagrams in the same flow), and 128 bit source and destination addresses
+- Removed compared with IPv4: checksum, in-network fragmentation and reassembly, and the options field (moved to a next header chain instead)
+- Over 25 years since introduction and adoption is still incomplete, showing how much harder infrastructure change is than application layer change
 `},
 ];
