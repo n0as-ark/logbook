@@ -1401,7 +1401,7 @@ content: `## Overview
 
 ## Obtaining an IP Address
 - Host part: assigned manually **by hard coding**, or **dynamically via** **Dynamic Host Configuration Protocol (DHCP)** ("plug and play")
-- DHCP addresses are leased for a period; renewal typically begins around half the lease time; the DHCP server is often located inside a router
+- DHCP addresses are leased for a period; automatically assigns IP addresses and other network configuration details to devices on a network; renewal typically begins around half the lease time; the DHCP server is often located inside a router
 - DHCP exchange has four steps: **discover, offer, request, ack** (discover and offer can be skipped if the host reuses a remembered address, per RFC 2131)
  
 \`\`\`
