@@ -1037,7 +1037,7 @@ E-mail has three major components working together:
 
 The transfer in step 4 is **direct**: the sending server connects straight to the receiving server, with no intermediate relay in the standard picture. The sending server plays the SMTP *client*, and the receiving server plays the SMTP *server*
 
-## 3. How SMTP Works
+## 2. How SMTP Works
 
 **SMTP (specified in RFC 5321)** uses TCP to reliably transfer a message from a client (the mail server initiating the connection) to a server, on **port 25**. 
 There are three phases: 
@@ -1072,7 +1072,7 @@ What each step accomplishes:
 - \`DATA\` announces that the message content follows. A line consisting solely of a period marks its end.
 - \`QUIT\` closes the session.
 
-## 4. The Message Itself: Content versus Envelope
+## 3. The Message Itself: Content versus Envelope
 
 - RFC 5321 describes the SMTP **protocol** that servers use to exchange mail
 - RFC 5322 (the successor to the older RFC 2822) describes the **format of the e-mail message**, much as HTML defines syntax for web documents)
@@ -1080,13 +1080,13 @@ What each step accomplishes:
 Every message has a **header** block (with lines such as \`To:\`, \`From:\`, \`Subject:\`), then an empty line, then the **body** (the actual message, ASCII characters only). 
 These header lines live *inside* the body of what SMTP transmits, so they are different from the SMTP-level \`MAIL FROM:\` / \`RCPT TO:\` commands used during the handshake.
 
-## 5. Reading Mail: Access Protocols
+## 4. Reading Mail: Access Protocols
 
 SMTP stops once a message is stored on the *recipient's* mail server. Pulling messages down to a phone or laptop is a different job, handled by a **mail access protocol**:
 - **IMAP (Internet Mail Access Protocol, RFC 3501)**: messages stay on the server, while the user agent handles retrieval, deletion, and folder management for messages.
 - **HTTP-based webmail** (Gmail, Hotmail, and Yahoo!Mail): shows mail through a web page. Behind the page, SMTP handles sending, and IMAP or POP handles retrieval.
 
-## 7. SMTP Compared with HTTP
+## 5. SMTP Compared with HTTP
 
 | Aspect | HTTP | SMTP |
 |---|---|---|
@@ -1195,6 +1195,37 @@ Suppose a browser needs the address of \`www.harborbooks.com\`. A simplified ver
 **Recursive query:** the server that receives it takes over completely, chasing the name down and returning only the final result. Work shifts onto that server, so heavy use near the top of the tree risks overloading it.
  
 **Caching** is what keeps the system fast. Local servers keep recent answers, each valid for a time limit (the *ttl* field of a record). Cached TLD server addresses let them skip the root for most lookups. The tradeoff is that a cached answer can be out of date until its time limit expires.
+
+## 6. Resource Records
+ 
+Every record is a four-field tuple: \`(name, value, type, ttl)\`. The type determines how the first two fields are read:
+ 
+| Type | Meaning of \`name\` | Meaning of \`value\` |
+|---|---|---|
+| **A** | A hostname | Its IP address |
+| **CNAME** | An alias | The canonical (real) name, for example \`www.example.org\` really being \`webfarm-east.hosting.example\` |
+| **MX** | A domain | The mail server that accepts e-mail for the domain (Mail Exchanger) |
+| **NS** | A domain, such as \`lanternworks.example\` | The hostname of a server with the final word on that domain |
+ 
+A fictional startup, Lantern Works, registers \`lanternworks.example\` through a DNS registrar. The company supplies the hostnames and IP addresses of its two authoritative servers, a primary and a backup. The registrar then inserts two records into the TLD server for the parent zone:
+ 
+\`\`\`
+(lanternworks.example, ns1.lanternworks.example, NS)
+(ns1.lanternworks.example, 198.51.100.7, A)
+\`\`\`
+ 
+Next, the company runs its own authoritative server at \`198.51.100.7\` and fills it with records for its services: an A record for \`www.lanternworks.example\`, and an MX record for \`lanternworks.example\` that directs incoming e-mail to the right mail host.
+ 
+## 8. Attacks on DNS and Defenses
+ 
+### DDoS against root servers
+- **Flooding the roots with traffic** so that legitimate queries cannot get through
+- Traffic filtering helps, and local servers cache TLD addresses, so most lookups bypass the roots anyway
+- Flooding TLD servers is potentially more dangerous
+
+### Spoofing
+- **Intercepting a query** and returning a forged reply, or poisoning a resolver's cache with bogus records
+- **DNSSEC** (RFC 4033) counters this by adding authentication and message integrity to DNS data
 
 `},
   {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
