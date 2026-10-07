@@ -900,27 +900,25 @@ The three-digit **status code** on the first line summarizes the outcome. The le
 - **505 HTTP Version Not Supported**: the server does not speak the protocol version the client used
 
 ## 5. Non-persistent vs. persistent HTTP
- 
+
+**RTT (Round-Trip Time)** measures how long a small packet takes to reach the server and return.
+
+**Non-persistent HTTP** response time per object breaks down into: 
+- one RTT to initiate the TCP connection
+- one RTT for the HTTP request
+- the first few bytes of the response to come back
+- the actual object/file transmission time
+Each object costs **two round trips** (one for the TCP setup, one for the request and the first bytes of the reply) plus the object's own transmission time. Operating-system resources are also consumed for every connection opened. Browsers compensate by opening several connections in parallel, which hides some of the delay but adds even more overhead.
+
+**Persistent HTTP** leaves the connection open after the response. Later requests between the same pair of hosts reuse it, so the setup cost is paid **once**, cutting response time roughly in half.
+
 | | Non-persistent HTTP | Persistent HTTP (HTTP/1.1) |
 |---|---|---|
 | Connection | Opened, at most one object sent, then closed | Opened once; stays open |
 | Objects per connection | One | Multiple objects over the same connection |
 | Result | Downloading multiple objects requires multiple connections | Client sends new requests as soon as it encounters a new referenced object |
 
-Non-persistent HTTP:
-- Requires **2 round trips (RTTs)** per object (one to set up the TCP connection, one for the request/response)
-- Adds OS overhead per connection
-- Pushes browsers to open **multiple parallel TCP connections** just to reduce the resulting delay
-
-Persistent HTTP needs as little as **one RTT total** for all referenced objects, cutting response time roughly in half.
-
-
-**RTT (Round Trip Time)** is the time for a small packet to travel from client to server and back. 
-Non-persistent HTTP response time per object breaks down into: 
-- one RTT to initiate the TCP connection
-- one RTT for the HTTP request
-- the first few bytes of the response to come back
-- the actual object/file transmission time
+## 6. Statelessness and Cookies
 
 **Cookies:** since HTTP is stateless by design (no multi-step tracking, independent requests, nothing to recover), sites that need to remember a user across visits use cookies instead. 
 A cookie system has four parts: 
@@ -933,6 +931,8 @@ On a user's first visit, the site creates **a unique ID (the cookie)** and a mat
 Cookies are used for authorization, shopping carts, recommendations, and maintaining session state (e.g., webmail). The underlying challenge cookies solve is keeping state at the protocol endpoints across multiple transactions, using the messages themselves as the carrier.
  
 A related privacy note: **third-party (tracking) cookies** — set by a domain the user did not directly choose to visit, such as an ad network embedded in a page — let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
+
+## 7. HTTP/2 and Its Remaining Weakness
 
 **HTTP/2 to HTTP/3 (QUIC):** HTTP/2 multiplexes many independent request/response streams over a single TCP connection, each with its own stream ID. This still has a weakness: because it's one TCP connection, a single lost packet stalls *every* stream sharing that connection — data that has already safely arrived can't be delivered to the application because the system is waiting on some other piece that hasn't arrived yet. Browsers therefore still have an incentive to open multiple parallel TCP connections, just as with HTTP/1.1, to reduce stalling and increase overall throughput. HTTP/2 also has no built-in security over a vanilla TCP connection.
  
