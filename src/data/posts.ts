@@ -1227,6 +1227,16 @@ Next, the company runs its own authoritative server at \`198.51.100.7\` and fill
 - **Intercepting a query** and returning a forged reply, or poisoning a resolver's cache with bogus records
 - **DNSSEC** (RFC 4033) counters this by adding authentication and message integrity to DNS data
 
+---
+ 
+## Key Points to Remember
+ 
+- DNS answers lookups using a tree of servers (root, then TLD, then authoritative) plus aggressive caching.
+- A central design could not handle the query volume, the distances involved, or the reliability requirements.
+- Local servers sit in front of the hierarchy and answer from cache whenever they can.
+- Iterated queries return a referral to the next server, while recursive queries make the contacted server finish the job.
+- Resource records (A, CNAME, MX, NS) carry the actual data.
+- DNSSEC defends against forged answers by adding authentication.
 `},
   {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
 slug: "transport-layer-multiplexing-udp-rdt",
