@@ -1379,6 +1379,7 @@ checksum = detects bit errors
 - Cumulative ACKs are more resilient to ACK loss in general — one ACK implicitly confirms everything up to that point.
  
 ---
+
 ## Key Points to Remember
  
 - Ports identify processes; sockets are the live (IP, port)-bound objects processes read/write through.
