@@ -755,34 +755,40 @@ The sockets are created and controlled from the application layer, but the heavy
 
 ## 6. Addressing a Process
 
-**Addressing processes:** an IP address alone identifies a *host*, not a specific process on that host — a host can run many processes at once. To receive messages, a process needs an identifier made up of both an **IP address** and a **port number**.
+**Addressing processes:** an IP address alone identifies a *host*, not a specific process on that host. One host typically runs many processes at the same time, so another identifier that can identify a process - the **port number**, a 16-bit value from 0 to 65535, does this job. The pair of IP address and port number singles out exactly one process.
  
 Example port numbers:
 - HTTP server: port 80
 - Mail server: port 25
  
-To send an HTTP message to \`www.example.com\`: IP address \`108.138.85.55\`, port number \`80\`.
- 
-## 4. Transport Service Requirements
+To send an HTTP message to \`www.example.org\`: IP address \`203.0.113.10\`, port number \`80\`.
+
+The client side has a port as well. A client's operating system picks a temporary, unused port (an **ephemeral** port) for each new connection. Replies then find the correct socket, and two connections from the same machine never get mixed up.
+
+## 7. Transport Service Requirements
  
 What an application needs from the transport layer:
-- **Data integrity** (whether the app can tolerate losing data): some apps (file transfer, web transactions) require 100% reliable transfer — even one missing or corrupted byte breaks the file. Other apps (audio) can tolerate some loss.
-- **Timing** (how much delay the app can tolerate): apps like Internet telephony and interactive games need low delay to be usable.
-- **Throughput** (how much bandwidth/data rate the app needs to function well): some apps (multimedia) need a minimum throughput to work correctly; "elastic apps" simply make use of whatever throughput is available. Throughput is the *actual* rate data is successfully transferred, which is different from bandwidth — the theoretical maximum capacity of a link.
+- **Data integrity**: whether the app can tolerate losing data; some apps (file transfer, web transactions) require 100% reliable transfer since a single missing or damaged byte can corrupt the entire file. Other apps (streaming audio) can usually tolerate some loss.
+- **Timing**: how much delay the app can tolerate; interactive services like Internet telephony and interactive games becomes unusable when delay grows.
+- **Throughput**: how much bandwidth/data rate the app needs to function well; some multimedia services need a minimum data rate to work correctly; "elastic apps" (file downloads, e-mail) simply use whatever rate is available. Throughput is the *actual* rate data is successfully transferred, which is different from bandwidth, the theoretical maximum capacity of a link.
 - **Security**: encryption, data integrity guarantees, etc.
+
+## 8. The Two Internet Transport Services
  
 **TCP (Transmission Control Protocol) service:**
-- Reliable transport — guarantees data actually arrives
-- Flow control — makes sure the sender doesn't overwhelm the receiver
-- Congestion control — throttles the sender automatically when the network is overloaded
-- Connection-oriented — requires setup between client and server before data flows
-- Does not provide: timing, minimum throughput guarantee, or security
+- **Connection-oriented**: requires a connection setup between client and server before data flows
+- **Reliable in-order transport**: guarantees that bytes arrive complete and in sequence
+- **Flow control**:  makes sure the sender **doesn't overwhelm the receiver**
+- **Congestion control**: the sender backs off automatically whenever the network is overloaded
+- Not provided: timing guarantees, minimum throughput, or encryption
  
 **UDP (User Datagram Protocol) service:**
-- Unreliable, minimal transfer between sending and receiving processes
-- Does not provide reliability, flow control, congestion control, timing, throughput guarantees, security, or connection setup — it strips away nearly everything TCP does in exchange for speed
+- Unreliable, **minimal** transfer between sending and receiving processes
+- Not provided: delivery guarantee, reliability, flow control, congestion control, timing, throughput guarantees, encryption, or connection setup
+Nearly everything TCP does is stripped away in exchange for low overhead and speed. Applications that need some of TCP's features on top of UDP must build them on their own, which is exactly the route QUIC takes (covered in the HTTP post).
  
-**Securing TCP:** vanilla (plain, unmodified) TCP and UDP sockets have no encryption, so cleartext passwords sent into the socket traverse the Internet in cleartext. **Transport Layer Security (TLS)** provides encrypted TCP connections, data integrity, and end-point authentication. TLS is implemented at the application layer — apps use TLS libraries, which in turn use TCP — so what enters the "socket" is already encrypted before it crosses the Internet.
+Plain TCP and UDP sockets deliver bytes exactly as written. A password sent into the socket therefore traverse the Internet in readable form. 
+**Transport Layer Security (TLS)** closes that gap by providing encrypted connections, integrity checking, and end-point authentication. Despite the name, TLS is **implemented at the application layer**. A program writes plaintext into a TLS library, the library encrypts it, and the ciphertext goes into an ordinary TCP socket. From the network's perspective, only scrambled bytes ever travel.
  
 ---
  
