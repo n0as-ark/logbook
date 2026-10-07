@@ -1180,6 +1180,21 @@ The answer is a tree of servers, each responsible for one slice of the namespace
 - A host's queries always go to its local server first, which is usually operated by the ISP. 
 - On macOS, \`scutil --dns\` reveals which resolver is configured; on Windows, \`ipconfig /all\` does the same.
 
+## 5. Resolving a Name Step by Step
+ 
+Suppose a browser needs the address of \`www.harborbooks.com\`. A simplified version of the lookup:
+ 
+1. The host asks its local DNS server.
+2. On a cache miss, the local server asks a root server, which points to the \`.com\` TLD servers.
+3. A \`.com\` TLD server points to the authoritative server for \`harborbooks.com\`.
+4. That authoritative server returns the IP address of \`www.harborbooks.com\`.
+5. The local server hands the answer to the host and remembers it.
+ 
+**Iterated query:** a contacted server either answers or hands back a referral to the *next* server to try. The local server follows every referral on its own, stepping from server to server.
+ 
+**Recursive query:** the server that receives it takes over completely, chasing the name down and returning only the final result. Work shifts onto that server, so heavy use near the top of the tree risks overloading it.
+ 
+**Caching** is what keeps the system fast. Local servers keep recent answers, each valid for a time limit (the *ttl* field of a record). Cached TLD server addresses let them skip the root for most lookups. The tradeoff is that a cached answer can be out of date until its time limit expires.
 
 `},
   {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
