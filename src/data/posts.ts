@@ -541,9 +541,7 @@ Billions of devices take part in it, and every exchange of data relies on the fo
 - **Switching and routing**: the mechcanisms that move data from one place to another
 - **Links**: the physical/wireless medium that carries the signals
 
-Open standards, including published protocol specifications and documents are called Request for Comments (RFCs), are what let equipment from different vendors working together. A programmer building an app doesn't need to understand cables or routing tables, because the network exposes a simple interface and absorbs the difficult part internally.
- 
----
+Open standards, including published protocol specifications and documents are called **Request for Comments (RFCs)**, are what let equipment from different vendors working together. A programmer building an app doesn't need to understand cables or routing tables, because the network exposes a simple interface and absorbs the difficult part internally.
 
 ## 2. Protocols: The Rules of Communication
  
@@ -562,8 +560,6 @@ Networks are also grouped by how much ground they cover:
 - **MAN (Metropolitan Area Network)**: a city or campus region
 - **WAN (Wide Area Network)**: multiple cities or countries
 - **GAN (Global Area Network)**: the whole planet
- 
----
 
 ## 3. How the Internet is Built
  
@@ -582,8 +578,6 @@ Three conceptual layers:
 - **Coaxial cable**: a copper core surrounded by a braided copper shield that blocks outside noise
 - **Fiber optic**: glass strands carrying pulses of light with very few transmission errors
 - **Wireless** — Wi-Fi, cellular, Bluetooth, microwave, and satellite signals
- 
---- 
 
 ## 4. Packet Switching
  
@@ -608,8 +602,6 @@ When packets arrive faster than the outgoing link can send them, the router hold
 - the maximum rate at which a link can carry data, measured in bits per second (**bps**)
 - Time to transmit N bytes over bandwidth R = **N / R**
 
----
-
  ## 5. How Providers Connect
 
 Rough hierarchy:
@@ -620,8 +612,6 @@ End users -> Local/regional ISP -> Upper-tier ISP -> Tier 1 ISP <-> Tier 1 ISP (
 
  The Tier 1 providers exchange traffic with each other as equals through **peering agreements**, in which each side agrees to carry the other's traffic.
  A single packet commonly crosses 15+ routers, along with many switches, and several different ISPs handle it before it arrives. No one organization controls the entire route, so each router simply makes its best effort.
-
----
 
 ## 6. Delay
  
@@ -646,8 +636,6 @@ d_node = d_proc + d_queue + d_trans + d_prop
 | Node | A device/point in the path (router, switch, host) |
 | Link | The connection/hop between two nodes |
 | Line | The physical medium the link runs over |
-
----
 
 ## 7. OSI Model
  
