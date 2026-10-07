@@ -570,8 +570,8 @@ Three conceptual layers:
 - **Core Networks**: the high-capacity backbone operated by large ISPs. It carries traffic between access networks over long distances.
  
 **Equipment**
-- *Endpoints:* computers, servers, phones,and IoT devices
-- *Infrastructure:* wireless access points, routers, switches, and the links between them
+- **Endpoints:** computers, servers, phones,and IoT devices
+- **Infrastructure:** wireless access points, routers, switches, and the links between them
  
 **Physical media:**
 - **Twisted pair**: typically 8 copper wires arranged in twisted pairs, which cancels out much of the electrical interference
@@ -602,7 +602,7 @@ When packets arrive faster than the outgoing link can send them, the router hold
 - the maximum rate at which a link can carry data, measured in bits per second (**bps**)
 - Time to transmit N bytes over bandwidth R = **N / R**
 
- ## 5. How Providers Connect
+## 5. How Providers Connect
 
 Rough hierarchy:
  
@@ -611,14 +611,16 @@ End users -> Local/regional ISP -> Upper-tier ISP -> Tier 1 ISP <-> Tier 1 ISP (
 \`\`\`
 
  The Tier 1 providers exchange traffic with each other as equals through **peering agreements**, in which each side agrees to carry the other's traffic.
- A single packet commonly crosses 15+ routers, along with many switches, and several different ISPs handle it before it arrives. No one organization controls the entire route, so each router simply makes its best effort.
+ A single packet commonly crosses **15+ routers**, along with many switches, and several different ISPs handle it before it arrives. No one organization controls the entire route, so each router simply makes its best effort.
 
 ## 6. Delay
  
 Each node a packet passes through adds a small wait, called **nodal delay**.
 It has 4 components:
- 
+
+\`\`\`
 d_node = d_proc + d_queue + d_trans + d_prop
+\`\`\`
 
 | Component | What it measures |
 |---|---|
@@ -666,7 +668,7 @@ Each layer communicates with the layer directly below it (via OS function calls)
 | 1. Physical | Fiber, copper, Wi-Fi, etc. |
  
 **Encapsulation**
-As a message moves down the stack on the sending machine, every layer wraps it with its own header containing instructions for its counterpart on the receiving machine. 
+As a message moves down the stack on the sending machine, every layer **wraps it with its own header** containing instructions for its counterpart on the receiving machine. 
 
 \`\`\`
 Application layer:        [        Message         ]
@@ -675,7 +677,7 @@ Network layer:     [  Hn  |  Ht  |      Message         ]
 Link layer:      [  Hl  |  Hn  |  Ht  |      Message         ]
 \`\`\`
 
-Headers are stripped in reverse order as data moves up the stack on the receiving machine.
+Headers are stripped in **reverse order** as data moves up the stack on the receiving machine.
  
 ---
 
