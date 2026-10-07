@@ -1253,21 +1253,21 @@ Go-Back-N: Receiver
       ^rcv_base
  
 A=ACKed S=sent U=usable X=out-of-order`,
-content: `## 1. Transport Services and Protocols
+content: `## 1. Role of the Transport Layer
  
 - Provides **logical communication** between application processes on different hosts; end-to-end from the application's point of view, even though data physically passes through every router in between.
-- **Sender**: **breaks** application messages **into segments**, passes them to the network layer.
-- **Receiver**: **reassembles** segments **into messages**, passes them up to the application layer.
-- Two transport protocols available to Internet applications: **TCP** and **UDP**.
+- **Sender**: **splits** application messages **into segments**, and passes them to the network layer.
+- **Receiver**: **reassembles** segments **into messages**, and delivers them to the right socket.
+- TCP: reliable, ordered, congestion-aware, flow-controlled, connection-based.
+- UDP: a thin layer over IP with no delivery or ordering guarantees.
 - Sender-side steps: message arrives from application → header fields determined (ports, etc.) → segment created → handed to IP.
 - Receiver-side steps: segment arrives from IP → header checked → application message extracted → demultiplexed up to the correct socket.
- 
----
 
-## 2. Multiplexing and Demultiplexing
- 
-- **Demultiplexing** — sorting incoming data to the correct process/socket on the receiving side.
-- **Multiplexing** — combining multiple sessions/streams from different sockets onto one connection on the sending side.
+## 2. Delivering Segments to the Right Socket
+
+- A **socket** is the in-memory endpoint a program uses to send and receive; a **port** is the number that labels it.
+- **Multiplexing** (sender): gather data from many sockets and tag each chunk with source and destination ports.
+- **Demultiplexing** (receiver): read those tags and hand each segment to the matching socket.
 - Every IP datagram carries source/destination IP addresses; every segment inside carries source/destination port numbers. Both together route a segment to the correct socket.
 
 \`\`\`
@@ -1284,33 +1284,29 @@ content: `## 1. Transport Services and Protocols
          TCP/UDP segment format
 \`\`\`
 
-**Connectionless demultiplexing (UDP):**
-- Socket identified by just the local (IP, port) pair — \`socket(AF_INET, SOCK_DGRAM)\`, then \`.bind(myaddr, port)\`.
-- Sending requires specifying a destination IP and port.
-- **Destination IP + destination port** is the *only* thing that decides which socket gets a segment — different source IPs/ports with the same destination still land in the same socket.
- 
-**Connection-oriented demultiplexing (TCP):**
-- Socket identified by a full **4-tuple**: **source IP, source port, dest IP, dest port**.
-- One listening port can serve many simultaneous sockets, each tied to a different client via its own 4-tuple.
-- Example: three segments all addressed to the same server IP/port can still demux to three different sockets, since the full 4-tuples differ.
+**UDP sockets (connectionless):**
+- Created with \`socket(AF_INET, SOCK_DGRAM)\`, then reserves a local IP and port with \`.bind(myaddr, port)\`.
+- Matched on destination IP and port only, so different senders targeting the same port share one socket.
+- Each outgoing datagram names its destination explicitly.
 
-\`SOCK_DGRAM\` = UDP, \`SOCK_STREAM\` = TCP. Binding = assigning a socket its local (IP, port)
-
----
+**TCP sockets (connection-oriented):**
+- Created with \`SOCK_STREAM\`; identified by a full **4-tuple** **(source IP, source port, dest IP, dest port)**.
+- One listening port can serve many clients, each with its own socket.
+- Example: three segments all addressed to to port 80 can reach three sockets if their source addresses or ports differ.
 
 ## 3. Connectionless Transport: UDP
  
-- RFC 768 (1980) — "no frills," **best-effort service**, **no delivery guarantee**.
+- Defined in RFC 768 (1980) — adds almost nothing to IP's best-effort delivery.
 - Segments may be lost or delivered out of order.
-- **Connectionless**: no handshaking, each segment handled independently.
+- **Connectionless**: no handshaking, and each segment is handled independently.
  
 **Why UDP exists:**
-- No connection setup → **no extra RTT delay** before data flows.
-- Simple — no connection state at sender or receiver. (**Connection state** = sequence/ACK numbers, unACKed data, the advertised receive window, buffered out-of-order segments, and active timers that both sides track for the life of a connection — TCP keeps this; UDP skips it entirely.)
-- Small header → less overhead.
-- No congestion control — sends as **fast** as the app wants, keeps working under congestion.
+- No setup delay → data flows immediately.
+- No connection state at sender or receiver. (**Connection state** = sequence/ACK numbers, unACKed data, the advertised receive window, buffered out-of-order segments, and active timers that both sides track for the life of a connection — TCP keeps this; UDP skips it entirely.)
+- Small header → low overhead.
+- No congestion control: the application sets its own sending rate, even under congestion.
  
-**Typical uses:** streaming multimedia (loss-tolerant, rate-sensitive), DNS, SNMP, HTTP/3. Reliability/congestion control for these gets added at the **application layer**, not the transport layer.
+**Typical uses:** streaming multimedia (loss-tolerant, rate-sensitive), DNS, SNMP, HTTP/3. Any reliability/congestion control they need is built at the **application layer**, not the transport layer.
  
 **UDP header fields:**
  
@@ -1334,15 +1330,15 @@ checksum = detects bit errors
 **Internet checksum:**
 - Sender treats the segment (header + IP addresses) as a sequence of 16-bit integers, adds them (one's-complement sum), stores the result in the checksum field.
 - Receiver repeats the addition and compares to the checksum field.
-- Mismatch → error detected, segment discarded. Match → probably fine, but not a guarantee (some error patterns can cancel out).
- 
----
+- Mismatch → error detected and the segment is discarded. 
+- Match → probably fine, but not a guarantee (some error patterns can cancel out).
 
-## 4. Principles of Reliable Data Transfer (RDT)
- 
-- Applications hand data to a "reliable channel" abstraction; the real channel (built on IP) offers no delivery, ordering, or duplication guarantee.
-- Protocol complexity depends on how the channel misbehaves — loses data, corrupts data, reorders it?
-- Sender and receiver don't know each other's state directly — has to be communicated via messages.
+## 4. Reliable Data Transfer (RDT)
+
+**The problem:**
+- Applications want a "reliable channel", but IP may lose, corrupt, or reorder packets.
+- Protocol complexity depends on how the channel misbehaves.
+- Sender and receiver only knows what the other reports, so status travels in messages.
  
 \`\`\`
 | Version | Channel assumption | What it adds | Key detail |
@@ -1357,15 +1353,15 @@ checksum = detects bit errors
 **Performance (stop-and-wait):**
 - Transmission time = Packet Size (in bits) / Link Bandwidth (in bps)
 - Utilization time = fraction of time the sender is actually transmitting = (L/R) / (RTT + L/R)
-- Link sits idle almost the whole time — the protocol itself is the bottleneck.
  
 **Pipelining:**
-- Allows **multiple in-flight, unACKed packets at once** instead of stopping after each one.
+- Keeps multiple unACKed packets in-flight.
 - Needs a larger sequence-number range and buffering at sender/receiver.
-- 3-packet pipelining triples utilization (~0.00081 in the example above) — better, but still far from saturating the link.
+- 3-packet pipelining triples utilization, but still far from saturating the link.
+- Two designs: **Go-Back-N** and **Selective Repeat**.
  
 **Go-Back-N (GBN):**
-- can have up to **N unacknowledged packets in flight at once**; N is the window size.
+- Up to **N sent-but-unacknowledged packets in flight at once**; N is the window size.
 - ACKs are **cumulative**: ACK(n) covers everything up through n; window slides to n+1 on receipt of ACK(n).
 - One timer for the oldest in-flight packet; on timeout, resend packet n *and everything after it* in the window.
 - Receiver: ACKs the highest in-order sequence number so far (duplicates possible); out-of-order packets are either discarded or buffered, but never delivered to the application out of order.
