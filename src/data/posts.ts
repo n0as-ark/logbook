@@ -1019,30 +1019,33 @@ C: MAIL FROM: <alice@crepes.fr>
 S: 250 alice@crepes.fr... Sender ok
 C: RCPT TO: <bob@burgerplace.com>
 S: 250 bob@burgerplace.com ... Recipient ok`,
-content: `## 2. E-Mail: SMTP and IMAP
+content: `## 1. The Moving Parts of E-Mail
  
-E-mail has three major components:
-- **User agents** — the "mail readers" used to compose, edit, and read mail (e.g., Outlook, Gmail, an iPhone mail client); outgoing and incoming messages are stored on the server, not just locally.
-- **Mail servers** — hold a **mailbox** containing a user's incoming messages, and a **message queue** of outgoing mail waiting to be sent.
-- **SMTP (Simple Mail Transfer Protocol)** — the protocol mail servers use to send messages to one another.
+E-mail has three major components working together:
+- **User agents**: the programs people use to write, edit, and read messages (e.g., Outlook, Gmail, an iPhone mail client); outgoing and incoming messages are stored on the server, not just on the device.
+- **Mail servers**: hold a **mailbox** for each user, where incoming messages accumulate, and an outgoing **queue** for outbound mail waits for its turn.
+- **SMTP (Simple Mail Transfer Protocol)**: the protocol mail servers use to send messages to one another.
 
-**SMTP (RFC 5321)** uses TCP to reliably transfer a message from a client (the mail server initiating the connection) to a server, on port 25. This is a direct transfer, with the sending server acting as the client toward the receiving server. 
-There are three phases: 
-- SMTP handshaking (greeting)
-- SMTP transfer of messages
-- SMTP closure. 
-Like HTTP, it's a command/response interaction: commands are sent as ASCII text, and responses carry a status code plus a phrase. Notably, there is **no authentication** built into this server-to-server handshake.
-
-
-**Scenario — Noa sends e-mail to Danny:**
-1. Noa uses her user agent to compose a message addressed to \`danny@example.com\`.
-2. Noa's user agent sends the message to her mail server using SMTP; it's placed in the outgoing message queue.
-3. The client side of SMTP at Noa's mail server opens a TCP connection to Danny's mail server.
+**Scenario — Noa sends an e-mail to Danny:**
+1. Noa composes a message in her user agent, addressed to \`danny@example.com\`.
+2. Noa's user agent passes the message to her own mail server using SMTP; it's placed in the outgoing message queue.
+3. Noa's mail server, acting as SMTP client, opens a TCP connection to Danny's server.
 4. The SMTP client sends Noa's message over that connection.
-5. Danny's mail server places the message into Danny's mailbox.
-6. Danny invokes his user agent to read the message.
+5. Danny's mail server places the message into his mailbox.
+6. Danny opens his user agent later and reads the message.
 \n
- 
+
+The transfer in step 4 is **direct**: the sending server connects straight to the receiving server, with no intermediate relay in the standard picture. The sending server plays the SMTP *client*, and the receiving server plays the SMTP *server*
+
+## 3. How SMTP Works
+
+**SMTP (specified in RFC 5321)** uses TCP to reliably transfer a message from a client (the mail server initiating the connection) to a server, on **port 25**. 
+There are three phases: 
+- **Handshaking**: a greeting in which the two servers introduce themselves
+- **Transfer**: one or more messages are delivered
+- **Closure**: the session ends
+Like HTTP, it's a command/response interaction. Commands are sent as ASCII text, and each respons carries a three-digit status code followed by a text a phrase. Notably, there is **no authentication** between servers.
+
 **Sample SMTP interaction:**
 \`\`\`
 S: 220 burgerplace.com
@@ -1063,22 +1066,37 @@ S: 221 burgerplace.com closing connection
 \`\`\`
 \n
 
-**SMTP vs. HTTP:**
-- HTTP is client **pull**; SMTP is client **push**.
-- Both use ASCII command/response interaction with status codes.
-- HTTP encapsulates each object in its own response message; SMTP sends multiple objects together in a single **multipart** message (using the **MIME**, Multipart Internet Mail Extensions, protocol — which is how one message ends up with separate bodies for the text and for an attachment).
-- SMTP uses persistent connections.
-- SMTP requires the message (header and body) to be in 7-bit ASCII.
-- The SMTP server uses \`CRLF.CRLF\` (carriage-return + line-feed, i.e. a blank line, followed by a period) to determine the end of a message. This also lets multiple messages headed to the same server be sent one right after another over the same connection, e.g. the same message being sent to several recipients.
+What each step accomplishes:
+- \`HELO\` identifies the connecting server.
+- \`MAIL FROM\` names the sender, and \`RCPT TO\` names a recipient.
+- \`DATA\` announces that the message content follows. A line consisting solely of a period marks its end.
+- \`QUIT\` closes the session.
 
-**Message format (RFC 2822)** defines the syntax of the e-mail message itself (the way HTML defines syntax for web documents), separately from RFC 5321, which defines the SMTP protocol used to exchange those messages. A message consists of a **header** (with lines like \`To:\`, \`From:\`, \`Subject:\`), a blank line, then the **body** (the actual message, ASCII characters only). 
-Important distinction: these header lines live *inside* the body of what SMTP transmits — they are different from the SMTP-level \`MAIL FROM:\` / \`RCPT TO:\` commands used during the handshake.
- 
-**Retrieving mail — mail access protocols:** SMTP only handles delivery/storage of a message to the *receiver's* mail server; it says nothing about how the receiver later pulls that message down to a device. 
-A separate **mail access protocol** handles retrieval:
-- **IMAP (Internet Mail Access Protocol, RFC 3501)** — messages stay stored on the server; IMAP provides retrieval, deletion, and folder management for messages that remain server-side.
-- **HTTP** — services like Gmail, Hotmail, and Yahoo!Mail provide a web-based interface layered on top of SMTP (for sending) and IMAP or POP (for retrieving).
- 
+## 4. The Message Itself: Content versus Envelope
+
+- RFC 5321 describes the SMTP **protocol** that servers use to exchange mail
+- RFC 5322 (the successor to the older RFC 2822) describes the **format of the e-mail message**, much as HTML defines syntax for web documents)
+
+Every message has a **header** block (with lines such as \`To:\`, \`From:\`, \`Subject:\`), then an empty line, then the **body** (the actual message, ASCII characters only). 
+These header lines live *inside* the body of what SMTP transmits, so they are different from the SMTP-level \`MAIL FROM:\` / \`RCPT TO:\` commands used during the handshake.
+
+## 5. Reading Mail: Access Protocols
+
+SMTP stops once a message is stored on the *recipient's* mail server. Pulling messages down to a phone or laptop is a different job, handled by a **mail access protocol**:
+- **IMAP (Internet Mail Access Protocol, RFC 3501)**: messages stay on the server, while the user agent handles retrieval, deletion, and folder management for messages.
+- **HTTP-based webmail** (Gmail, Hotmail, and Yahoo!Mail): shows mail through a web page. Behind the page, SMTP handles sending, and IMAP or POP handles retrieval.
+
+## 7. SMTP Compared with HTTP
+
+| Aspect | HTTP | SMTP |
+|---|---|---|
+| Direction of data flow | Client **pulls** objects from a server | Client **pushes** a message to a server |
+| Interaction style | ASCII commands, replies with status codes | ASCII commands, replies with status codes |
+| Several objects | Each object travels in its own response | Everything travels together in one multipart message |
+| Connections | Persistent or non-persistent | Persistent |
+| Content format | Any data | Header and body restricted to 7-bit ASCII |
+| End of message | Length or connection signals | A line with only a period (\`CRLF.CRLF\`) |
+
 **Problems with SMTP:**
 - Communication happens between servers; client-to-server communication is left undefined by the protocol itself.
 - There's **no authentication** between servers.
