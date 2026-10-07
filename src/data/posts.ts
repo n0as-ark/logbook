@@ -1157,7 +1157,7 @@ The answer is a tree of servers, each responsible for one slice of the namespace
                    Root name servers
               /            |            \\
       .com servers    .org servers   .net servers      <- TLD servers
-        /    \\            |            /      \\
+        /     \\            |            /      \\
   shop.com  ebooks.com  study.org  example.net  exam.net    <- authoritative servers
 \`\`\`
 
@@ -1179,7 +1179,9 @@ The answer is a tree of servers, each responsible for one slice of the namespace
 - A helper layer rather than part of the tree. 
 - A host's queries always go to its local server first, which is usually operated by the ISP. 
 - On macOS, \`scutil --dns\` reveals which resolver is configured; on Windows, \`ipconfig /all\` does the same.
-  `},
+
+
+`},
   {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
 slug: "transport-layer-multiplexing-udp-rdt",
 date: "2026-09-09",
