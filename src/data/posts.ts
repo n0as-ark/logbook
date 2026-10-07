@@ -704,33 +704,57 @@ HTTP server  ->  port 80
 Mail server  ->  port 25
  
 www.example.com : 108.138.85.55 : 80`,
-content: `## 1. Creating a Network App
+content: `## 1. Where Network Applications Run
  
-A network application consists of programs that run on different end systems and communicate over the network (e.g., web server software communicating with browser software). Since network-core devices (routers, switches) don't run user applications, all the logic lives at the network's edge. This split is what allows rapid app development and propagation: a new app only needs to be installed on end systems, with no changes required to the core.
- 
-**Client-server paradigm:**
-- Server: **always-on** host, permanent IP address, often hosted in data centers for scaling
-- Clients: contact and communicate with the server, may be intermittently connected, may have dynamic IP addresses, do not communicate directly with each other
+A network application consists of programs, each living on a different end system. Routers and switches in the middle of the network only forward traffic, and none of them executes application code. 
+This division of labor has a practical payoff - a new app only needs to be installed on end systems, with no changes required to the network core.
+
+## 2. Two Architectural Styles
+
+### Client-server
+- **Server**: **always-on** host with a permanent IP address, and often sits in data centers for scaling
+- **Clients**: machines that contact and communicate with the server, may have a different IP addresse on each connection, and never talk directly to another client
 - Examples: HTTP (client: browser; server: web server), IMAP (client: mail app; server: mail server), FTP (client: FTP client; server: FTP server)
  
-**Peer-to-peer (P2P) architecture:**
-- No always-on server; arbitrary end systems communicate directly
-- Peers request service from other peers and provide service in return. This gives self-scalability, since new peers bring both new capacity and new demand
-- Peers are intermittently connected and change IP addresses, which makes management more complex
+### Peer-to-peer (P2P)
+- No dedicated, always-on server; arbitrary end systems **exchange data with each other directly**
+- Peers request service from other peers and provide service in return. This gives **self-scalability**: a newcomer adds demand, but also adds upload bandwidth for others to use
+- Tradeoff: keeping track of who holds what is harder than administering a handful of servers
 - Example: P2P file sharing (BitTorrent)
  
-**Processes communicating:**
-- A process is a program running within a host. Two processes on the same host communicate via inter-process communication (defined by the OS); processes on different hosts communicate by exchanging messages.
-- Client process: initiates communication.
-- Service (server) process: waits to be contacted.
-- Note: applications with P2P architectures still have both client and server processes internally where a peer acts as a client when requesting and as a server when serving.
+## 3. Processes and Their Roles
+
+A process is **a program in execution**. Two processes on the same host communicate via inter-process communication; processes on different machines share no memory, so they communicate by exchanging **messages** across the network instead.
+- Client process: the one that opens the conversation
+- Service (server) process: waits to be contacted
+- Note: applications with P2P architectures still have both client and server processes internally - the same peer acts as a client while requesting a chunk of data and as a server while another peer is requesting a chunk from it
  
----
+## 4. What an Application-Layer Protocol Defines
+
+Two processes can only cooperate if they agree on a shared language.
+An application-layer protocol specifies:
+- **Message types** (e.g., request, response)
+- **Message syntax**:what fields a message contains and how those boundaries between fields are marked
+- **Message semantics**: what the content of each field means
+- **Rules of engagement**: for when and how processes send and respond to messages
  
-## 2. Sockets and Addressing
+**Open protocols** are defined in public documents called RFCs. With the specification available to everyone, any company or developer can build software that **interoperates** correctly, which is why any browser can talk to any web server. Examples: HTTP, SMTP.
  
-A process sends and receives messages through its **socket**, which acts like a door: the sending process pushes a message out the door and trusts the transport infrastructure on the other side to deliver it to the socket at the receiving process. Two sockets are always involved, one on each end. The socket itself is created and controlled from the application layer, but everything after that (reliability, routing, etc.) is handled by the lower layers, controlled by the OS rather than the app developer.
+**Proprietary protocols** are owned/controlled by a specific company, and the exact details of their operation are not published in the same open way. Examples: Skype, Zoom.
+
+## 5. Sockets: The Doorway to the Network
  
+A process sends and receives messages through its **socket**, which acts like a doorway: the sending process pushes a message through its door and relies on the transport infrastructure beyond the door to carry the message to the socket at the receiving process. Every conversation involves **two sockets**, one on each end. 
+
+Responsibility splits cleanly at that door:
+ 
+- **Application side:** the developer controls message contents, protocol logic, the choice of transport service, and perhaps a few tuning parameters
+- **Below the door:** the operating system runs the transport, network, and link layers. Routing and retransmission are never the application's job
+
+The sockets are created and controlled from the application layer, but the heavy lifting behind them happens entirely in the lower layers.
+
+## 6. Addressing a Process
+
 **Addressing processes:** an IP address alone identifies a *host*, not a specific process on that host — a host can run many processes at once. To receive messages, a process needs an identifier made up of both an **IP address** and a **port number**.
  
 Example port numbers:
@@ -738,22 +762,6 @@ Example port numbers:
 - Mail server: port 25
  
 To send an HTTP message to \`www.example.com\`: IP address \`108.138.85.55\`, port number \`80\`.
- 
----
- 
-## 3. What an Application-Layer Protocol Defines
- 
-An application-layer protocol specifies:
-- **Types of messages exchanged** (e.g., request, response)
-- **Message syntax** — what fields exist in a message and how those fields are delineated (marked/separated) from each other
-- **Message semantics** — the meaning of the information carried in each field
-- **Rules** for when and how processes send and respond to messages
- 
-**Open protocols** are defined in RFCs (Request for Comments — publicly available technical documents), so everyone has access to the protocol definition. Because the spec is public, any company or developer can build software that correctly implements it, and all correct implementations can talk to each other — this is what allows **interoperability**. Examples: HTTP, SMTP.
- 
-**Proprietary protocols** are owned/controlled by a specific company and are not documented in the same open way - only that company knows the exact internal workings. Examples: Skype, Zoom.
- 
----
  
 ## 4. Transport Service Requirements
  
