@@ -1161,6 +1161,24 @@ The answer is a tree of servers, each responsible for one slice of the namespace
   shop.com  ebooks.com  study.org  example.net  exam.net    <- authoritative servers
 \`\`\`
 
+### Root name servers
+- When a server is stumped by a name, the root gets the question
+- There are 13 logical root server identities, each replicated in hundreds of locations around the world.
+- **Internet Corporation for Assigned Names and Numbers (ICANN)** administers the root servers.
+
+### Top-level domain (TLD) servers
+- Handle \`.com\`, \`.org\`, \`.net\`, \`.edu\`, and the rest, along with every country-code domain such as \`.ca\`, \`.fr\`, or \`.jp\`. 
+- Specialized registries operate them. 
+- Network Solutions maintains the official registry behind \`.com\` and \`.net\`, while Educause handles \`.edu\`.
+
+### Authoritative servers
+- Belong to an organization (or to a hosting provider acting on its behalf).
+- Store the official name-to-address records for the machines the organization names.
+
+### Local DNS servers
+- A helper layer rather than part of the tree. 
+- A host's queries always go to its local server first, which is usually operated by the ISP. 
+- On macOS, \`scutil --dns\` reveals which resolver is configured; on Windows, \`ipconfig /all\` does the same.
   `},
   {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
 slug: "transport-layer-multiplexing-udp-rdt",
