@@ -823,23 +823,23 @@ A web page consists of objects (an HTML file, JPEG images, a Java applet, audio 
 Each object is reachable through a **URL** (Uniform Resource Locator), which combines a host name with a path:
 \`\`\`
 http://www.example.org/gallery/cat.jpg
-        └─────┬───────┘└──────┬───────┘
+       └─────┬───────┘└──────┬───────┘
           host name        path name
 \`\`\`
 
 ## 2. Clients, Servers, and TCP
  
-**HTTP (HyperText Transfer Protocol)** is the Web's application-layer protocol that governs how browsers and web servers converse, and it follows the client-server model. The client (browser) requests, receives, and displays web objects using HTTP while the server (web server software, e.g. Apache) sends objects in response to those requests.
+**HTTP (HyperText Transfer Protocol)** is the Web's application-layer protocol that governs how browsers and web servers converse, and it follows the **client-server model**. The client (browser) requests, receives, and displays web objects using HTTP while the server (web server software, e.g. Apache) sends objects in response to those requests.
  
 HTTP rides on top of TCP, so evrey exchange begins with **a connection**: 
-1. The client initiates a TCP connection, which creates a socket, to the server on **port 80**. Encrypted HTTPS uses port 443 instead.
-2. The server accepts the connection.
+1. The client **initiates a TCP connection**, which creates a socket, to the server on **port 80**. Encrypted HTTPS uses port 443 instead.
+2. The **server accepts** the connection.
 3. Request and response messages travel back and forth.
-4. The connection is closed afterward.
+4. The **connection is closed** afterward.
  
-**HTTP is stateless** — the server keeps no memory of past client requests. This keeps the protocol simple: 
+**HTTP is stateless**: the server keeps no memory of past client requests. This keeps the protocol simple: 
 - There's no need to track state across a multi-step exchange
-- Every request is independent, and there's no need to recover from a transaction that partially completed but never finished
+- Every request is **independent**, and there's no need to recover from a transaction that partially completed but never finished
 - Tradeoff: any protocol that *does* maintain state is inherently more complex. History has to be tracked, and if the client or server crashes, their two views of that state may become inconsistent and need to be reconciled.
 
 ## 3. Request Messages
@@ -904,13 +904,13 @@ The three-digit **status code** on the first line summarizes the outcome. The le
 **RTT (Round-Trip Time)** measures how long a small packet takes to reach the server and return.
 
 **Non-persistent HTTP** response time per object breaks down into: 
-- one RTT to initiate the TCP connection
-- one RTT for the HTTP request
+- **one RTT** to initiate the TCP connection
+- **one RTT** for the HTTP request
 - the first few bytes of the response to come back
 - the actual object/file transmission time
-Each object costs **two round trips** (one for the TCP setup, one for the request and the first bytes of the reply) plus the object's own transmission time. Operating-system resources are also consumed for every connection opened. Browsers compensate by opening several connections in parallel, which hides some of the delay but adds even more overhead.
+Each object costs **two round trips** plus the object's own transmission time. Operating-system resources are also consumed for every connection opened. Browsers compensate by opening several connections in parallel, which hides some of the delay but adds even more overhead.
 
-**Persistent HTTP** leaves the connection open after the response. Later requests between the same pair of hosts reuse it, so the setup cost is paid **once**, cutting response time roughly in half.
+**Persistent HTTP** *leaves the connection open* after the response. Later requests between the same pair of hosts reuse it, so the setup cost is paid **once**, cutting response time roughly in half.
 
 | | Non-persistent HTTP | Persistent HTTP (HTTP/1.1) |
 |---|---|---|
@@ -920,7 +920,7 @@ Each object costs **two round trips** (one for the TCP setup, one for the reques
 
 ## 6. Statelessness and Cookies
 
-A web server running plain HTTP remembers nothing about earlier requests, because the protocol is **stateless**. Every request stands alone - no multi-step exchange has to be tracked, and nothing has to be repaired if a transaction is abandoned halfway. Protocols that do keep state are more complicated, because history has to be stored and because a crash on either side can leave the two parties with conflicting views that must be reconciled.
+A web server running plain HTTP remembers nothing about earlier requests, because the protocol is **stateless**. Every request stands alone; no multi-step exchange has to be tracked, and nothing has to be repaired if a transaction is abandoned halfway. Protocols that do keep state are more complicated, because history has to be stored and because a crash on either side can leave the two parties with conflicting views that must be reconciled.
 
 The drawback is obvious for services that need continuity across many requests.  **Cookies** supply it by carrying a small piece of state inside the messages themselves:
 - a \`Set-Cookie\` header line in the HTTP response
@@ -931,7 +931,7 @@ On a user's first visit, the site creates **a unique ID (the cookie)** and a mat
  
 Cookies are used for authorization, shopping carts, recommendations, and maintaining session state (e.g., webmail). The underlying challenge cookies solve is keeping state at the protocol endpoints across multiple transactions, using the messages themselves as the carrier.
  
-A related privacy note: **third-party (tracking) cookies** — set by a domain the user did not directly choose to visit, such as an ad network embedded in a page, let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
+A related privacy note: **third-party (tracking) cookies** set by a domain the user did not directly choose to visit, such as an ad network embedded in a page, let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
 
 ## 7. HTTP/2 and Its Remaining Weakness
 
