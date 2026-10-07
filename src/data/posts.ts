@@ -1302,7 +1302,7 @@ content: `## 1. Role of the Transport Layer
  
 **Why UDP exists:**
 - No setup delay → data flows immediately.
-- No connection state at sender or receiver. (**Connection state** = sequence/ACK numbers, unACKed data, the advertised receive window, buffered out-of-order segments, and active timers that both sides track for the life of a connection — TCP keeps this; UDP skips it entirely.)
+- No connection state at sender or receiver. (**Connection state** = sequence/ACK numbers, unACKed data, the advertised receive window, buffered out-of-order segments, and active timers that both sides track for the life of a connection)
 - Small header → low overhead.
 - No congestion control: the application sets its own sending rate, even under congestion.
  
