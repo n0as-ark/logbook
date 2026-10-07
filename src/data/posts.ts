@@ -933,13 +933,42 @@ Cookies are used for authorization, shopping carts, recommendations, and maintai
  
 A related privacy note: **third-party (tracking) cookies** set by a domain the user did not directly choose to visit, such as an ad network embedded in a page, let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
 
-## 7. HTTP/2 and Its Remaining Weakness
+## 7. From HTTP/2 to HTTP/3 (QUIC)
 
-**HTTP/2 to HTTP/3 (QUIC):** HTTP/2 multiplexes many independent request/response streams over a single TCP connection, each with its own stream ID. This still has a weakness: because it's one TCP connection, a single lost packet stalls *every* stream sharing that connection — data that has already safely arrived can't be delivered to the application because the system is waiting on some other piece that hasn't arrived yet. Browsers therefore still have an incentive to open multiple parallel TCP connections, just as with HTTP/1.1, to reduce stalling and increase overall throughput. HTTP/2 also has no built-in security over a vanilla TCP connection.
+**What HTTP/2 improves**
+- Many requests and responses share one TCP connection, each tagged with a stream ID so the pieces can be told apart (**multiplexing**).
+- Objects no longer queue one behind another, as they did in HTTP/1.1.
  
-**HTTP/3** solves this by moving to **QUIC (Quick UDP Internet Connections)**, an application-layer protocol built on top of UDP. QUIC rebuilds the reliable-delivery features TCP normally provides (reliability, congestion control, authentication, crypto state) itself, but per-stream rather than per-connection, so one lost packet only stalls the stream it belongs to — not the whole connection. This is deployed widely by Google (Chrome, mobile YouTube app).
+**What is still wrong**
+- Every stream depends on a single TCP connection, which delivers bytes strictly in order.
+- One lost packet freezes all streams until the retransmission arrives. Data from other streams that already got through sits in a buffer, undelivered. This effect is called **stalling** (or head-of-line blocking).
+- Browsers keep opening several parallel connections to limit the damage, the same workaround used under HTTP/1.1.
+- HTTP/2 has no encryption of its own. Security comes from running TLS over plain TCP.
+
+**HTTP/3: the fix**
+- HTTP/3 runs on **QUIC** (Quick UDP Internet Connections), a protocol built into applications and carried over UDP.
+- QUIC supplies reliability, congestion control, authentication, and encryption itself, handled separately for each stream.
+- A lost packet delays only its own stream, and the others keep flowing.
+- Google uses it widely, for example in Chrome and the mobile YouTube app.
+
+\`\`\`
+  HTTP/2 over TCP                       HTTP/3 (QUIC)
+ ----------------                     ----------------
++--------+--------+                +-----------+--------+
+| HTTP/2 |  TLS   |   Application  | H2 (slim) |  QUIC  |
++--------+--------+                +-----------+--------+
+|       TCP       |    Transport   |          UDP       |
++-----------------+                +--------------------+
+|        IP       |    Network     |          IP        |
++-----------------+                +--------------------+
  
-Connection setup is also faster: standard TCP + TLS requires **two serial handshakes** (a transport-layer TCP handshake, then a security-layer TLS handshake) before any data flows. QUIC folds reliability, congestion control, authentication, and crypto state into a **single handshake** (1-RTT). If a client has connected to the same server before, it can reuse the cached TLS session ticket from that prior connection for encryption and authentication on the new connection — giving **0-RTT** handshake delay, since no new negotiation is needed.
+TLS + TCP  -->  merged into QUIC, which now sits on UDP instead of TCP
+\`\`\`
+
+**Faster connection setup**
+- TCP with TLS needs two handshakes in sequence, one for transport and one for security, before any data moves.
+- QUIC combines them into a single handshake, so data can flow after one round trip (**1-RTT**).
+- On a repeat visit, the client reuses a stored session ticket from the earlier connection. Encryption and authentication are already settled, so the first packet can carry data (**0-RTT**).
 
 \`\`\`
   TCP + TLS handshake                        QUIC handshake
@@ -960,19 +989,14 @@ Client            Server                 Client            Server
 Total: 2 RTTs before data                Total: 1 RTT before data
 \`\`\`
  
-\`\`\`
-  HTTP/2 over TCP                       HTTP/3 (QUIC)
- ----------------                     ----------------
-+--------+--------+                +-----------+--------+
-| HTTP/2 |  TLS   |   Application  | H2 (slim) |  QUIC  |
-+--------+--------+                +-----------+--------+
-|       TCP       |    Transport   |          UDP       |
-+-----------------+                +--------------------+
-|        IP       |    Network     |          IP        |
-+-----------------+                +--------------------+
+**Quick comparison**
  
-TLS + TCP  -->  merged into QUIC, which now sits on UDP instead of TCP
-\`\`\`
+| | HTTP/2 | HTTP/3 |
+|---|---|---|
+| Transport | TCP | UDP (through QUIC) |
+| Effect of one lost packet | Stalls all streams | Stalls one stream |
+| Setup before data | 2 handshakes (TCP, then TLS) | 1 round trip (0 on a repeat visit) |
+| Encryption | Added separately with TLS | Built into QUIC |
  
 ---
 
