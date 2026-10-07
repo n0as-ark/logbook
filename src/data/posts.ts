@@ -817,24 +817,89 @@ snippet: `HTTP/2 over TCP                   HTTP/3 (QUIC)
 +------------------+                +--------------------+
 |        IP        |    Network     |         IP         |
 +------------------+                +--------------------+`,
-content: `## HTTP
+content: `## 1. Anatomy of a Web Page
  
-**Basics:** a web page consists of objects (an HTML file, JPEG images, a Java applet, audio files, etc.), which can be stored across different web servers. A web page consists of a base HTML file that references several objects, each addressable by a URL, e.g. \`www.example.com/media/pic.gif\`, where \`www.example.com\` is the host name and \`media/pic.gif\` is the path name.
+A web page consists of objects (an HTML file, JPEG images, a Java applet, audio files, etc.), which can be stored across different web servers. 
+Each object is reachable through a **URL** (Uniform Resource Locator), which combines a host name with a path:
+\`\`\`
+http://www.example.org/gallery/cat.jpg
+        └─────┬───────┘└──────┬───────┘
+          host name        path name
+\`\`\`
+
+## 2. Clients, Servers, and TCP
  
-**HTTP (HyperText Transfer Protocol)** is the Web's application-layer protocol, following a client-server model: the client (browser) requests, receives, and displays web objects using HTTP; the server (web server software, e.g. Apache) sends objects in response to those requests.
+**HTTP (HyperText Transfer Protocol)** is the Web's application-layer protocol that governs how browsers and web servers converse, and it follows the client-server model. The client (browser) requests, receives, and displays web objects using HTTP while the server (web server software, e.g. Apache) sends objects in response to those requests.
  
-**HTTP uses TCP:** 
-1. The client initiates a TCP connection (creating a socket) to the server on **port 80**
-2. The server accepts the connection
-3. HTTP messages are exchanged between browser (HTTP client) and web server (HTTP server)
-4. The TCP connection is closed afterward.
+HTTP rides on top of TCP, so evrey exchange begins with **a connection**: 
+1. The client initiates a TCP connection, which creates a socket, to the server on **port 80**. Encrypted HTTPS uses port 443 instead.
+2. The server accepts the connection.
+3. Request and response messages travel back and forth.
+4. The connection is closed afterward.
  
 **HTTP is stateless** — the server keeps no memory of past client requests. This keeps the protocol simple: 
 - There's no need to track state across a multi-step exchange
 - Every request is independent, and there's no need to recover from a transaction that partially completed but never finished
 - Tradeoff: any protocol that *does* maintain state is inherently more complex. History has to be tracked, and if the client or server crashes, their two views of that state may become inconsistent and need to be reconciled.
 
-**Non-persistent vs. persistent HTTP:**
+## 3. Request Messages
+
+HTTP request messages are **plain ASCII** (human-readable format), for example:
+ 
+\`\`\`
+GET /gallery/index.html HTTP/1.1
+Host: www.example.org
+User-Agent: ExampleBrowser/12.0
+Accept: text/html
+Accept-Language: en-ca
+Connection: keep-alive
+\`\`\`
+ 
+The general layout has three zones, with a carriage return and line feed (CRLF) ending every line:
+\`\`\`
+┌────────────────────────────────────────────┐
+│  method   SP   URL   SP   version   CRLF   │  ← request line
+├────────────────────────────────────────────┤
+│  header-name : value                CRLF   │  ⎫
+│  header-name : value                CRLF   │  ⎬ header lines
+│  ...                                       │  ⎪
+│  header-name : value                CRLF   │  ⎭
+├────────────────────────────────────────────┤
+│  CRLF                                      │  ← blank line (end of headers)
+├────────────────────────────────────────────┤
+│  entity body (optional)                    │
+└────────────────────────────────────────────┘
+\`\`\`
+
+**HTTP methods:**
+- **GET**: the most common method; small amounts of data can ride along inside the URL after a \`?\` (e.g. \`www.somesite.com/search?q=lighthouse&sort=new\`).
+- **POST**: The user's input travels in the entity body instead of the URL, so it stays out of browser history and server logs that record URLs.
+- **HEAD**: requests only the headers that would be returned for a GET on that URL, with no body attached. It is a cheap way to inspect a file's size or modification date without downloading the file.
+- **PUT**: uploads a new object to the server, completely replacing whatever file already exists at that URL, with the new content carried in the entity body.
+
+## 4. Response Messages and Status Codes
+
+A response mirrors the structure of a request: a status line, header lines, a blank line, and then the body.
+ 
+\`\`\`
+HTTP/1.1 200 OK
+Date: Tue, 06 Oct 2026 14:02:11 GMT
+Server: ExampleServer/2.4
+Content-Type: text/html; charset=utf-8
+Content-Length: 1456
+ 
+<!doctype html>
+<html> ... </html>
+\`\`\`
+ 
+The three-digit **status code** on the first line summarizes the outcome. The leading digit identifies the family: 2xx for success, 3xx for redirection, 4xx for a problem on the client's side, and 5xx for a problem on the server's side. Common codes:
+- **200 OK**: the request succeeded, and the requested object follows in the message
+- **301 Moved Permanently**: the requested object now lives elsewhere, and the new address is given later in the message (\`Location:\` field)
+- **400 Bad Request**: the server couln't understand the request
+- **404 Not Found**: the requested document wasn't found on this server
+- **505 HTTP Version Not Supported**: the server does not speak the protocol version the client used
+
+## 5. Non-persistent vs. persistent HTTP
  
 | | Non-persistent HTTP | Persistent HTTP (HTTP/1.1) |
 |---|---|---|
@@ -856,47 +921,6 @@ Non-persistent HTTP response time per object breaks down into:
 - one RTT for the HTTP request
 - the first few bytes of the response to come back
 - the actual object/file transmission time
-
-**HTTP request message format:** plain ASCII (human-readable), for example:
- 
-\`\`\`
-GET /index.html HTTP/1.1
-Host: www.example.com
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:80.0) Gecko/20100101 Firefox/80.0
-Accept: text/html,application/xhtml+xml
-Accept-Language: en-us,en;q=0.5
-Accept-Encoding: gzip,deflate
-Connection: keep-alive
-\`\`\`
- 
-General structure: a request line (method, full path, HTTP version), followed by header lines, a blank line (carriage-return/line-feed at the start of the line marks the end of the headers), and an optional body.
-\`\`\`
-┌────────────────────────────────────────────┐
-│  method   SP   URL   SP   version   CRLF   │  ← request line
-├────────────────────────────────────────────┤
-│  header-name : value                CRLF   │  ⎫
-│  header-name : value                CRLF   │  ⎬ header lines
-│  ...                                       │  ⎪
-│  header-name : value                CRLF   │  ⎭
-├────────────────────────────────────────────┤
-│  CRLF                                      │  ← blank line (end of headers)
-├────────────────────────────────────────────┤
-│  entity body (optional)                    │
-└────────────────────────────────────────────┘
-\`\`\`
-
-**HTTP methods:**
-- **GET** — the most common method; can send small amounts of data to the server by appending it to the URL after a \`?\` (e.g. \`www.somesite.com/animalsearch?monkeys&banana\`)
-- **POST** — used when a web page includes form input; user input is sent from client to server in the entity body of the request rather than the URL
-- **HEAD** — requests only the headers that would be returned for a GET on that URL, without downloading the actual file — useful for getting information about a file without transferring it
-- **PUT** — uploads a new object to the server, completely replacing whatever file already exists at that URL, with the new content carried in the entity body
- 
-**HTTP response status codes** appear on the first line of the server's response:
-- **200 OK** — request succeeded, requested object follows in the message
-- **301 Moved Permanently** — requested object has moved; the new location is given later in the message (\`Location:\` field)
-- **400 Bad Request** — the request message wasn't understood by the server
-- **404 Not Found** — the requested document wasn't found on this server
-- **505 HTTP Version Not Supported**
 
 **Cookies:** since HTTP is stateless by design (no multi-step tracking, independent requests, nothing to recover), sites that need to remember a user across visits use cookies instead. 
 A cookie system has four parts: 
