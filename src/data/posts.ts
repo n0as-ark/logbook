@@ -531,113 +531,113 @@ Building this made the gap between a toy cipher and a real one feel concrete in 
   excerpt: "Core fundamentals of computer networking: Internet structure, protocols, packet switching, delay, and the OSI/TCP-IP models.",
   readTime: "7 min",
   snippet: "7  Application   HTTP, DNS\n6  Presentation\n5  Session\n4  Transport     TCP, UDP\n3  Network       IPv4, IPv6\n2  Data-Link     Ethernet\n1  Physical      Fiber, Wi-Fi",
-  content: `## 1. The Internet Today
+  content: `## 1. What the Internet Is
  
-The Internet consists of billions of devices connected together. 
-Key components: 
-- **Hosts (endpoints)** — devices sending/receiving data
-- **Applications** — programs generating/consuming data
-- **Protocols** — rules governing communication
-- **Switching and routing** — how data moves between devices
-- **Communication links** — physical/wireless medium
+The Internet is a worldwide collection of smaller networks that have been linked into one system.
+Billions of devices take part in it, and every exchange of data relies on the following key components: 
+- **Hosts**: the devices at either end of a conversation, sending or receiving data
+- **Applications**: the programs that create or consume the data
+- **Protocols**: the agreed rules that make communication understandable
+- **Switching and routing**: the mechcanisms that move data from one place to another
+- **Links**: the physical/wireless medium that carries the signals
 
-Definition: a **global network of interconnected smaller networks**, based on standards such as communications protocols and RFCs. It provides application programmers access while abstracting the complexity of communication, hiding challenges behind ease of use.
+Open standards, including published protocol specifications and documents are called Request for Comments (RFCs), are what let equipment from different vendors working together. A programmer building an app doesn't need to understand cables or routing tables, because the network exposes a simple interface and absorbs the difficult part internally.
  
 ---
 
-## 2. Protocols and Definitions
+## 2. Protocols: The Rules of Communication
  
-A **protocol** defines the structure and order of messages sent and received. It includes detail on formatting and timing (who communicates when). It is often implemented as a "back-and-forth" conversation.
+**Protocol**: a shared agreement on what messages look like, what they mean, and who speaks when.
  
 **Human vs. Computer protocols:**
  
 | Human Protocol | Computer Protocol |
 |---|---|
-| "Hello" ↔ "Hello" | DNS Request ↔ DNS Response |
-| "Do you know where the library is?" ↔ "Yes, it's on Main Street!" | DHCP Discover ↔ DHCP Offer |
+| "Hi" ↔ "Hi" | DNS Request ↔ DNS Response |
+| "Do you know where the nearest gas station is?" ↔ "Yes, it's on Bedford Street!" | DHCP Discover ↔ DHCP Offer |
  
-**Network sizes** (by geographic scope):
-- **PAN** - Personal Area Network
-- **LAN** — Local Area Network
-- **MAN** — Metropolitan Area Network
-- **WAN** — Wide Area Network
-- **GAN** — Global Area Network
+Networks are also grouped by how much ground they cover:
+- **PAN (Personal Area Network)**: a few meters around one person
+- **LAN (Local Area Network)**: a home, office, or single building
+- **MAN (Metropolitan Area Network)**: a city or campus region
+- **WAN (Wide Area Network)**: multiple cities or countries
+- **GAN (Global Area Network)**: the whole planet
  
 ---
 
-## 3. Internet Structure
+## 3. How the Internet is Built
  
 Three conceptual layers:
  
-- **Network Edge** — endpoint devices: home networks, enterprise networks, mobile devices, content provider/datacenter networks
-- **Access Networks** — connects edge devices to the rest of the Internet (local/regional ISPs, mobile carriers)
-- **Core Networks** — backbone infrastructure (national/global ISPs) moving traffic across long distances
+- **Network Edge**: the devices people actually use - personal computers, phones, smart appliances, company machines, and the servers in data centers
+- **Access Networks**: home routers, mobile towers, and company networks that connect edge devices to the wider system
+- **Core Networks**: the high-capacity backbone operated by large ISPs. It carries traffic between access networks over long distances.
  
-**Internet parts:**
-- *Endpoints:* personal computers, servers, mobile phones, IoT devices
-- *Infrastructure:* wireless access points, routers, switches, communication links
+**Equipment**
+- *Endpoints:* computers, servers, phones,and IoT devices
+- *Infrastructure:* wireless access points, routers, switches, and the links between them
  
-**Connectivity options:**
-- *Home:* dial-up modems, cable modems, fiber to the curb, mesh Wi-Fi, satellite (LEO/GEO)
-- *Corporate:* DS-1 thru DS-4, cable-modem, Ethernet over copper, fiber, free-air optical, satellite
-- *Core:* peering agreements, fiber
- 
-**Physical links:**
-- **Twisted pair** — copper, usually 8 wires, twisted to reduce interference
-- **Coaxial cable** — 2 copper conductors (center + braided shield)
-- **Fiber optic** — glass, carries light, very low error rates (**single-mode**: longer distance, higher speed; **multi-mode**: lower cost)
-- **Wireless** — Wi-Fi, cellular, Bluetooth, microwave, satellite
+**Physical media:**
+- **Twisted pair**: typically 8 copper wires arranged in twisted pairs, which cancels out much of the electrical interference
+- **Coaxial cable**: a copper core surrounded by a braided copper shield that blocks outside noise
+- **Fiber optic**: glass strands carrying pulses of light with very few transmission errors
+- **Wireless** — Wi-Fi, cellular, Bluetooth, microwave, and satellite signals
  
 --- 
 
 ## 4. Packet Switching
  
-Data is transmitted in small units. Large messages are broken into **packets** for transmission. Networks often cap packet size (common limit: **1500 bytes**). Each packet must be addressed correctly.
+**Packets**
+The sender divides a large file or stream into **packets**, and each packet receives a destination address. Many networks restrict pacekt length, with **1500 bytes** being a typical ceiling.
  
-**Circuit vs. Packet switching:**
-**Circuit switching** — physical/virtual connection set up; all data follows the same path
-**Packet switching** — path chosen per packet, independent of prior choices
-    - related packets may follow different paths
-    - broken links can be routed around quickly
+**Circuit switching vs. Packet switching:**
+|   | Circuit Switching | Pacekt Switching |
+|---|--—|---|
+| Path | One dedicated route is reserved before data flows | Each packet is routed on its own |
+| Order of travel | Everything follows the same route | Packets from one message may take different routes |
+| When a link fails | The connection breaks | Traffic is steered around the failure |
+
+ The Internet relies mostly on **packet switching**, mainly because of its resilience.
  
-**Store and Forward:** Packets transmit only as fast as bandwidth allows. A complete packet must arrive before it can be evaluated and forwarded.
+**Store and Forward:** a router cannot start passing a packet along until the entire packet has arrived and been checked. Transmission speed is always capped by the link's bandwidth.
  
-**Queueing:** Queueing occurs when the output link is slower than the input link; packets wait temporarily in router RAM. If buffer space is exceeded, packets are discarded. It can also be intentional (administrative delay).
+**Queueing** 
+When packets arrive faster than the outgoing link can send them, the router holds the extras in a buffer, usually in its RAM. A full buffer forces the router to drop new arrivals.
  
 **Bandwidth:**
-- Bandwidth is measured in bits per second (**bps**, lowercase b)
-- Prefixes: kbps = 10³, mbps = 10⁶, gbps = 10⁹
+- the maximum rate at which a link can carry data, measured in bits per second (**bps**)
 - Time to transmit N bytes over bandwidth R = **N / R**
- 
-**Tier 1 and Peers:**
-- Home/corporate users pay an ISP for connectivity
-- ISPs buy higher-speed connectivity from upper-tier ISPs
-- Traffic crossing to another ISP's network travels via a **peering agreement**
-- **Backbone / long-haul links** carry data over long distances
-- Large content providers (Fastly, Google, Akamai) peer with many ISPs to stay "closer" to end users
- 
-**Hop count:** A packet commonly traverses 15+ routers (and many switches) en route to its destination, handled by multiple ISPs along the way.
- 
+
+---
+
+ ## 5. How Providers Connect
+
 Rough hierarchy:
  
 \`\`\`
 End users -> Local/regional ISP -> Upper-tier ISP -> Tier 1 ISP <-> Tier 1 ISP (peering)
 \`\`\`
- 
+
+ The Tier 1 providers exchange traffic with each other as equals through **peering agreements**, in which each side agrees to carry the other's traffic.
+ A single packet commonly crosses 15+ routers, along with many switches, and several different ISPs handle it before it arrives. No one organization controls the entire route, so each router simply makes its best effort.
+
 ---
 
-## 5. Delay
+## 6. Delay
  
-**Nodal delay** at each node (router):
+Each node a packet passes through adds a small wait, called **nodal delay**.
+It has 4 components:
  
 d_node = d_proc + d_queue + d_trans + d_prop
- 
-- **Processing delay** — checking for errors, determining output port
-- **Queueing delay** — time waiting to be sent on the link
-- **Transmission delay** — time to push bits onto the line
-- **Propagation delay** — time for the signal to reach the next node
 
-**Total delay** = sum of nodal delay (∑d_node) across all nodes in the path — matches what a traceroute measures hop by hop.
+| Component | What it measures |
+|---|---|
+| Processing delay | Inspecting the packet for errors and determining the outgoing port |
+| Queueing delay | Time waiting in the buffer until the link is free |
+| Transmission delay | Time placing all of the packet's bits onto the link |
+| Propagation delay | The signal's physical travel time to the next node |
+
+**Total delay** = sum of nodal delay (∑d_node) across all nodes in the path
 
 **Terminology check:**
  
@@ -649,7 +649,7 @@ d_node = d_proc + d_queue + d_trans + d_prop
 
 ---
 
-## 6. OSI Model
+## 7. OSI Model
  
 The International Organization for Standardization (ISO) developed the **Open Systems Interconnection (OSI)** model in the late 1970s–1980s to classify protocols by responsibility. TCP/IP became dominant due to the Internet's growth, so OSI today is used mainly as a **reference model**.
  
@@ -657,13 +657,13 @@ Each layer communicates with the layer directly below it (via OS function calls)
  
 | Layer | Responsibility |
 |-------|----------------|
-| 7. Application | Formatting data for the application |
-| 6. Presentation | Context-neutral data format |
-| 5. Session | Multiplexing sessions within a connection |
-| 4. Transport | Connection-oriented or connection-less delivery |
-| 3. Network | Global addressing and routing |
-| 2. Data-Link | Local addressing and media access |
-| 1. Physical | Transmission of bits |
+| 7. Application | Shapes data into the form a specific application expects |
+| 6. Presentation | Describes data in a format independent of any one system |
+| 5. Session | Combines multiple conversations over a single connection |
+| 4. Transport | Provides delivery that is either connection-based or connectionless |
+| 3. Network | Handles worldwide addressing and route selection |
+| 2. Data-Link | Handles local addressing and access to the shared medium |
+| 1. Physical | Sends the raw bits over the medium |
  
 **TCP/IP mapping:**
  
@@ -677,7 +677,8 @@ Each layer communicates with the layer directly below it (via OS function calls)
 | 2. Data-Link | Ethernet and other diverse protocols |
 | 1. Physical | Fiber, copper, Wi-Fi, etc. |
  
-**Encapsulation:** Each layer adds a header (H) to the message from the layer above it to pass information to the peer layer on the other side. 
+**Encapsulation**
+As a message moves down the stack on the sending machine, every layer wraps it with its own header containing instructions for its counterpart on the receiving machine. 
 
 \`\`\`
 Application layer:        [        Message         ]
@@ -686,7 +687,7 @@ Network layer:     [  Hn  |  Ht  |      Message         ]
 Link layer:      [  Hl  |  Hn  |  Ht  |      Message         ]
 \`\`\`
 
-Headers are stripped in reverse order as data moves up the stack on the receiving end.
+Headers are stripped in reverse order as data moves up the stack on the receiving machine.
  
 ---
 
