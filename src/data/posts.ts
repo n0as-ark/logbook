@@ -920,17 +920,18 @@ Each object costs **two round trips** (one for the TCP setup, one for the reques
 
 ## 6. Statelessness and Cookies
 
-**Cookies:** since HTTP is stateless by design (no multi-step tracking, independent requests, nothing to recover), sites that need to remember a user across visits use cookies instead. 
-A cookie system has four parts: 
-- a cookie header line in the HTTP response
-- a cookie header line in subsequent HTTP requests
-- a cookie file kept on the user's machine (managed by the browser)
-- a back-end database at the site
+A web server running plain HTTP remembers nothing about earlier requests, because the protocol is **stateless**. Every request stands alone - no multi-step exchange has to be tracked, and nothing has to be repaired if a transaction is abandoned halfway. Protocols that do keep state are more complicated, because history has to be stored and because a crash on either side can leave the two parties with conflicting views that must be reconciled.
+
+The drawback is obvious for services that need continuity across many requests.  **Cookies** supply it by carrying a small piece of state inside the messages themselves:
+- a \`Set-Cookie\` header line in the HTTP response
+- a \`Cookie\` header line in subsequent HTTP requests
+- a small cookie file that the browser stores on the visitor's computer
+- a database on the website's back end
 On a user's first visit, the site creates **a unique ID (the cookie)** and a matching entry in its backend database; every later request from that user to the same site carries the cookie value in its header, letting the site "recognize" the user.
  
 Cookies are used for authorization, shopping carts, recommendations, and maintaining session state (e.g., webmail). The underlying challenge cookies solve is keeping state at the protocol endpoints across multiple transactions, using the messages themselves as the carrier.
  
-A related privacy note: **third-party (tracking) cookies** — set by a domain the user did not directly choose to visit, such as an ad network embedded in a page — let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
+A related privacy note: **third-party (tracking) cookies** — set by a domain the user did not directly choose to visit, such as an ad network embedded in a page, let that third party recognize the same browser across many unrelated sites, effectively tracking browsing behavior and enabling targeted ads based on that history. A **first-party cookie**, by contrast, comes from the site the user actually navigated to.
 
 ## 7. HTTP/2 and Its Remaining Weakness
 
