@@ -1120,11 +1120,11 @@ tags: ["Network"],
 excerpt: "The DNS hierarchy, iterated versus recursive lookups, caching, and resource records",
 readTime: "8 min",
 snippet: `
-                      Root servers
-                /          |          \\
-      .com servers     .org servers  .net servers
-       /    \\             |               \\
-  shop.com  hbooks.com  openforum.org    example.net`,
+             Root name servers
+          /          |         \\
+  .com servers  .org servers  .net servers
+    /    \\            \\          \\
+shp.com  exam.com  study.org    example.net`,
 content: `## 1. Why Names Need Translating
  
 Hosts and routers on the Internet carry two kinds of identifiers. An **IP address** (32 bits in IPv4) is what the network actually uses to deliver datagrams. A **hostname** such as \`www.example.org\` is what people can remember and type. A service must convert one into the other, in either direction, at enormous volume. That something is the **Domain Name System (DNS)**.
@@ -1149,6 +1149,17 @@ Name resolution is a core Internet function, yet it is implemented as an ordinar
 - **Distance:** users far from the server would suffer long delays on every lookup
 - **Maintenance:** one database would need constant updates from every organization in the world
 
+## 4. A Hierarchy of Servers
+ 
+The answer is a tree of servers, each responsible for one slice of the namespace:
+ 
+\`\`\`
+                   Root name servers
+              /            |            \\
+      .com servers    .org servers   .net servers      <- TLD servers
+        /    \\            |            /      \\
+  shop.com  ebooks.com  study.org  example.net  exam.net    <- authoritative servers
+\`\`\`
 
   `},
   {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
