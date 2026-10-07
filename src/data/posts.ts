@@ -1113,6 +1113,44 @@ SMTP stops once a message is stored on the *recipient's* mail server. Pulling me
 - There's no authentication built into SMTP's server-to-server handshake.
 - A separate access protocol (IMAP, or HTTP-based webmail) is needed to actually retrieve mail down to a device — SMTP only handles delivery to the receiver's server.
 `},
+  {title: "Study Notes: Application Layer - DNS",
+slug: "application-layer-dns",
+date: "2026-09-07",
+tags: ["Network"],
+excerpt: "The DNS hierarchy, iterated versus recursive lookups, caching, and resource records",
+readTime: "8 min",
+snippet: `
+                      Root servers
+                /          |          \\
+      .com servers     .org servers  .net servers
+       /    \\             |               \\
+  shop.com  hbooks.com  openforum.org    example.net`,
+content: `## 1. Why Names Need Translating
+ 
+Hosts and routers on the Internet carry two kinds of identifiers. An **IP address** (32 bits in IPv4) is what the network actually uses to deliver datagrams. A **hostname** such as \`www.example.org\` is what people can remember and type. A service must convert one into the other, in either direction, at enormous volume. That something is the **Domain Name System (DNS)**.
+ 
+DNS is really two things at once:
+- A **distributed database** layered across numerous name servers
+- An **application-layer protocol** that hosts and name servers use to ask questions and return answers
+ 
+Name resolution is a core Internet function, yet it is implemented as an ordinary application-layer protocol. The complexity lives at the network's edge, and the core stays simple.
+  
+## 2. What DNS Provides
+ 
+- **Hostname-to-address translation**, the headline service
+- **Host aliasing:** one machine can answer to several names. Every alias simply points back to the single **canonical** name
+- **Mail server aliasing:** a domain's mail can be handled by a differently named host
+- **Load distribution:** a busy site with replicated servers can map one name to many IP addresses, rotating through them so that traffic spreads out
+
+## 3. Why One Central Server Cannot Work
+
+- **Single point of failure:** if that server went down, name resolution for the entire Internet would stop
+- **Traffic volume:** one machine would have to absorb every query on the planet
+- **Distance:** users far from the server would suffer long delays on every lookup
+- **Maintenance:** one database would need constant updates from every organization in the world
+
+
+  `},
   {title: "Study Notes: Transport Layer - Multiplexing, UDP, and Reliable Data Transfer",
 slug: "transport-layer-multiplexing-udp-rdt",
 date: "2026-09-09",
