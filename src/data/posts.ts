@@ -1458,7 +1458,7 @@ With one byte per segment, each ACK value is simply the last received sequence n
 
 **Reliable transfer:**
 
-*Choosing the timeout:*
+*<u>Choosing the timeout</u>:*
 - Timeout must exceed RTT, but RTT varies. 
   - Too short → premature timeouts (timer expiring before the ACK arrives, even though nothing was actually lost)
   - Too long → slow reaction to real loss
