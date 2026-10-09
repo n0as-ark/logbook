@@ -696,7 +696,7 @@ slug: "application-layer-network-app-fundamentals",
 date: "2026-09-03",
 tags: ["Network"],
 excerpt: "Client-server vs. P2P architectures, sockets and addressing, what an application-layer protocol defines, and the transport service requirements behind TCP, UDP, and TLS.",
-readTime: "10 min read",
+readTime: "10 min",
 snippet: `Identifying a process:
 IP address + port number
  
@@ -807,7 +807,7 @@ slug: "application-layer-http",
 date: "2026-09-04",
 tags: ["Network"],
 excerpt: "HTTP request/response mechanics, persistent vs. non-persistent connections, cookies, how HTTP/3 (QUIC)replaces TCP+TLS with a single faster handshake.",
-readTime: "9 min read",
+readTime: "9 min",
 snippet: `HTTP/2 over TCP                   HTTP/3 (QUIC)
 ----------------                    ----------------
 +--------+---------+                +-----------+--------+
@@ -1527,7 +1527,7 @@ slug: "network-layer-data-plane",
 date: "2026-09-16",
 tags: ["Network"],
 excerpt: "Forwarding vs. routing, router architecture, switching fabrics, queuing and scheduling, IP addressing, DHCP, NAT, and IPv6",
-readTime: "x min",
+readTime: "10 min",
 snippet: `
 Arriving         DHCP Server 
  Client         (192.168.1.1)
