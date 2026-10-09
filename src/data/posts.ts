@@ -1540,16 +1540,31 @@ Arriving         DHCP Server
    │                   │
    │◀──── DHCP ACK ────│  (confirms)
    │                   │`,
-content: `## Overview
+content: `## Network Layer Basics
  
-- Network layer moves segments from sending host to receiving host; every host and router runs network layer protocols
-- **Encapsulation**: application data becomes a segment (transport layer, adds ports), then a datagram (network layer, adds IP addresses), then a frame (link layer, adds a header). The frame wrapper survives only one hop; the datagram survives the whole trip
-- **Forwarding**: moving a packet from input port to output port (like navigating one interchange); local, per router action
-- **Routing**: computing the path from source to destination (like planning a trip); end to end
+- Runs on every host and router; ferries transport segments between the sending and receiving machines
+- Sender wraps each segment in a datagram and passes it to the link layer; receiver unwraps it and hands the segment to TCP or UDP
+- Routers read each datagram header and move it from an input port to an output port
+- **Encapsulation**: data becomes a segment (with port numbers), then a datagram (with IP addresses), then a frame (with a link header). Segment and datagram stay essentially intact end to end, TTL aside. A frame lasts one **hop** (one link between neighbouring devices), and every router builds a fresh one
+
+## Forwarding and Routing
+
+- **Forwarding**: moving a packet from input port to output port; local, per router action
+- **Routing**: choosing the path from source to destination
 - **Data plane**: local, hardware, nanosecond scale; **decides how an arriving datagram is forwarded**
-- **Control plane**: network wide, software, millisecond scale; *decides the **end to end route***. Implemented via traditional routing algorithms in each router, or SDN (logic placed on remote servers)
-- **Service model**: the Internet uses **best effort**: <u>no guarantees</u> on delivery, order, timing, or bandwidth
-- Best effort service's mechanism is simple and easy to deploy; sufficient bandwidth makes real time apps "good enough" most of the time; CDNs and datacenters replicate services near clients; congestion control in elastic apps helps overall behavior
+- **Control plane**: network wide, in software, millisecond scale; *decides the **end to end route***
+  - Traditional: routing algorithms run in every router
+  - SDN: separate servers compute decisions on the routers' behalf
+
+## Best Effort Service
+
+- A **service model** lists the promises made about delivery. Per datagram: guaranteed arrival, or arrival within a bound such as 40 msec. Per flow: in order delivery, minimum bandwidth, limited jitter
+- The Internet's **best effort** model offers <u>none of these</u>
+- Why it still works:
+  - Simple, so easy to deploy
+  - Ample capacity keeps voice and video usually tolerable
+  - Replicated services in datacenters and CDNs sit near users and survive a site failure
+  - Elastic applications adapt through congestion control
 
 ## Inside a Router
 \`\`\`
@@ -1561,7 +1576,7 @@ content: `## Overview
 │    layer)     │  │               │  │                     │   │
 └───────────────┘  └───────────────┘  └─────────────────────┘   │
 \`\`\`
-- Architecture: input ports feed a switching fabric which feeds output ports, all coordinated by a routing processor
+
 - **Decentralized switching**: each input port has its own copy of the forwarding table and does the lookup itself, locally. No central processor is involved per packet
 - **Destination based forwarding**: forwards based on destination IP only (traditional)
 - **Generalized forwarding**: forwards based on any header fields
@@ -1569,11 +1584,10 @@ content: `## Overview
 ## Switching Fabrics
 - **Switching rate**: **how quickly packets can move** through the fabric from inputs to outputs, typically expressed as a multiple of a single port's line speed
 - **Line rate**: the speed of an individual physical link connected to one port
-- Switching rate ideally reaches **N × Line Rate** for N inputs
+- Ideal rate for N inputs: **N × Line Rate**
 - **Fabric types**:
-  - **Via memory**: CPU controlled, packet copied into system memory; throughput capped by memory bandwidth since each datagram crosses the bus twice (once from input port to memory, once from memory to output port); adequate for small scale
-  - **Via bus**: **shared bus** links input and output memory; limited by bus bandwidth (contention); example: a 32 Gbps bus in the Cisco 5600
-  - **Via interconnection network**: crossbar and Clos multistage switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
+  - **Via memory**: CPU directs transfers; packet copied into system memory, then out, crossing the system bus twice; Memory bandwidth caps throughput, so suited to small scale only
+  - **Via interconnection network**: crossbar and Clos (multistage) switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
 - **Longest prefix matching**: when multiple table entries match, <u>pick the most specific (longest) prefix</u>. Implemented via ternary content addressable memories (TCAMs), giving **constant time lookup** regardless of table size (about 1M entries on Cisco Catalyst).
 
 ## Queuing
@@ -1583,13 +1597,17 @@ content: `## Overview
 - **Buffering** is required when datagrams arrive from the fabric faster than the link transmission rate; datagrams can be lost due to congestion when no buffer space remains
 - Buffer sizing rule of thumb (RFC 3439): **RTT (about 250ms) × link capacity C**. Too much buffering causes excess delay and a slow TCP response
 - **Drop policies**: tail drop (drop arriving packet); priority based drop
-- **Marking**: instead of dropping a packet outright, the router marks a field in its header **to signal that congestion is building**; the receiving endpoint **can then react and slow down before real loss occurs**. RED (Random Early Detection) decides probabilistically which packets to mark as the queue starts to fill, while ECN (Explicit Congestion Notification) is the header bit actually used to carry that signal
+- **Marking**: instead of dropping a packet outright, the router marks a field in its header **to signal that congestion is building**; the receiving endpoint **can then react and slow down before real loss occurs**. 
+  - RED (Random Early Detection) decides probabilistically which packets to mark as the queue starts to fill; while 
+  - ECN (Explicit Congestion Notification) is the header bit actually used to carry that signal
 
-## Packet Scheduling Disciplines
+## Packet Scheduling
+
+Chooses which waiting packet goes out next:
  1. **FCFS / FIFO**: transmit in arrival order
- 2. **Priority**: classified and queued by class, always serve the highest nonempty priority queue, FCFS within a class
- 3. **Round robin**: cycle through class queues, sending one packet per class per turn
- 4. **Weighted fair queuing (WFQ)**: extends round robin by giving each class a service share proportional to its assigned weight, so every class is **assured some minimum bandwidth**
+ 2. **Priority**: sorted into classes; the highest nonempty priority class is always served first, and FCFS within a class
+ 3. **Round robin**: classes take turns, one whole packet per nonempty class
+ 4. **Weighted fair queuing (WFQ)**: weighted round robin; a class receives weight divided by total weight of service, **guaranteeing it minimum bandwidth**
 
 ## Internet Protocol (IP)
 - The IP protocol defines datagram format, addressing, and packet handling; Internet Control Message Protocol (ICMP) handles error reporting and router signaling
