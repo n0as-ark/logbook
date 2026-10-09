@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const currentlyLearning = [
   "C++",
   "Data Structures",
@@ -17,11 +19,13 @@ const projects = [
     title: "XOR Encryption Tool",
     description:
       "A from-scratch Python implementation exploring why weak ciphers fail, built as the first step toward understanding modern cryptography.",
+    href: "/blog/xor-cipher-excel-password-intro",
   },
   {
     title: "Credential Risk Analyzer",
     description:
-      "A Python command-line tool exploring why strong-looking passwords still get breached, combining entropy with real breach data into a single risk score."
+      "A Python command-line tool exploring why strong-looking passwords still get breached, combining entropy with real breach data into a single risk score.",
+    href: "/blog/is-a-strong-password-actually-safe",
   },
 ];
 
@@ -60,7 +64,15 @@ const About = () => {
         <div className="space-y-6">
           {projects.map((project) => (
             <div key={project.title}>
-              <h3 className="text-sm font-medium text-foreground mb-1">{project.title}</h3>
+              <h3 className="text-sm font-medium text-foreground mb-1">
+                {project.href ? (
+                  <Link to={project.href} className="hover:underline underline-offset-4">
+                    {project.title}
+                  </Link>
+                ) : (
+                  project.title
+                )}
+              </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {project.description}
               </p>
