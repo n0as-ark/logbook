@@ -18,6 +18,11 @@ const projects = [
     description:
       "A from-scratch Python implementation exploring why weak ciphers fail, built as the first step toward understanding modern cryptography.",
   },
+  {
+    title: "Credential Risk Analyzer",
+    description:
+      "A Python command-line tool exploring why strong-looking passwords still get breached, combining entropy with real breach data into a single risk score."
+  },
 ];
 
 const About = () => {
