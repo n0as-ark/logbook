@@ -1407,17 +1407,25 @@ TCP + TLS handshake            QUIC handshake
   |<-ServerHello-|  RTT 2
   |---- Data --->|`,
 content: `## 1. Connection-Oriented Transport: TCP
- 
-TCP's behavior is defined across RFCs 793, 1122, 2018, 5681, and 7323. 
-Core characteristics:
-- **Point-to-point**: one sender, one receiver
-- **Reliable, in-order byte stream** — no "message boundaries"
-- **Full duplex**: data flows both ways over one connection; Maximum Segment Size (MSS) caps segment size
-- **Pipelined**: doesn't wait for an ACK before sending the next chunk of data; congestion/flow control set the sender's window size
-- **Cumulative ACKs**
-- **Connection-oriented**: handshake before data, explicit termination after
+
+**What TCP offers:** 
+- **Point-to-point**: one sender, one receiver, data flowing both ways (RFCs 793, 1122, 2018, 5681, and 7323).
+- **Reliable, in-order byte stream** with no message boundaries: TCP does not remember where each \`send()\` ended, so applications add their own delimiters or length prefixes.
+- **Pipelined**: doesn't wait for an ACK before sending the next chunk of data; congestion/flow control set the sender's window size.
+- **Cumulative ACKs**, several segments in flight, and a rate limited by both receiver capacity and network conditions.
+- **Connection-oriented**: handshake to open, explicit close to finish.
 - **Flow controlled** — sender can't overwhelm the receiver
- 
+- Each segment carries at most one **MSS** (maximum segment size) of payload.
+
+**Opening a connection (three-way handshake):**
+1. Client picks initial seq *x*, sends SYNbit=1, Seq=x
+2. Server picks initial seq *y*, replies SYNbit=1, Seq=y, ACKbit=1, ACKnum=x+1 (SYNACK; the SYN itself consumes one sequence number)
+3. Client replies ACKbit=1, ACKnum=y+1 — may already carry data
+
+**Note:** 
+- Sequence number 0 is never actually used as a real initial value
+- Each direction picks its own random starting number and numbers independently
+
 **Segment structure:**
  
 | Field | Purpose |
@@ -1430,79 +1438,80 @@ Core characteristics:
 | RST, SYN, FIN bits | Connection management (restart / start / finish) |
 | Receive window (rwnd) | Flow control — bytes receiver can accept |
 | Checksum | Internet checksum |
-| Options | Variable-length options |
+| Options | Optional extra header fields |
 | Application data | Payload |
 
 **Sequence numbers and ACKs:**
-- **Sequence number** = byte-stream number of the **first byte in a segment** (e.g., seq 0 + 100 bytes → next segment starts at seq 100)
+- **Sequence number** = byte-stream number of the **first byte in a segment** (e.g., seq 500 + 200 bytes → next segment starts at seq 700)
 - **ACK number** = **next expected byte**, cumulative
 - Out-of-order handling is left to the implementor by spec
-- Telnet example: Host A sends 'C' at seq # 42, ACK # 79; Host B echoes 'C' at seq # 79, ACK # 43; Host A ACKs at seq # 43 \`(= seq # 42 + 1 byte for 'C')\`, ACK # 80
-- Each direction gets its own **random initial sequence number**; numbering never crosses between directions
+
+Example: a user types one character into a remote terminal and the server echoes it:
  
-**RTT and timeout:**
+| Step | Direction | Seq | ACK | Data | Explanation |
+|---|---|---|---|---|---|
+| 1 | A → B | 1000 | 5000 | 'Q' | A sends the character and, in the same segment, says it expects byte 5000 next from B |
+| 2 | B → A | 5000 | 1001 | 'Q' | B returns the echo and acknowledges A's byte 1000 by asking for 1001 |
+| 3 | A → B | 1001 | 5001 | none | A acknowledges B's echoed byte; nothing new to send |
+ 
+With one byte per segment, each ACK value is simply the last received sequence number plus one.
+
+**Reliable transfer:**
+
+*Choosing the timeout:*
 - Timeout must exceed RTT, but RTT varies. 
   - Too short → premature timeouts (timer expiring before the ACK arrives, even though nothing was actually lost)
   - Too long → slow reaction to real loss
 - **SampleRTT** = time from segment sent to its ACK received (retransmissions excluded)
 - **EstimatedRTT** smooths SampleRTT by **averaging recent measurements** rather than reacting to one sample
  
-**TCP sender (simplified):**
-- Data from application → create segment with seq #, start timer if not running (tracks oldest unACKed segment), expiration = TimeOutInterval
-- Timeout → retransmit the segment that timed out, restart timer
+*TCP sender (simplified):*
+- Data from application → create segment with seq #, start timer if not running (tracks the oldest unACKed segment), expiration = TimeOutInterval
+- Timeout → retransmit the segment that timed out, and restart timer
 - ACK received → update what's ACKed; restart timer if segments remain unACKed
  
-**TCP receiver — ACK generation (RFC 5681):**
+*TCP receiver (RFC 5681):*
 | Event | Action |
 |---|---|
-| In-order segment, nothing else pending | Delayed ACK — wait up to 500ms, then ACK |
-| In-order segment, one other pending | Send one cumulative ACK for both |
-| Out-of-order (gap detected) | Immediate duplicate ACK for next expected byte |
-| Segment fills a gap | Immediate ACK, if it starts at the gap's lower end |
+| Expected segment, everything earlier already ACKed | Delayed ACK — wait up to 500ms, then ACK |
+| Expected segment, one earlier ACK still pending | Send one cumulative ACK for both |
+| Higher-than-expected segment (gap) | Immediate duplicate ACK for next expected byte |
+| Segment fills the gap's lower edge | Immediate ACK for the new position |
 
-**Retransmission scenarios:**
+*Retransmission scenarios:*
 - Lost ACK → sender's timer expires, resends; receiver re-ACKs the duplicate
-- Premature timeout → a later cumulative ACK covers the resent data anyway; SendBase advances, further duplicate ACKs get ignored
-- Cumulative ACK covering an earlier lost ACK → the loss becomes irrelevant once a later ACK covers the same ground
+- Premature timeout → a later cumulative ACK arrives anyway; the window advances, extra duplicate ACKs are ignored
+- Cumulative ACK covering an earlier lost ACK → nothing to repair, since the later ACK covers it
  
-**Fast retransmit:**
-- Upon receiving three additional duplicate ACKs (four total with the same number) → strong signal of loss, even before timeout
+*Fast retransmit:*
+- Upon receiving **three additional duplicate ACKs** (four total with the same number) → strong signal of loss, even before timeout
 - Sender immediately resends the smallest unACKed sequence number, skipping the wait for timeout
 
 **Flow control:**
-- Problem: network layer could deliver data faster than the application reads it out, overflowing the receiver's buffer
-- Receiver advertises free buffer space via **rwnd (receive window)** in every TCP header
+- Problem: packets arrive faster than the application reads them, overflowing the receiver's buffer
+- Fix: the receiver advertises free buffer space via **rwnd (receive window)** in every TCP header
 - **RcvBuffer** size set by OS/socket options (e.g., 4096 bytes)
 - Sender limits unACKed in-flight data to **rwnd** bytes
-- Application draining the buffer frees space, growing rwnd again over time — dynamically matches transmission rate to receiver capacity
- 
-**Connection management — three-way handshake:**
-1. Client picks initial seq *x*, sends SYNbit=1, Seq=x
-2. Server picks initial seq *y*, replies SYNbit=1, Seq=y, ACKbit=1, ACKnum=x+1 (SYNACK; the SYN itself consumes one sequence number)
-3. Client replies ACKbit=1, ACKnum=y+1 — may already carry data
-Note: Sequence number 0 is never actually used as a real initial value
+- Flow control protects the receiver; congestion control protects the network
  
 **Closing a connection:**
 - Each side sends a segment with **FIN bit = 1** to close its own direction
 - A received FIN gets ACKed; that ACK can combine with the receiver's own FIN ("FINACK") if it's also ready to close
 - Simultaneous FIN exchanges from both sides are handled correctly
- 
----
 
 ## 2. QUIC: A Reliable Transport Built on UDP
  
 - Developed by Google (2012), later standardized by the Internet Engineering Task Force (IETF)
 - **Runs over UDP**, adds **TCP-level reliability**, **TLS encryption**, and **stream multiplexing**
+- Motivation: with many streams on one TCP connection, a single lost packet blocks all of them
  
 | TCP + TLS limitation | QUIC improvement |
 |---|---|
-| Setup needs multiple round trips (separate TCP + TLS handshakes) | 1- or 0-RTT handshake |
-| One lost packet delays every stream | Streams are independent — loss in one doesn't block others |
-| TCP lives in the OS kernel — slow to update | QUIC lives in user space — easy to evolve |
-| TLS runs above TCP as a separate layer | TLS 1.3 encryption built in |
- 
-Motivation: TCP resends data on any detected loss, sometimes unnecessarily; QUIC's independent streams and faster handshake cut down that overhead
- 
+| Needs multiple round trips for separate TCP + TLS handshakes | One combined handshake: 1 RTT, or 0 for a known server |
+| One lost packet delays every stream | Streams are independent; a loss only affects its own |
+| TCP lives in the OS kernel and changes slowly | QUIC lives in user space and updates with the application |
+| TLS runs above TCP as a separate layer | TLS 1.3 is built in |
+  
 ---
 
 ## Key Points to Remember
