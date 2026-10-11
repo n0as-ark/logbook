@@ -1686,6 +1686,11 @@ tags: ["Python", "Cryptography"],
 excerpt: "I'm building a Python tool that combines password entropy with real breach data, then testing whether entropy predicts compromise.",
 readTime: "5 min",
 content:`As I worked on my [XOR encryption tool](https://n0as-ark.github.io/logbook/blog/xor-cipher-excel-password-intro), I was reminded that encryption is only as trong as its key. In everyday life, that key is usually a password, so the XOR project left me curious about the part most people actually deal with: the *password itself*. 
-We constantly run into password rules that require a certain length, a capital letter, a number, and a special character, and I initially thought that this kind of complexity would make a password strong enough to withstand cyber attacks. It is true that complex passwords are harder to brute force; however, I wanted to check whether the passwords we consider strong are actually strong. So I'm building a small command-line Python tool to look into this. `
+We constantly run into password rules that require a certain length, a capital letter, a number, and a special character, and I initially thought that this kind of complexity would make a password strong enough to withstand cyber attacks. It is true that complex passwords are harder to brute force; however, I wanted to check whether the passwords we consider strong are actually strong. 
+
+So I'm building a small command-line Python tool to look into this, which I'm calling the **Credential Risk Analyzer**. It will evaluate a password using two measures, **entropy** and **whether that exact password has appeared in a known data breach**, and combine them into a single risk score out of 100:
+
+For context, entropy is a number that indicates how big the search space would be if someone had to guess the password from scratch, based on its **length** and what **kinds of character** it uses. The second measure, the breach check uses the **Pwned Passwords API** to see whether the exact password shows up in the known data breaches collected by the *Have I Been Pwned* website.
+`
  },
 ];
