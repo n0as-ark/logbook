@@ -1697,6 +1697,11 @@ Interestingly, those complexity rules have been questioned by others before. The
 This matters for my project because the entropy formula alone gives more points to passwords with more kinds of characters, which is exactly what those complexity rules ask for. For example, \`P@ssw0rd\` scores higher than \`password\` just because it mixes in a capital letter, a symbol, and a number, even though both are very common passwords that attackers try early. I want to see what happens when I put entropy and breach data side by side.
 
 My guess is that entropy will turn out to be a poor predictor of whether a password has been breached. At least from my experience, I tend to pick passwords that I can remember easily rather than picking them at random. A password built from a word, a season, a year, and a symbol on the end could score well on entropy while being easy for attackers to guess. To test this, I will run a few hundred passwords through the tool: some from public lists of common passwords, some I write myself in that pattern style, and some random ones I generate as a control. Then I'll group them by entropy and see what share of each group has been breached.
-`
+
+If the high-entropy passwords are rarely breached, I was wrong, and I'll say that. The sample is one I'm putting together myself, so it won't represent how everyone picks passwords, and I'll try to be clear about that too.
+
+There's a lot I don't know yet, including whether the scoring thresholds I pick will make sense. I'll write about that as I find out.
+
+Temoshok, D., Fenton, J. L., Choong, Y. Y., Lefkovitz, N., Regenscheid, A., Galluzzo, R., & Richer, J. P. (2025). *Digital identity guidelines: Authentication and authenticator management* (NIST Special Publication 800-63B-4). National Institute of Standards and Technology. [Link](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63B-4.pdf)`
  },
 ];
