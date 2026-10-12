@@ -1691,9 +1691,9 @@ We constantly run into password rules that require a certain length, a capital l
 
 ## What I'll be building
 
-So I'm building a small command-line Python tool to look into this, which I'm calling the **Credential Risk Analyzer**. It will evaluate a password using two measures, **entropy** and **whether that exact password has appeared in a known data breach**, and combine them into a single risk score out of 100.
+So I'm building a small command-line Python tool to look into this, which I'm calling the **Credential Risk Analyzer**. It will evaluate a password using two measures, 1)**entropy** and 2)**whether that exact password has appeared in a known data breach**, and combine them into a single risk score out of 100.
 
-For context, entropy is a number that indicates how big the search space would be if someone had to guess the password from scratch, based on its **length** and what **kinds of characters** it uses. The second measure, the breach check, uses the **Pwned Passwords API** to see whether the exact password shows up in the known data breaches collected by the *Have I Been Pwned* website.
+For context, entropy is a number that indicates how big the search space would be if someone had to guess the password from scratch, based on its <u>length</u> and what <u>kinds of characters</u> it uses. The second measure, the breach check, uses the **\`Pwned Passwords API\`** to see whether the exact password shows up in the known data breaches collected by the *Have I Been Pwned* website.
 The interesting part about these measures is that they account for different scenarios. While entropy assumes the attacker is guessing the password blindly, the breach check accounts for the scenario where the password is already in a leaked list and the attacker doesn't have to guess at all. I'll have to find out whether using both measures together is helpful as I work on this project, but for now, I suspect the two numbers will disagree more often than the strength meters, which rely on the complexity rules mentioned above, would suggest.
 
 ## Why complexity alone may not be enough
