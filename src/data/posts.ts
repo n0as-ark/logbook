@@ -1685,22 +1685,31 @@ date: "2026-10-06",
 tags: ["Python", "Cryptography"],
 excerpt: "I'm building a Python tool that combines password entropy with real breach data, then testing whether entropy predicts compromise.",
 readTime: "5 min",
-content:`As I worked on my [XOR encryption tool](https://n0as-ark.github.io/logbook/blog/xor-cipher-excel-password-intro), I was reminded that encryption is only as trong as its key. In everyday life, that key is usually a password, so the XOR project left me curious about the part most people actually deal with: the *password itself*. 
+content:`As I worked on my [XOR encryption tool](https://n0as-ark.github.io/logbook/blog/xor-cipher-excel-password-intro), I was reminded that encryption is only as strong as its key. In everyday life, that key is usually a password, so the XOR project left me curious about the part most people actually deal with: the *password itself*. 
+
 We constantly run into password rules that require a certain length, a capital letter, a number, and a special character, and I initially thought that this kind of complexity would make a password strong enough to withstand cyber attacks. It is true that complex passwords are harder to brute force; however, I wanted to check whether the passwords we consider strong are actually strong. 
 
-So I'm building a small command-line Python tool to look into this, which I'm calling the **Credential Risk Analyzer**. It will evaluate a password using two measures, **entropy** and **whether that exact password has appeared in a known data breach**, and combine them into a single risk score out of 100:
+## What I'll be building
 
-For context, entropy is a number that indicates how big the search space would be if someone had to guess the password from scratch, based on its **length** and what **kinds of character** it uses. The second measure, the breach check, uses the **Pwned Passwords API** to see whether the exact password shows up in the known data breaches collected by the *Have I Been Pwned* website.
+So I'm building a small command-line Python tool to look into this, which I'm calling the **Credential Risk Analyzer**. It will evaluate a password using two measures, **entropy** and **whether that exact password has appeared in a known data breach**, and combine them into a single risk score out of 100.
+
+For context, entropy is a number that indicates how big the search space would be if someone had to guess the password from scratch, based on its **length** and what **kinds of characters** it uses. The second measure, the breach check, uses the **Pwned Passwords API** to see whether the exact password shows up in the known data breaches collected by the *Have I Been Pwned* website.
 The interesting part about these measures is that they account for different scenarios. While entropy assumes the attacker is guessing the password blindly, the breach check accounts for the scenario where the password is already in a leaked list and the attacker doesn't have to guess at all. I'll have to find out whether using both measures together is helpful as I work on this project, but for now, I suspect the two numbers will disagree more often than the strength meters, which rely on the complexity rules mentioned above, would suggest.
+
+## Why complexity alone may not be enough
 
 Interestingly, those complexity rules have been questioned by others before. The *Digital Identity Guidelines* (*SP 800-63B-4, July 2025*), written by the National Institute of Standards and Technology (**NIST**) for the services that verify passwords, mention that these services shall not impose composition rules such as requiring a mix of character types. They also mention that these services must check new passwords against a blocklist, which can include passwords from past breaches, much like the breach check I’m trying to build (Sec. 3.1.1.1 and 3.1.1.2). Appendix A.1 explains the reasoning behind the first point: analyses of breached password databases show that these rules help less than people expected.
 This matters for my project because the entropy formula alone gives more points to passwords with more kinds of characters, which is exactly what those complexity rules ask for. For example, \`P@ssw0rd\` scores higher than \`password\` just because it mixes in a capital letter, a symbol, and a number, even though both are very common passwords that attackers try early. I want to see what happens when I put entropy and breach data side by side.
+
+## What I want to test
 
 My guess is that entropy will turn out to be a poor predictor of whether a password has been breached. At least from my experience, I tend to pick passwords that I can remember easily rather than picking them at random. A password built from a word, a season, a year, and a symbol on the end could score well on entropy while being easy for attackers to guess. To test this, I will run a few hundred passwords through the tool: some from public lists of common passwords, some I write myself in that pattern style, and some random ones I generate as a control. Then I'll group them by entropy and see what share of each group has been breached.
 
 If the high-entropy passwords are rarely breached, I was wrong, and I'll say that. The sample is one I'm putting together myself, so it won't represent how everyone picks passwords, and I'll try to be clear about that too.
 
 There's a lot I don't know yet, including whether the scoring thresholds I pick will make sense. I'll write about that as I find out.
+
+## References
 
 Temoshok, D., Fenton, J. L., Choong, Y. Y., Lefkovitz, N., Regenscheid, A., Galluzzo, R., & Richer, J. P. (2025). *Digital identity guidelines: Authentication and authenticator management* (NIST Special Publication 800-63B-4). National Institute of Standards and Technology. [Link](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63B-4.pdf)`
  },
