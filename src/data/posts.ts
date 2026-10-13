@@ -1715,4 +1715,32 @@ Temoshok, D., Fenton, J. L., Choong, Y. Y., Lefkovitz, N., Regenscheid, A., Gall
 
 > → **Next up:**`
  },
+  {title: 'How Password Entropy Works (and Where It Misleads)',
+slug: "how-password-entropy-works",
+date: "2026-10-09",
+tags: ["Python", "Cryptography"],
+excerpt: "",
+readTime: "x min",
+content:`As mentioned in my [previous post](https://n0as-ark.github.io/logbook/blog/is-a-strong-password-actually-safe), the Credential Risk Analyzer I'm building will evaluate a password using two measures: entropy and whether that password has appeared in a known data breach. This post covers the entropy part in particular, including how I calculate it and where I notice the number can be misleading.
+
+## The formula
+The entropy here is a number, measured in bits, that indicates how big the search space would be if someone had to guess the password from scratch. 
+The formula I'm using is:
+
+\`entropy = password length x log2(pool size)\`, 
+
+where the pool size is the number of different characters each position in the password could hold.
+
+The pool size depends on which types of characters the password uses as below:
+| Character Type | Pool Size | Characters |
+|---|---|---|
+| Lowercase | 26 | From a to z |
+| Uppercase | 26 | From A to Z|
+| Digit | 10 | From 0 to 9 |
+| Special | 13 | ! @ # $ % ^ & * - _ + = ? |
+For example, a password with only lowercase letters has a pool of 26 whereas a password with all four types has 75.
+
+Note: for this project, I limited the special characters to \`! @ # $ % ^ & * - _ + = ?\` because many password rules only allow a limited set of special characters, and these are the ones that most commonly appear on those lists. Because of this simplification, any other symbols, such as a period or a parenthesis, don't add to the pool, though they still counts toward the password length. A real attacker's character set could be bigger than mine, so the scores here are estimates, not exact numbers.
+`
+  },
 ];
