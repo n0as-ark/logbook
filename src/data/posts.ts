@@ -1713,14 +1713,23 @@ There's a lot I don't know yet, including whether the scoring thresholds I pick 
 
 Temoshok, D., Fenton, J. L., Choong, Y. Y., Lefkovitz, N., Regenscheid, A., Galluzzo, R., & Richer, J. P. (2025). *Digital identity guidelines: Authentication and authenticator management* (NIST Special Publication 800-63B-4). National Institute of Standards and Technology. [Link](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63B-4.pdf)
 
-> → **Next up:**`
+> → **Next up:** [How Password Entropy Works (and Where It Misleads)](https://n0as-ark.github.io/logbook/blog/how-password-entropy-works)`
  },
   {title: 'How Password Entropy Works (and Where It Misleads)',
 slug: "how-password-entropy-works",
 date: "2026-10-09",
 tags: ["Python", "Cryptography"],
-excerpt: "",
-readTime: "x min",
+excerpt: "How I calculate password entropy in Python, and what I noticed when a few common passwords scored higher than I expected.",
+readTime: "5 min",
+snippet: `
+def calculate_entropy(password: str) -> float:
+    pool_size = get_pool_size(password)
+    if pool_size == 0:
+        return 0.0
+    return len(password) * math.log2(pool_size)
+
+round(calculate_entropy("password"), 1)   # 37.6
+round(calculate_entropy("P@ssw0rd"), 1)   # 49.8`
 content:`As mentioned in my [previous post](https://n0as-ark.github.io/logbook/blog/is-a-strong-password-actually-safe), the Credential Risk Analyzer I'm building will evaluate a password using two measures: entropy and whether that password has appeared in a known data breach. This post covers the entropy part in particular, including how I calculate it and where I notice the number can be misleading.
 
 ## The formula
@@ -1740,7 +1749,7 @@ The pool size depends on which types of characters the password uses as below:
 | Special | 13 | ! @ # $ % ^ & * - _ + = ? |
 For example, a password with only lowercase letters has a pool of 26 whereas a password with all four types has 75.
 
-Note: for this project, I limited the special characters to \`! @ # $ % ^ & * - _ + = ?\` because many password rules only allow a limited set of special characters, and these are the ones that most commonly appear on those lists. Because of this simplification, any other symbols, such as a period or a parenthesis, don't add to the pool, though they still counts toward the password length. A real attacker's character set could be bigger than mine, so the scores here are estimates, not exact numbers.
+**Note**: for this project, I limited the special characters to \`! @ # $ % ^ & * - _ + = ?\` because many password rules only allow a limited set of special characters, and these are the ones that most commonly appear on those lists. Because of this simplification, any other symbols, such as a period or a parenthesis, don't add to the pool, though they still counts toward the password length. A real attacker's character set could be bigger than mine, so the scores here are estimates, not exact numbers.
 `
   },
 ];
