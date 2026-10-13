@@ -9,14 +9,14 @@ export interface Post {
   snippet?: string;
 }
 
-export const ALL_TAGS = ["C++", "Python", "Linux", "Network", "Data Structure", "Operating Systems", "Cryptography"] as const;
+export const ALL_TAGS = ["C++", "Python", "Linux", "Network", "Data Structure", "Operating Systems", "Cryptography", "Projects"] as const;
 
 export const posts: Post[] = [
   {
     title: "A Password Lock Isn't Real Encryption",
     slug: "xor-cipher-excel-password-intro",
     date: "2026-05-14",
-    tags: ["Cryptography", "Python"],
+    tags: ["Cryptography", "Python", "Projects"],
     excerpt: "A lot of organizations still lock down sensitive files with nothing more than an Excel or Word password. In this post, I look at why that falls short of real encryption - and walk through a small project I built to make that gap visible.",
     readTime: "4 min",
     snippet: `# older XOR-based "encryption"
@@ -59,7 +59,7 @@ In the next post, I'll implement XOR encryption from scratch, walk through exact
   {title: "XOR Encryption: A Simple Cipher That Breaks Very Easily",
    slug: "xor-cipher-basics",
    date:"2026-05-24",
-   tags: ["Cryptography", "Python"],
+   tags: ["Cryptography", "Python", "Projects"],
    excerpt: "Before jumping into modern cryptography, I want to start with XOR - the weakest possible cipher. Not because it is secure, but because it is the clearest way to see how plaintext becomes ciphertext, and how a weak design can fail very quickly.",
    readTime: "8 min",
    snippet: `def xor_encrypt(plaintext: bytes, key: int) -> bytes:
@@ -404,7 +404,7 @@ Pointers are one of those topics where the definition is simple but the implicat
   {title: "Multi-Byte XOR Encryption: Why a Longer Key Still Breaks",
   slug: "multi-byte-xor",
   date: "2026-06-12",
-  tags: ["Cryptography", "Python"],
+  tags: ["Cryptography", "Python", "Projects"],
   excerpt: "A longer XOR key looks like a fix, with billions of possibilities instead of just 256. But once that multi-byte key repeats, it leaves patterns in the ciphertext that we can attack. In this post I walk through how multi-byte XOR works, how to guess the key length with Hamming distance, and how to recover the key column by column using simple frequency analysis, showing that key length alone does not make this toy cipher secure.",
   readTime: "6 min",
   snippet: `def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
@@ -1682,7 +1682,7 @@ Arriving Client                    DHCP Server (192.168.1.1)
   {title: 'Is a "Strong" Password Actually Safe? Building a Tool to Find Out',
 slug: "is-a-strong-password-actually-safe",
 date: "2026-10-06",
-tags: ["Python", "Cryptography"],
+tags: ["Python", "Cryptography", "Projects"],
 excerpt: "I'm building a Python tool that combines password entropy with real breach data, then testing whether entropy predicts compromise.",
 readTime: "5 min",
 content:`As I worked on my [XOR encryption tool](https://n0as-ark.github.io/logbook/blog/xor-cipher-excel-password-intro), I was reminded that encryption is only as strong as its key. In everyday life, that key is usually a password, so the XOR project left me curious about the part most people actually deal with: the *password itself*. 
@@ -1718,7 +1718,7 @@ Temoshok, D., Fenton, J. L., Choong, Y. Y., Lefkovitz, N., Regenscheid, A., Gall
   {title: 'How Password Entropy Works (and Where It Misleads)',
 slug: "how-password-entropy-works",
 date: "2026-10-09",
-tags: ["Python", "Cryptography"],
+tags: ["Python", "Cryptography", "Projects"],
 excerpt: "How I calculate password entropy in Python, and what I noticed when a few common passwords scored higher than I expected.",
 readTime: "5 min",
 snippet: `
