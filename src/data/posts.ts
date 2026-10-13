@@ -1729,7 +1729,7 @@ def calculate_entropy(password: str) -> float:
     return len(password) * math.log2(pool_size)
 
 round(calculate_entropy("password"), 1)   # 37.6
-round(calculate_entropy("P@ssw0rd"), 1)   # 49.8`
+round(calculate_entropy("P@ssw0rd"), 1)   # 49.8`,
 content:`As mentioned in my [previous post](https://n0as-ark.github.io/logbook/blog/is-a-strong-password-actually-safe), the Credential Risk Analyzer I'm building will evaluate a password using two measures: entropy and whether that password has appeared in a known data breach. This post covers the entropy part in particular, including how I calculate it and where I notice the number can be misleading.
 
 ## The formula
