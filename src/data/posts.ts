@@ -1767,6 +1767,26 @@ def calculate_entropy(password: str) -> float:
 \`\`\`
 
 The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. 
-The full code is in the [repo] ().
+The full code is in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src).
+
+## Output
+Here is the output for some examples using \`password\` and \`P@ssw0rd\`:
+\`\`\`python
+>>> round(calculate_entropy("password"), 1)
+37.6
+>>> round(calculate_entropy("P@ssw0rd"), 1)
+49.8
+\`\`\`
+
+The two examples have the same length but the second one scores higher than the first one. This is because the second password contains a capital letter, a digit, and a special character, which raises the pool to 75.
+However, both are very common passwords, and the formula alone can't really tell this because it only looks at the length and character types.
+
+While the previous example shows how character types can raise the score, length can have a similar effect. When I tried repeating the same word twice, the score doubled:
+\`\`\`python
+>>> round(calculate_entropy("passwordpassword"), 1)
+75.2
+\`\`\`
+As the output shows, \`passwordpassword\` scores exactly double \`password\`, even though the second half is simply a repetition of the first half, adding nothing for an attacker to guess. This shows that the formula can reward length even when the extra characters are only a repeat of what is already there.
+
 `},
 ];
