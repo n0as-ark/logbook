@@ -1766,8 +1766,7 @@ def calculate_entropy(password: str) -> float:
     return len(password) * math.log2(pool_size)
 \`\`\`
 
-The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. 
-The full code is in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src).
+The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. *The full code is in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src)*.
 
 ## Output
 Here is the output for some examples using \`password\` and \`P@ssw0rd\`:
