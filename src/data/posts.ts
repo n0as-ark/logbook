@@ -1806,5 +1806,8 @@ As the output shows, Shannon entropy scores \`password\` and \`P@ssw0rd\` identi
 
 The implementation for \`calculate_shannon_entropy\` is in the *[repo](https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/entropy.py)*.
 
+## Wrapping up
+Looking at the two measures side by side, neither of them is enough on its own, sice each seems to miss something. 
+The pool-based formula tells how a password would hold up against blind guessing if it were chosen at random, and Shannon entropy shows how repetitive the string is. However, neither of them can tell whether a password is just a common word with a few swaps , like \`P@ssw0rd\`, which I suspect is something attackers try early. In other words, a password can score fairly well on both and still be easy to guess. That is the gap I want the breach check to cover, and I'll look into it in the next post.
 `},
 ];
