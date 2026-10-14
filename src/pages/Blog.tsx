@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { posts } from "@/data/posts";
 import PostCard from "@/components/PostCard";
 import SearchBar from "@/components/SearchBar";
@@ -10,7 +11,11 @@ const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
 const Blog = () => {
   const [search, setSearch] = useState("");
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTag = searchParams.get("tag");
+  const setActiveTag = (tag: string | null) => {
+    setSearchParams(tag ? { tag } : {});
+  };
   const [page, setPage] = useState(1);
 
   const filteredPosts = useMemo(() => {
