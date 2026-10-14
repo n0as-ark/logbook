@@ -1766,7 +1766,7 @@ def calculate_entropy(password: str) -> float:
     return len(password) * math.log2(pool_size)
 \`\`\`
 
-The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. *The full code is in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/entropy.py)*.
+The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. *The full code is in the *[repo](https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/entropy.py)*.
 
 ## Output
 Here is the output for some examples using \`password\` and \`P@ssw0rd\`:
@@ -1804,7 +1804,7 @@ However, Shannon entropy also has its own blind spot:
 \`\`\`
 As the output shows, Shannon entropy scores \`password\` and \`P@ssw0rd\` identically at 22.0 bits. This happens because in both cases only one character, \`s\`, repeats, and it doesn't take into account that one of them uses more types of characters.
 
-The implementation for \`calculate_shannon_entropy\` is in the [repo] (https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/entropy.py).
+The implementation for \`calculate_shannon_entropy\` is in the *[repo](https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/entropy.py)*.
 
 `},
 ];
