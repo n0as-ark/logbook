@@ -1766,7 +1766,7 @@ def calculate_entropy(password: str) -> float:
     return len(password) * math.log2(pool_size)
 \`\`\`
 
-The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. *The full code is in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src)*.
+The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. *The full code is in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/entropy.py)*.
 
 ## Output
 Here is the output for some examples using \`password\` and \`P@ssw0rd\`:
@@ -1786,6 +1786,25 @@ While the previous example shows how character types can raise the score, length
 75.2
 \`\`\`
 As the output shows, \`passwordpassword\` scores exactly double \`password\`, even though the second half is simply a repetition of the first half, adding nothing for an attacker to guess. This shows that the formula can reward length even when the extra characters are only a repeat of what is already there.
+
+## Shannon Entropy
+Because of the above observation, I wanted another measure that takes the repetition of characters into account when computing scores, which led me to Shannon entropy. 
+Unlike the previous formula which looks at how large the pool is, Shannon entropy looks at how repetitive the characters in a particular string are:
+\` Shannon entropy = -Σ { p(c) x log2(p(c)) for each unique character c } \`
+Here, \`p(c)\` is the probability of character \`c\`, estimated by how often it appears in the password, and the sum runs over each unique character in the password.
+
+For example, the pool-based formula scores at **47.0 bits** with \`aaaaaaaaaa\`, whereas Shannon entropy scores it at 0.0. The pool-based version only sees 10 lowercase letters and assumes they were chosen at random, while Shannon sees a single character repeated. At least for this example, Shannon entropy appears to be the more sensible measure.
+
+However, Shannon entropy also has its own blind spot:
+\`\`\`python
+>>> round(calculate_shannon_entropy("password"), 1)
+22.0
+>>> round(calculate_shannon_entropy("P@ssw0rd"), 1)
+22.0
+\`\`\`
+As the output shows, Shannon entropy scores \`password\` and \`P@ssw0rd\` identically at 22.0 bits. This happens because in both cases only one character, \`s\`, repeats, and it doesn't take into account that one of them uses more types of characters.
+
+The implementation for \`calculate_shannon_entropy\` is in the [repo] (https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/entropy.py).
 
 `},
 ];
