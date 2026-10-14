@@ -1750,6 +1750,23 @@ The pool size depends on which types of characters the password uses as below:
 For example, a password with only lowercase letters has a pool of 26 whereas a password with all four types has 75.
 
 **Note**: for this project, I limited the special characters to \`! @ # $ % ^ & * - _ + = ?\` because many password rules only allow a limited set of special characters, and these are the ones that most commonly appear on those lists. Because of this simplification, any other symbols, such as a period or a parenthesis, don't add to the pool, though they still counts toward the password length. A real attacker's character set could be bigger than mine, so the scores here are estimates, not exact numbers.
-`
-  },
+
+An easier way to think about the entropy is that it measures how many yes/no questions an attacker would need to ask to guess a password, with each question counting as **one bit**. As mentioned above, the pool size is the number of possible characters each position in the password could be, and \`log2(pool_size)\` turns that into the number of questions needed to guess one character, which is how many times the pool can be cut in half before only one option is left. That value is then multiplied by \`length\` to account for every character in the password.
+
+Here is how the entropy calculation can be done in Python:
+
+\`\`\`python
+import math
+
+def calculate_entropy(password: str) -> float:
+    """Estimate entropy in bits: length x log2(pool_size)."""
+    pool_size = get_pool_size(password)
+    if pool_size == 0:    # empty password ""
+        return 0.0
+    return len(password) * math.log2(pool_size)
+\`\`\`
+
+The \`get_pool_size\` function is a helper that checks which types of characters the password contains and adds up their pool sizes. 
+The full code is in the [repo] ().
+`},
 ];
