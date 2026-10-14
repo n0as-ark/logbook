@@ -1679,7 +1679,7 @@ Arriving Client                    DHCP Server (192.168.1.1)
 - Removes the **checksum**, **in-network fragmentation and reassembly**, and the **options** field (replaced by a next header protocol)
 - Over 25 years since introduction and adoption is still incomplete, showing how much harder infrastructure change is than application layer change
 `},
-  {title: 'Is a "Strong" Password Actually Safe? Building a Tool to Find Out',
+  {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
 date: "2026-10-06",
 tags: ["Python", "Cryptography", "Projects"],
@@ -1720,7 +1720,7 @@ slug: "how-password-entropy-works",
 date: "2026-10-09",
 tags: ["Python", "Cryptography", "Projects"],
 excerpt: "How I calculate password entropy in Python, and what I noticed when a few common passwords scored higher than I expected.",
-readTime: "5 min",
+readTime: "7 min",
 snippet: `
 def calculate_entropy(password: str) -> float:
     pool_size = get_pool_size(password)
