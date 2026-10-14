@@ -72,7 +72,7 @@ const Index = () => {
             {allTags.map((tag) => (
               <Link
                 key={tag}
-                to={`/blog?tag=${tag}`}
+                to={`/blog?tag=${encodeURIComponent(tag)}`}
                 className="font-mono text-xs uppercase tracking-wider text-muted-foreground border border-border rounded-sm px-2 py-1 hover:text-primary hover:border-primary transition-colors"
               >
                 {tag}
