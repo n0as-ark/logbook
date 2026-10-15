@@ -1721,8 +1721,7 @@ date: "2026-10-09",
 tags: ["Python", "Cryptography", "Projects"],
 excerpt: "How I calculate password entropy in Python, and what I noticed when a few common passwords scored higher than I expected.",
 readTime: "7 min",
-snippet: `
-def calculate_entropy(password: str) -> float:
+snippet: `def calculate_entropy(password: str) -> float:
     pool_size = get_pool_size(password)
     if pool_size == 0:
         return 0.0
@@ -1810,4 +1809,17 @@ The implementation for \`calculate_shannon_entropy\` is in the *[repo](https://g
 Looking at the two measures side by side, neither of them is enough on its own, sice each seems to miss something. 
 The pool-based formula tells how a password would hold up against blind guessing if it were chosen at random, and Shannon entropy shows how repetitive the string is. However, neither of them can tell whether a password is just a common word with a few swaps , like \`P@ssw0rd\`, which I suspect is something attackers try early. In other words, a password can score fairly well on both and still be easy to guess. That is the gap I want the breach check to cover, and I'll look into it in the next post.
 `},
+  {title: 'How "Have I Been Pwned" Checks Passwords Without Seeing Them',
+slug: "checking-passwords-without-revealing-them",
+date: "2026-10-11",
+tags: ["Python", "Cryptography", "Projects"],
+excerpt: "How my Credential Analyzer checks whether a password has appeared in a data breach without ever sending the password anywhere, using the Have I Been Pwned API and k-anonymity.",
+readTime: "5 min",
+snippet: `hashed = hash_password("password")
+prefix, suffix = hashed[:5], hashed[5:]
+
+# prefix -> "5BAA6"  (sent to the API)
+# suffix -> "1E4C9B93F3F0682250B6CF8331B7EE68FD8"  (stays on this machine)`,
+content:``
+  },
 ];
