@@ -1820,6 +1820,12 @@ prefix, suffix = hashed[:5], hashed[5:]
 
 # prefix -> "5BAA6"  (sent to the API)
 # suffix -> "1E4C9B93F3F0682250B6CF8331B7EE68FD8"  (stays on this machine)`,
-content:``
+content:`As mentioned in the [previous post](https://n0as-ark.github.io/logbook/blog/how-password-entropy-works), the Credential Risk Analyzer I'm building evaluates a password using two measures, **entropy** and **breach data**. Entropy was the first half, and this post covers the second half, which is how the tool checks whether a password has appeared in a known data breach without sending the password to anyone.
+
+## Checking without revealing
+
+Since the tool is meant to evaluate passwords, sending them to a third party in order to check them would be a strange design. The **Pwned Passwords API** from *[Have I Been Pwned]*(https://haveibeenpwned.com/Passwords) gets around this with a technique called k-anonymity, which means the service never learns which password I'm asking about.
+
+`
   },
 ];
