@@ -1834,7 +1834,7 @@ content:`As mentioned in the [previous post](https://n0as-ark.github.io/logbook/
 
 ## Checking without revealing
 
-Since the tool is meant to evaluate passwords, sending them to a third party in order to check them would be a strange design. The **Pwned Passwords API** from *[Have I Been Pwned]*(https://haveibeenpwned.com/Passwords) gets around this with a technique called k-anonymity, which means the service never learns which password I'm asking about.
+Since the tool is meant to evaluate passwords, sending them to a third party in order to check them would be a strange design. The **Pwned Passwords API** from [*Have I Been Pwned*](https://haveibeenpwned.com/Passwords) gets around this with a technique called k-anonymity, which means the service never learns which password I'm asking about.
 
 `
   },
