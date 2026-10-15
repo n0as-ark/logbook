@@ -18,7 +18,7 @@ const projects = [
   {
     title: "XOR Encryption Tool",
     description:
-      "A from-scratch Python implementation exploring why weak ciphers fail, built as the first step toward understanding modern cryptography.",
+      "A from-scratch Python implementation of XOR encryption and the attacks that break it, built as a first step toward understanding modern cryptography.",
     href: "/blog/xor-cipher-excel-password-intro",
   },
   {
