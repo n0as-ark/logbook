@@ -427,7 +427,7 @@ Here is what that looks like with a real example, encrypting \`"Hello!"\` with t
 |-----------|---|---|---|---|---|---|
 | Plaintext | H | e | l | l | o | ! |
 | Key (repeating) | K | E | Y | K | E | Y |
-| Ciphertext | · | $ | 5 | ' | * | x |
+| Ciphertext | · | ␣ | 5 | ' | * | x |
 Positions 0 and 3 were both XORed with \`K\`. Positions 1 and 4 with \`E\`. Positions 2 and 5 with \`Y\`. That repetition is the problem.
 The implementation is almost identical to the single-byte version. The only real change is that the key is now a \`bytes\` object and \`i % len(key)\` handles the cycling:
 \`\`\`python
@@ -475,11 +475,16 @@ def hamming_distance(a: bytes, b: bytes) -> int:
  
 def guess_key_length(ciphertext: bytes, max_len: int = 40) -> int:
     scores = []
-    for klen in range(2, max_len + 1):
-        a = ciphertext[:klen]        # first chunk of guessed key length
-        b = ciphertext[klen:klen*2]  # second chunk right after
-        score = hamming_distance(a, b) / klen  # normalize by key length
-        scores.append((score, klen))
+    for klen in range(2, min(max_len +1, len(ciphertext) // 2 + 1)):  # cap at half ciphertext length
+        distances = []
+        for j in range(min(4, len(ciphertext) // klen - 1)):    # average multiple pairs
+          a = ciphertext[j*klen:(j+1)*klen]        # first chunk of guessed key length
+          b = ciphertext[(j+1)*klen:(j+2)*klen]    # second chunk right after
+          if len(a) == klen and len(b) == klen:    # only use full chunks
+                distances.append(hamming_distance(a,b) / klen)
+        if distances:
+            scores.append((sum(distances) / len(distances), klen))
+            
     return min(scores)[1]  # key length with smallest distance is most likely correct
 
 # example
@@ -518,6 +523,9 @@ def break_repeating_xor(ciphertext: bytes, key_len: int) -> bytes:
     )
 \`\`\`
 The slice \`ciphertext[i::key_len]\` pulls out exactly the bytes that share a key position. Do this for every column and the full key falls out.
+
+Note: This scoring assumes the plaintext is English. If the message were in another language, or binary data like an image, counting common English letters wouldn’t pick out the right key byte.
+
 ## What this taught me
 The thing I kept coming back to was how the attack never needed to try every possible key. It just needed the structure of the cipher to leak information, and a repeating key always does that no matter how long it is.
 That is when it started making sense why real encryption does not just use a longer XOR key. AES applies multiple rounds of substitution, permutation, and mixing so that no single output byte has a simple relationship to any single input byte. There is no column to isolate, no pattern to exploit at that level.
