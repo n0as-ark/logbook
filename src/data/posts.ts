@@ -66,8 +66,9 @@ In the next post, I'll implement XOR encryption from scratch, walk through how i
 
   ciphertext = xor_encrypt(message, 13)
   recovered  = xor_decrypt(ciphertext, 13)`,
-   content: `In the last post, I talked about how a password prompt does not automatically mean strong protection. In modern Office files, a password is usually used to derive a real encryption key for algorithms like AES. But older protection methods could be much weaker, which makes XOR a useful place to start if the goal is to understand what encryption is actually doing behind the scenes.
-So instead of jumping straight into modern cryptography, I want to begin with XOR. Not because it is secure, but because it is one of the clearest ways to see how plaintext becomes ciphertext, and how a weak design can fail very quickly.
+   content: `As mentioned in my [previous post](https://n0as-ark.github.io/logbook/blog/xor-cipher-excel-password-intro), a password prompt doesn't automatically mean strong protection. In modern Office, the password is used to derive an encryption key for algorithms like **AES**, but older versions relied on much weaker schemes, some of which were based on XOR. This post covers XOR in particular, including how I implemented it in Python and where it breaks down.
+The reason why I'm starting with XOR is not because it is secure, but because it is one of the clearest ways to see how plaintext becomes ciphertext, and how quickly a weak design can fail.
+
 ## What is XOR?
 XOR stands for *exclusive or*. It is a bitwise operation that compares two bits and returns \`1\` if they are different, and \`0\` if they are the same.
 | A | B | A XOR B |
@@ -76,10 +77,10 @@ XOR stands for *exclusive or*. It is a bitwise operation that compares two bits 
 | 0 | 1 | 1 |
 | 1 | 0 | 1 |
 | 1 | 1 | 0 |
-For example, if we write 5 and 3 in binary:
+For example, 5 and 3 can be written in binary as:
 - 5 is **101**
 - 3 is **011**
-Now we apply XOR bit by bit:
+Applying XOR bit by bit gives:
 \`\`\`
 5 → 101
 3 → 011
@@ -87,14 +88,15 @@ Now we apply XOR bit by bit:
 6 → 110
 \`\`\`
 The result **110** in binary is 6 in decimal, so 5 XOR 3 = 6.
-What makes XOR interesting is that it is reversible. If you apply XOR to a value with the same key twice, you get the original value back. That means the same operation can be used for both encryption and decryption.
+Interestingly, XOR is reversible. Applying XOR to a value with the same key twice returns the original value, which means the same operation can be used for both encryption and decryption.
 \`\`\`python
 5 ^ 3  # 6
 6 ^ 3  # 5
 \`\`\`
-Simple and elegant. But in this case, that simplicity is also the weakness.
+This simplicity is what makes XOR easy to understand, but as I found out, it is also what makes it weak.
+
 ## Building XOR encryption in Python
-Here's the most basic version: take each byte of a message and XOR it with a single-byte key.
+The most basic version takes each byte of a message and XORs it with a single-byte key:
 \`\`\`python
 def xor_encrypt(plaintext: bytes, key: int) -> bytes:
   return bytes(byte ^ key for byte in plaintext)
@@ -110,14 +112,16 @@ recovered = xor_decrypt(ciphertext, key)
 print(ciphertext)
 print(recovered)
 \`\`\`
-This works exactly as expected. 
+Since XOR is reversivle, \`xor-decrypt\` is simply the same function as \`xor_encrypt\`.
+Here is how each unique character in the message changes with a key of 13:
 | Plaintext | H | e | l | o | , | (space) | W | r | d | ! |
 |-----------|---|---|---|---|---|---------|---|---|---|---|
 | Key | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 |
 | Result | E | h | a | b | ! | - | Z | \\x7f | i | , |
-The original message turns into unreadable bytes (b'Ehaab!-Zb\\x7fai,'), and applying the same key again restores it. At a mechanical level, that is encryption.
+As the output shows, the original message turns into unreadable bytes (b'Ehaab!-Zb\\x7fai,'), and applying the same key again restores \`Hello, World!\`. At a mechanical level, that is encryption.
+
 ### Why it falls apart
-The problem is the size of the key space. A single byte key only has 256 possible values, which means an attacker can simply try every possible key and check which output looks like real text.
+The problem is the size of the key space. A single byte key only has <u>256 possible values</u>, so an attacker can simply try every possible key and check which output looks like real text:
 \`\`\`python
 def brute_force(ciphertext: bytes) -> None:
   for key in range(256):
@@ -129,7 +133,7 @@ def brute_force(ciphertext: bytes) -> None:
       except UnicodeDecodeError:
           pass
 \`\`\`
-This version makes a very simple assumption: the original plaintext is a normal English sentence, so the brute force loop treats any decoded output that contains a space as "interesting." That is enough for a quick demo, but it is only a heuristic, not a general solution. If the plaintext were something else, such as a numeric PIN or a password with letters, numbers, and a small set of symbols, the \`if\` condition inside \`brute_force\` would need to be updated to match that expected format instead.
+This version makes a very simple assumption: the original plaintext is a normal English sentence, so the brute force loop treats any decoded output that contains a space as a candidate. That is enough for a quick demo, but it is only a heuristic, not a general solution. If the plaintext were something else, such as a numeric PIN or a password with letters, numbers, and a small set of symbols, the \`if\` condition inside \`brute_force\` would need to be updated to match that expected format instead.
 The important part is not the exact heuristic, but the fact that every possible key can be tested quickly.
 That is why single byte XOR is not something you would rely on for real world protection. It is useful as a teaching tool, but not as a serious security design.
 There is another weakness too: if part of the original plaintext is predictable, for example a file header or a standard phrase, XOR can leak the key very quicky. That kind of weakness is one reason real encryption systems need more than a simple reversible operation.
