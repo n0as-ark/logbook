@@ -524,7 +524,9 @@ This points to two limitations of the approach. First, the Hamming distance test
 For short keys, a simpler approach may work better. If the key is only 1 to 3 bytes long, every possible key can be tried directly and checked for readable text. A 3-byte key has 256³ = 16 million combinations, which is still small enough for a computer to go through.
 
 ## Breaking it column by column
-Once the key length is known, the attack reduces to something we already covered. If the key is six bytes long, then positions 0, 6, 12, 18... in the ciphertext were all encrypted with the same byte. Pull those out as a column and it is just single-byte XOR again, breakable with the same frequency analysis from the last post.
+Once the key length is known, the attack reduces to the single-byte problem from my last post. If the key is six bytes long, then positions 0, 6, 12, 18, and so on in the ciphertext were all encrypted with the same byte. Pulling those positions out as a column turns it into single-byte XOR again.
+
+The difference from the last post is how each candidate is scored. Instead of checking for a space, the function below uses a simple form of frequency analysis: it counts how many decrypted characters are among the most common in English (\`etaoin shrdlu\`, including the space) and keeps the key byte with the highest count.
 \`\`\`python
 def break_single_byte(data: bytes) -> int:
     best_score, best_key = -1, 0
@@ -544,9 +546,16 @@ def break_repeating_xor(ciphertext: bytes, key_len: int) -> bytes:
         for i in range(key_len)  # repeat for each key position
     )
 \`\`\`
-The slice \`ciphertext[i::key_len]\` pulls out exactly the bytes that share a key position. Do this for every column and the full key falls out.
+The slice \`ciphertext[i::key_len]\` pulls out exactly the bytes that share a key position. Repeating this for every column recovers the full key:
+\`\`\`python
+>>> break_repeating_xor(xor_encrypt(message, b"SECRET"), 6)
+b'SECRET'
+>>> break_repeating_xor(xor_encrypt(message, b"CAT"), 6)
+b'CATCAT'
+\`\`\`
+As the output shows, both keys were recovered, including \`CAT\` as \`CATCAT\` from the length the Hamming distance test guessed.
 
-Note: This scoring assumes the plaintext is English. If the message were in another language, or binary data like an image, counting common English letters wouldn’t pick out the right key byte.
+Note: this scoring assumes the plaintext is English. If the message were in another language, or binary data like an image, counting common English letters wouldn’t pick out the right key byte, and the scoring would need to match that kind of data instead.
 
 ## What this taught me
 The thing I kept coming back to was how the attack never needed to try every possible key. It just needed the structure of the cipher to leak information, and a repeating key always does that no matter how long it is.
