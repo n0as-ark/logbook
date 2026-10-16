@@ -426,19 +426,22 @@ Pointers are one of those topics where the definition is simple but the implicat
 xor_decrypt = xor_encrypt
 ciphertext = xor_encrypt(message, b"SECRET")
 recovered  = xor_decrypt(ciphertext, b"SECRET")`,
-  content: `After breaking single-byte XOR in the last post, my first instinct was, **"What if the key were just longer?"** One byte gives 256 combinations. Four bytes gives 256⁴ ≈ 4.3 billion. That felt like a real improvement, at least against brute force.
-It took me a while to understand why that thinking misses the point. The number of possible keys is not what determines security. The structure of the cipher is. And once I saw how repeating a key leaves patterns in the ciphertext, it became clear that multi-byte XOR is still fundamentally broken, just in a less obvious way.
+  content: `After breaking single-byte XOR in my last post, my first instinct was to ask, **"What if the key were just longer?"** One byte gives 256 combinations, while four bytes gives 256⁴ ≈ 4.3 billion. At least against brute force, that felt like a real improvement.
+
+However, it took me a while to understand why that thinking misses the point. The number of possible keys is not what determines security. The structure of the cipher is. Once I saw how repeating a key leaves patterns in the ciphertext, it became clear that multi-byte XOR is still fundamentally broken, just in a less obvious way.
+
 ## How it works
-Single-byte XOR uses one number as the key for every byte. Multi-byte XOR uses a sequence of numbers instead, and repeats it across the message.
-If your key is \`[3, 7, 1]\`, the first byte gets XORed with \`3\`, the second with \`7\`, the third with \`1\`, and then it starts over. The fourth byte gets \`3\` again, the fifth gets \`7\`.
-The way the code handles this is just \`i % len(key)\`. Position 0 goes to key byte 0. Position 3 goes to key byte 0 again. Position 4 goes to key byte 1. That one line is the whole repeating mechanism.
-Here is what that looks like with a real example, encrypting \`"Hello!"\` with the key \`"KEY"\`. Each character is shown as its ASCII value in hex, so \`H\` is \`0x48\` and \`K\` is \`0x4B\`:
+Single-byte XOR uses one number as the key for every byte. On the other hand, multi-byte XOR uses a sequence of numbers and repeats it across the message.
+
+For example, with the key \`[3, 7, 1]\`, the first byte is XORed with \`3\`, the second with \`7\`, the third with \`1\`, and then the key starts over: the fourth byte gets \`3\` again, the fifth gets \`7\`.
+In the code, this is handled by \`i % len(key)\`. Position 0 maps to key byte 0, position 3 maps to key byte 0 again, and position 4 maps to key byte 1. That one expression is the whole repeating mechanism.
+Here is what that looks like when encrypting \`"Hello!"\` with the key \`"KEY"\`. Each character is shown as its ASCII value in hex, so \`H\` is \`0x48\` and \`K\` is \`0x4B\`:
 |           | 0 | 1 | 2 | 3 | 4 | 5 |
 |-----------|---|---|---|---|---|---|
 | Plaintext | H | e | l | l | o | ! |
 | Key (repeating) | K | E | Y | K | E | Y |
 | Ciphertext | · | ␣ | 5 | ' | * | x |
-Positions 0 and 3 were both XORed with \`K\`. Positions 1 and 4 with \`E\`. Positions 2 and 5 with \`Y\`. That repetition is the problem.
+Positions 0 and 3 were both XORed with \`K\`, positions 1 and 4 with \`E\`, and positions 2 and 5 with \`Y\`. As I found out later in this post, that repetition is exactly the problem.
 The implementation is almost identical to the single-byte version. The only real change is that the key is now a \`bytes\` object and \`i % len(key)\` handles the cycling:
 \`\`\`python
 def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
@@ -457,6 +460,7 @@ recovered  = xor_decrypt(ciphertext, key)
  
 print(recovered)  # b'Hello, World! This is a longer message.'
 \`\`\`
+
 ## Guessing the key length
 Before breaking the cipher, we need to know how long the key is. One way to figure this out is the Hamming distance test - the Hamming distance between two byte sequences is the count of bit positions where they differ. 
 The idea relies on a property of XOR: if two ciphertext bytes were encrypted with the same key byte, XORing them cancels the key out and leaves just the XOR of the original plaintext bytes. Natural language bytes — letters, spaces, punctuation — share a similar structure at the bit level, so XORing any two of them tends to flip only a few bits. Bytes from different key positions do not share a key byte, so the key does not cancel out, leaving a more random result with more bits flipped on average.
