@@ -418,7 +418,7 @@ Pointers are one of those topics where the definition is simple but the implicat
   date: "2026-06-12",
   tags: ["Cryptography", "Python", "Projects"],
   excerpt: "A longer XOR key looks like a fix, with billions of possibilities instead of just 256. But once that multi-byte key repeats, it leaves patterns in the ciphertext that we can attack. In this post I walk through how multi-byte XOR works, how to guess the key length with Hamming distance, and how to recover the key column by column using simple frequency analysis, showing that key length alone does not make this toy cipher secure.",
-  readTime: "6 min",
+  readTime: "10 min",
   snippet: `def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
     return bytes(
         byte ^ key[i % len(key)]
