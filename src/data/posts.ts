@@ -1868,6 +1868,18 @@ content:`As mentioned in the [previous post](https://n0as-ark.github.io/logbook/
 
 Since the tool is meant to evaluate passwords, sending them to a third party in order to check them would be a strange design. The **Pwned Passwords API** from [*Have I Been Pwned*](https://haveibeenpwned.com/Passwords) gets around this with a technique called k-anonymity, which means the service never learns which password I'm asking about.
 
+## How the check works
+
+The first step is to hash the password with SHA-1, which turns it into a 40-character string. For example, the SHA-1 has of \`password\` is:
+
+\`\`\`
+5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8
+\`\`\`
+
+The tool then splits this hash into two parts: the first 5 characters (the prefix, \`5BAA6\`) and the remaining 35 (the suffix). Only the prefix is sent to the API:
+\`\`\`
+https://api.pwnedpasswords.com/range/5BAA6
+\`\`\`
 `
   },
 ];
