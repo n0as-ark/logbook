@@ -133,15 +133,24 @@ def brute_force(ciphertext: bytes) -> None:
       except UnicodeDecodeError:
           pass
 \`\`\`
-This version makes a very simple assumption: the original plaintext is a normal English sentence, so the brute force loop treats any decoded output that contains a space as a candidate. That is enough for a quick demo, but it is only a heuristic, not a general solution. If the plaintext were something else, such as a numeric PIN or a password with letters, numbers, and a small set of symbols, the \`if\` condition inside \`brute_force\` would need to be updated to match that expected format instead.
-The important part is not the exact heuristic, but the fact that every possible key can be tested quickly.
-That is why single byte XOR is not something you would rely on for real world protection. It is useful as a teaching tool, but not as a serious security design.
-There is another weakness too: if part of the original plaintext is predictable, for example a file header or a standard phrase, XOR can leak the key very quicky. That kind of weakness is one reason real encryption systems need more than a simple reversible operation.
-### Why learn it anyway?
-Even though XOR is weak on its own, it is not useless. XOR still appears inside modern cryptographic algorithms, but there is only one small component inside a much larger design with strong keys, multiple rounds, and carefully constructed transformations.
-That is exactly why I think it is worth building from scratch. If you understand how a simple scheme like XOR works, it becomes much easier to see why modern encryption needs things like large key sizes, key derivation, and stronger cipher structure.
+This version makes a very simple assumption: the original plaintext is a normal English sentence, so the brute force loop treats any decoded output that contains a space as a candidate. When I ran it on the ciphertext above, it printed ten candidates rather than one. A few of them looked like this:
+\`\`\`python
+Key 1: Di``c ,[c~`h-
+Key 12: Idmmn-!Vnsme 
+Key 13: Hello, World!
+\`\`\`
+The correct key was there, but so were several outputs that only passed because they happened to contain a space somewhere. In this case, picking out \`Hello, World!\` by eye was easy, but it shows that the check is only a heuristic, not a general solution. If the plaintext were something else, such as a numeric PIN or a password with letters, numbers, and a small set of symbols, the \`if\` condition inside \`brute_force\` would need to be updated to match that expected format instead.
 
-In the next post, we will look at multi-byte XOR with a repeating key. It's a step up from single-byte, but still breakable with a technique called frequency analysis.
+What matters more than the exact heuristic is that every possible key can be tested in a fraction of a second. This is why I don't think single byte XOR should be relied on for real-world protection. It works as a learning tool, but not as a serious security design.
+
+There is another weakness too. If part of the original plaintext is predictable, such as a file header or a standard phrase, XORing that known part with the ciphertext reveals the key directly. This kind of weakness is one reason real encryption systems need more than a simple reversible operation.
+
+### Why learn it anyway?
+Even though XOR is weak on its own, it is not useless. XOR still appears inside modern cryptographic algorithms, but only as one small component within a much larger design that includes strong keys, multiple rounds, and carefully constructed transformations.
+
+This matters for my project because building XOR from scratch makes it easier to see why modern encryption needs things like large key sizes, key derivation, and stronger cipher structure.
+
+In the next post, I'll look at multi-byte XOR with a repeating key. It should be a step up from a single-byte key, but I expect it to still be breakable, and I'll find out how much harder it actually is.
 > 🔗 **Code:** The full implementation is available on [GitHub](https://github.com/n0as-ark/XOR-Encryption-In-Python/blob/main/src).
 > → **Next up:** [Multi-Byte XOR Encryption: Why a Longer Key Still Breaks](https://n0as-ark.github.io/logbook/blog/multi-byte-xor)`,
   },
