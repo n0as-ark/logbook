@@ -462,16 +462,16 @@ print(recovered)  # b'Hello, World! This is a longer message.'
 \`\`\`
 
 ## Guessing the key length
-Before breaking the cipher, we need to know how long the key is. One way to figure this out is the Hamming distance test - the Hamming distance between two byte sequences is the count of bit positions where they differ. 
-The idea relies on a property of XOR: if two ciphertext bytes were encrypted with the same key byte, XORing them cancels the key out and leaves just the XOR of the original plaintext bytes. Natural language bytes — letters, spaces, punctuation — share a similar structure at the bit level, so XORing any two of them tends to flip only a few bits. Bytes from different key positions do not share a key byte, so the key does not cancel out, leaving a more random result with more bits flipped on average.
-By comparing chunks of ciphertext at different guessed key lengths and finding the length with the smallest average distance, we get a good estimate of the real key length without trying a single key.
-Here is how it works step by step, using the key \`"CAT"\` (3 bytes) as an example. For each candidate key length, we take two consecutive chunks of ciphertext and measure their Hamming distance. If the guessed key length matches the real key length, the key cancels out when we XOR the chunks:
+Before breaking the cipher, the length of the key needs to be known. One way to estimate it is the **Hamming distance** test, where the Hamming distance between two byte sequences is the number of bit positions where they differ. 
+The idea relies on a property of XOR. If two ciphertext bytes were encrypted with the same key byte, XORing them cancels the key out and leaves only the XOR of the two original plaintext bytes. Natural language bytes, such as letters, spaces, and punctuation, share a similar structure at the bit level, so XORing two of them tends to flip only a few bits. Bytes from different key positions don't share a key byte, so the key doesn't cancel out, and the result is more random, with more bits flipped on average.
+
+To see this step by step, consider the key \`"CAT"\` (3 bytes). For each candidate key length, the test takes two consecutive chunks of ciphertext and measure their Hamming distance. If the guessed length matches the real one, the key cancels out:
 \`\`\`
 ciphertext[0] = plaintext[0] ^ C
 ciphertext[3] = plaintext[3] ^ C
 ciphertext[0] ^ ciphertext[3] = plaintext[0] ^ plaintext[3]   # C cancels out
 \`\`\`
-But if we guess the wrong length, say 2, the key bytes at those positions are different and do not cancel:
+If the guess is wrong, say 2, the key bytes at those positions are different and don't cancel:
 \`\`\`
 ciphertext[0] = plaintext[0] ^ C
 ciphertext[2] = plaintext[2] ^ T
