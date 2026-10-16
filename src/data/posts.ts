@@ -134,11 +134,13 @@ def brute_force(ciphertext: bytes) -> None:
           pass
 \`\`\`
 This version makes a very simple assumption: the original plaintext is a normal English sentence, so the brute force loop treats any decoded output that contains a space as a candidate. When I ran it on the ciphertext above, it printed ten candidates rather than one. A few of them looked like this:
-\`\`\`python
-Key 1: Di``c ,[c~`h-
+
+\`\`\`
+Key 1: Di\`\`c ,[c~\`h-
 Key 12: Idmmn-!Vnsme 
 Key 13: Hello, World!
 \`\`\`
+
 The correct key was there, but so were several outputs that only passed because they happened to contain a space somewhere. In this case, picking out \`Hello, World!\` by eye was easy, but it shows that the check is only a heuristic, not a general solution. If the plaintext were something else, such as a numeric PIN or a password with letters, numbers, and a small set of symbols, the \`if\` condition inside \`brute_force\` would need to be updated to match that expected format instead.
 
 What matters more than the exact heuristic is that every possible key can be tested in a fraction of a second. This is why I don't think single byte XOR should be relied on for real-world protection. It works as a learning tool, but not as a serious security design.
