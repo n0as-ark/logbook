@@ -514,10 +514,12 @@ Here is the output for a few examples:
 >>> guess_key_length(xor_encrypt(message, b"CAT"))
 6
 \`\`\`
-As the output shows, the test correctly found the length of \`SECRET\`. However, for \`CAT\`, it also returned 6 instead of 3. This happens because a multiple of the real key length lines up with the key as well, so 6 cancels the key out just like 3 does, and the distances end up too close to tell apart.
+As the output shows, the test correctly found the length of \`SECRET\`. However, when I tried the shorter key \`CAT\`, it also returned 6 instead of 3. This happens because the key also lines up with itself at any multiple of its length, so a guess of 6 cancels the key out just like 3 does. The function only compares four pairs of chunks, which means a guess of 3 based on just 12 bytes, and a few pairs that flip more bits than usual, such as a space compared with a letter, were enough to push its score above the socre for 6.
 
-One limitation of this approach is that it needs a reasonably long ciphertext to work reliably. The Hamming distance test is a statistical method, meaning the more data it has, the more confident the estimate. It also tends to struggle with short keys (2 to 3 bytes), since multiples of the key length produce similarly low distances, making it hard to identify the true key length.
-For short messages or short keys, a simpler approach works better. If the key is short (say 1 to 4 bytes), we can just brute force it — try every possible key and check if the result looks like readable text. A 3-byte key has 256³ = 16 million combinations, which a modern computer can go through in seconds.
+Interestingly, this doesn't stop the attack. As the next section shows, breaking the cipher with a length of 6 recovers \`CATCAT\`, which is just the real key repeated, and it still decrypts the message correctly.
+
+This points to two limitations of the approach. First, the Hamming distance test is a statistical method, so it needs a reasonably long ciphertext to work reliably; the more data it has, the more confident the estimate. Second, as the \`CAT\` example shows, it tends to struggle with short keys (2 to 3 bytes), since multiples of the key length can score as low as, or lower than, the real key length.
+For short keys, a simpler approach may work better. If the key is only 1 to 3 bytes long, every possible key can be tried directly and checked for readable text. A 3-byte key has 256³ = 16 million combinations, which is still small enough for a computer to go through.
 
 ## Breaking it column by column
 Once the key length is known, the attack reduces to something we already covered. If the key is six bytes long, then positions 0, 6, 12, 18... in the ciphertext were all encrypted with the same byte. Pull those out as a column and it is just single-byte XOR again, breakable with the same frequency analysis from the last post.
