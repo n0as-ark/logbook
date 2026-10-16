@@ -558,9 +558,10 @@ As the output shows, both keys were recovered, including \`CAT\` as \`CATCAT\` f
 Note: this scoring assumes the plaintext is English. If the message were in another language, or binary data like an image, counting common English letters wouldn’t pick out the right key byte, and the scoring would need to match that kind of data instead.
 
 ## What this taught me
-The thing I kept coming back to was how the attack never needed to try every possible key. It just needed the structure of the cipher to leak information, and a repeating key always does that no matter how long it is.
-That is when it started making sense why real encryption does not just use a longer XOR key. AES applies multiple rounds of substitution, permutation, and mixing so that no single output byte has a simple relationship to any single input byte. There is no column to isolate, no pattern to exploit at that level.
-Building this made the gap between a toy cipher and a real one feel concrete in a way that reading about it did not.
+The thing I kept coming back to was that the attack never needed to try every possible key. It only needed the structure of the cipher to leak information, and a repeating key seems to do that no matter how long it is.
+That is when it started making sense why real encryption doesn't just use a longer XOR key. AES applies multiple rounds of substitution, permutation, and mixing so that no single output byte has a simple relationship to any single input byte. In other words, there is no column to isolate and no repeating pattern to exploit, which is exactly what made multi-byte XOR breakable.
+Building this made the gap between a toy cipher and a real one feel concrete in a way that reading about it didn't, and I suspect it will make the design chocies behind AES easier to follow when I get to them.
+
 > 🔗 **Code:** The full implementation is available on [GitHub](https://github.com/n0as-ark/XOR-Encryption-In-Python/blob/main/src/multi_byte_xor.py).`,
   },
   {title: "Study Notes: Introduction to Computer Networking",
