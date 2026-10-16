@@ -26,34 +26,31 @@ ciphertext = bytes(
 )
 # 256 possible keys - breakable
 # in milliseconds`,
-    content: `Across many industries, sensitive data like employee records, financial documents, personal identifiers often gets shared as Excel or Word files protected only by a simple password.
+    content: `Across many industries, sensitive data like employee records, financial documents, personal identifiers often gets shared as Excel or Word files protected only by a simple password. Setting a password and watching the file lock gives the impression that the data is safe, and I initially assumed that was enough to keep it from being read by anyone without the password. However, I realized I didn't actually know what that password does to the file, or how much protection it provides.
 
-At first glance, it feels secure. You set a password, the file locks, and you're done.
+So I decided to build an encryption tool from scratch in Python to understand what really happens on the backend.
 
-But what does that password actually do, and how secure is it really?<br>I wanted to find out, so I decided to build an encryption tool from scratch to understand what's really happening on the backend.
+## What Encryption Actually Is
 
-## What Is Encryption, Really?
-
-At its core, encryption is a way to scramble data so that only someone with the right key can read it.
-
-Like a combination lock:
+At its core, encryption is a way to scramble data so that only someone with the right key can read it. It can be thought of as a combination lock:
 - The **plaintext** is the message you want to protect.
 - The **key** is the combination.
 - The **ciphertext** is the locked (scrambled) result.
 
-The strength of encryption depends entirely on how hard it is to guess the combination.
+The strength of encryption depends heavily on how hard it is to guess the combination. Even if the algorithm itself is well designed, a key that is easy to guess makes the whole system easy to break.
 
 ## The Problem with Simple Passwords
 
-In modern Office, your password is used to derive an encryption key for the file. Older versions used very weak protection schemes - in some cases little more than a single-byte XOR - where the entire "lock" has only **256 possible combinations**.
+In modern Office, the password is used to derive an encryption key for the file. Older versions relied on much weaker schemes, some of which were based on XOR. To get a sense of how weak XOR can be, I looked at the simplest case, a <u>single-byte</u> XOR key, where the entire "lock" has only **256 possible combinations**. A computer can try all 256 in milliseconds.
 
-A computer can try all 256 in milliseconds.
+Interestingly, this means the password plays almost no role in protecting the file. Under a scheme like this, an attacker doesn't need the password at all and can simply try every possible key. This matters for my project because it shows that a locked file is only as secure as the scheme behind the lock, not just the password used to set it.
 
-## What I'm Building
+## What I'll be Building
 
-Over the next few weeks, I'll be learning cryptography by building it from the ground up in Python. Instead of jumping straight to modern algorithms like AES, I will start with XOR, the weakest possible "encryption", and show step by step how an insecure design collapses.
+Over the next few weeks, I'll be learning cryptography by building it from the ground up in Python. Instead of jumping straight to modern algorithms like **AES**, I'm starting with XOR, the weakest possible "encryption", so I can see step by step how an insecure design collapses. My guess is that starting from something broken will make it easier to understand why stronger algorithms are designed the way they are.
 
-In the next post, I'll implement XOR encryption from scratch, walk through exactly how it works, and explain why it should never be relied upon to protect real sensitive data.
+In the next post, I'll implement XOR encryption from scratch, walk through how it works, and explain why it shouldn't be relied on to protect real sensitive data. I haven't looked closely at how the older Office schemes worked in detail yet, so I may find that some of them hold up better than I expect.
+
 > → **Next up:** [XOR Encryption: A Simple Cipher That Breaks Very Easily](https://n0as-ark.github.io/logbook/blog/xor-cipher-basics)`,
   },
   {title: "XOR Encryption: A Simple Cipher That Breaks Very Easily",
