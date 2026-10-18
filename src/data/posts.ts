@@ -1886,6 +1886,38 @@ In response, the API sends back a list of every hash suffix in its database that
 It's a short way of saying that I ask for a whole shelf of possible matches instead of one book, and look through the shelf myself. The prefix does narrow down the possibilities a little, but it doesn't identify my password, and neither the password nor the full hash ever leaves my computer.
 
 One note on SHA-1: since it turns any input into a fixed-length hash, there is only a limited number of hash values available. Because of this, some different inputs inevitably end up with the same hash, which is called a *collision*. In security, that is a problem because two different passwords sharing the same hash would both be accepted as the right one. Researchers have also shown that SHA-1 collisions can be created on purpose ([The first collision for full SHA-1](https://ir.cwi.nl/pub/26763)), which is why SHA-1 is considered broken for security uses. However, this doesn't matter much for this project, because the API requires SHA-1 and I'm only using it as a lookup fingerprint, not to protect anything. An accidental collision between two ordinary passwords is extremely unlikely, so I can treat a matching suffix as the same password.
+
+## The code
+
+Here is the full function that does the check:
+\`\`\`python
+def check_breach(password: str, timeout: int = 5) -> int:
+    """return how many times a password appears in known breaches (0 if none).
+
+    Raises requests.RequestException if the API can't be reached or returns
+    an error status; handling that is up to the caller.
+    """
+    hashed = hash_password(password)
+    # only the 5-character prefix is sent
+    prefix, suffix = hashed[:5], hashed[5:]
+
+    response = requests.get(
+        API_URL + prefix,
+        headers={"User-Agent": USER_AGENT},
+        timeout=timeout,
+    )
+    
+    response.raise_for_status()  # raise an error on a bad status
+
+    # look for our suffix from the response
+    for line in response.text.splitlines():
+        line_suffix, count = line.split(":")
+        if line_suffix == suffix:
+            return int(count)
+
+    # not in the results, so no known breach
+    return 0
+\`\`\`
 `
   },
 ];
