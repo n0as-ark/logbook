@@ -1880,6 +1880,12 @@ The tool then splits this hash into two parts: the first 5 characters (the prefi
 \`\`\`
 https://api.pwnedpasswords.com/range/5BAA6
 \`\`\`
+
+In response, the API sends back a list of every hash suffix in its database that begins with that prefix, along with the number of times each one has shown up in breaches. Since many different hashes share the same 5-character prefix, the list is long and the server can't tell which one is mine. That part is left to my tool, which looks through the list for my suffix on my own computer. If the suffix is there, the password has appeared in a breach and the count tells me how many times, and if it isn't, the count is 0.
+
+It's a short way of saying that I ask for a whole shelf of possible matches instead of one book, and look through the shelf myself. The prefix does narrow down the possibilities a little, but it doesn't identify my password, and neither the password nor the full hash ever leaves my computer.
+
+One note on SHA-1: since it turns any input into a fixed-length hash, there is only a limited number of hash values available. Because of this, some different inputs inevitably end up with the same hash, which is called a *collision*. In security, that is a problem because two different passwords sharing the same hash would both be accepted as the right one. Researchers have also shown that SHA-1 collisions can be created on purpose ([The first collision for full SHA-1](https://ir.cwi.nl/pub/26763)), which is why SHA-1 is considered broken for security uses. However, this doesn't matter much for this project, because the API requires SHA-1 and I'm only using it as a lookup fingerprint, not to protect anything. An accidental collision between two ordinary passwords is extremely unlikely, so I can treat a matching suffix as the same password.
 `
   },
 ];
