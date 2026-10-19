@@ -1885,7 +1885,7 @@ In response, the API sends back a list of every hash suffix in its database that
 
 It's a short way of saying that I ask for a whole shelf of possible matches instead of one book, and look through the shelf myself. The prefix does narrow down the possibilities a little, but it doesn't identify my password, and neither the password nor the full hash ever leaves my computer.
 
-One note on SHA-1: since it turns any input into a fixed-length hash, there is only a limited number of hash values available. Because of this, some different inputs inevitably end up with the same hash, which is called a *collision*. In security, that is a problem because two different passwords sharing the same hash would both be accepted as the right one. Researchers have also shown that SHA-1 collisions can be created on purpose ([The first collision for full SHA-1](https://ir.cwi.nl/pub/26763)), which is why SHA-1 is considered broken for security uses. However, this doesn't matter much for this project, because the API requires SHA-1 and I'm only using it as a lookup fingerprint, not to protect anything. An accidental collision between two ordinary passwords is extremely unlikely, so I can treat a matching suffix as the same password.
+**One note on SHA-1**: since it turns any input into a fixed-length hash, there is only a limited number of hash values available. Because of this, some different inputs inevitably end up with the same hash, which is called a <u>*collision*</u>. In security, that is a problem because two different passwords sharing the same hash would both be accepted as the right one. Researchers have also shown that SHA-1 collisions can be created on purpose ([The first collision for full SHA-1](https://ir.cwi.nl/pub/26763)), which is why SHA-1 is considered broken for security uses. However, this doesn't matter much for this project, because the API requires SHA-1 and I'm only using it as a lookup fingerprint, not to protect anything. An accidental collision between two ordinary passwords is extremely unlikely, so I can treat a matching suffix as the same password.
 
 ## The code
 
@@ -1923,6 +1923,31 @@ The \`hash_password\` helper and the rest of the code are in the [repo](https://
 
 ## Two kinds of failure
 
-One design choice I made is that the function doesn't catch errors. If the request fails because of no internet, a timeout, or an error from the API, the exception is passed to whoever called the function. The reason is that "the API told us this password is not breached" and "we couldn't ask the API" are very different answers, and if the function returned 0 when something went wrong, a user without a connection would be told their password isn't breached. I'd rather leave the decision about what to do with a failed request to the command-line interface, which I haven't written yet.`
+One design choice I made is that the function doesn't catch errors. If the request fails because of no internet, a timeout, or an error from the API, the exception is passed to whoever called the function. The reason is that "the API told us this password is not breached" and "we couldn't ask the API" are very different answers, and if the function returned 0 when something went wrong, a user without a connection would be told their password isn't breached. I'd rather leave the decision about what to do with a failed request to the command-line interface, which I haven't written yet.
+
+## The output
+
+I tried the function on \`password\` first, since it is probably the most well-known weak password, and compared its breach count with its entropy:
+
+\`\`\`python
+>>> check_breach("password")
+52372427
+>>> round(calculate_entropy("password"), 1)
+37.6
+\`\`\`
+
+\`password\` showed up more than 52 million times in the breach data at the time I ran it (the count can change as new breaches are added), and its entropy is only 37.6 bits, so for this password the two measures agree that it's weak.
+
+I also tried a longer password built the way many people build theirs, with a word, a few letter-to-symbol swaps, a year, and some symbols on the end:
+
+\`\`\`python
+>>> check_breach("R@nd0mP@ssw0rd!2026:)")
+0
+>>> round(calculate_entropy("R@nd0mP@ssw0rd!2026:)"), 1)
+130.8
+\`\`\`
+
+The breach check returned 0 and my entropy function gives this password about 130.8 bits, which is a very high score. Both numbers make it look strong, but 0 only means this exact string hasn't appeared in the known breaches, not that it's safe. It follows a pattern that I suspect attackers try, so I can't call it strong, and this is the kind of password I want to test more of in the next post.
+`
   },
 ];
