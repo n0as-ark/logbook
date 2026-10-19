@@ -1885,7 +1885,7 @@ In response, the API sends back a list of every hash suffix in its database that
 
 It's a short way of saying that I ask for a whole shelf of possible matches instead of one book, and look through the shelf myself. The prefix does narrow down the possibilities a little, but it doesn't identify my password, and neither the password nor the full hash ever leaves my computer.
 
-**One note on SHA-1**: since it turns any input into a fixed-length hash, there is only a limited number of hash values available. Because of this, some different inputs inevitably end up with the same hash, which is called a <u>*collision*</u>. In security, that is a problem because two different passwords sharing the same hash would both be accepted as the right one. Researchers have also shown that SHA-1 collisions can be created on purpose ([The first collision for full SHA-1](https://ir.cwi.nl/pub/26763)), which is why SHA-1 is considered broken for security uses. However, this doesn't matter much for this project, because the API requires SHA-1 and I'm only using it as a lookup fingerprint, not to protect anything. An accidental collision between two ordinary passwords is extremely unlikely, so I can treat a matching suffix as the same password.
+**One note on SHA-1**: since it turns any input into a fixed-length hash, there is only a limited number of hash values available. Because of this, some different inputs inevitably end up with the same hash, which is called a <u>*collision*</u>. In security, that is a problem because two different passwords sharing the same hash would both be accepted as the right one. Researchers have also shown that SHA-1 collisions can be created on purpose ([The first collision for full SHA-1](https://link.springer.com/chapter/10.1007/978-3-319-63688-7_19)), which is why SHA-1 is considered broken for security uses. However, this doesn't matter much for this project, because the API requires SHA-1 and I'm only using it as a lookup fingerprint, not to protect anything. An accidental collision between two ordinary passwords is extremely unlikely, so I can treat a matching suffix as the same password.
 
 ## The code
 
@@ -1947,7 +1947,10 @@ I also tried a longer password built the way many people build theirs, with a wo
 130.8
 \`\`\`
 
-The breach check returned 0 and my entropy function gives this password about 130.8 bits, which is a very high score. Both numbers make it look strong, but 0 only means this exact string hasn't appeared in the known breaches, not that it's safe. It follows a pattern that I suspect attackers try, so I can't call it strong, and this is the kind of password I want to test more of in the next post.
+The breach check returned 0 and my entropy function gave this password about 130.8 bits, which is a very high score. Both numbers make it look strong, but 0 only means this exact string hasn't appeared in the known breaches, not that it's safe. It follows a pattern that I suspect attackers try, so I can't call it strong, and this is the kind of password I want to test more of in the next post.
+
+## Refernces
+Stevens, M., Bursztein, E., Karpman, P., Albertini, A., & Markov, Y. (2017). The first collision for full SHA-1. In J. Katz & H. Shacham (Eds.), *Advances in cryptology – CRYPTO 2017* (Lecture Notes in Computer Science, Vol. 10401). Springer. [Link](https://doi.org/10.1007/978-3-319-63688-7_19)
 `
   },
 ];
