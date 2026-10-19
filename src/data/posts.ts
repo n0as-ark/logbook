@@ -1892,7 +1892,7 @@ One note on SHA-1: since it turns any input into a fixed-length hash, there is o
 Here is the full function that does the check:
 \`\`\`python
 def check_breach(password: str, timeout: int = 5) -> int:
-    """return how many times a password appears in known breaches (0 if none).
+    """Return how many times a password appears in known breaches (0 if none).
 
     Raises requests.RequestException if the API can't be reached or returns
     an error status; handling that is up to the caller.
@@ -1918,6 +1918,8 @@ def check_breach(password: str, timeout: int = 5) -> int:
     # not in the results, so no known breach
     return 0
 \`\`\`
+
+The \`hash_password\` helper and the rest of the code are in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/breach_check.py). The API is free and needs no key, according to the [Have I Been Pwned documentation](https://haveibeenpwned.com/API/v3), so the tool works without an account.
 `
   },
 ];
