@@ -1920,6 +1920,9 @@ def check_breach(password: str, timeout: int = 5) -> int:
 \`\`\`
 
 The \`hash_password\` helper and the rest of the code are in the [repo](https://github.com/n0as-ark/credential-risk-analyzer/blob/main/src/breach_check.py). The API is free and needs no key, according to the [Have I Been Pwned documentation](https://haveibeenpwned.com/API/v3), so the tool works without an account.
-`
+
+## Two kinds of failure
+
+One design choice I made is that the function doesn't catch errors. If the request fails because of no internet, a timeout, or an error from the API, the exception is passed to whoever called the function. The reason is that "the API told us this password is not breached" and "we couldn't ask the API" are very different answers, and if the function returned 0 when something went wrong, a user without a connection would be told their password isn't breached. I'd rather leave the decision about what to do with a failed request to the command-line interface, which I haven't written yet.`
   },
 ];
