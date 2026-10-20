@@ -1856,7 +1856,7 @@ slug: "checking-passwords-without-revealing-them",
 date: "2026-10-11",
 tags: ["Python", "Cryptography", "Projects"],
 excerpt: "How my Credential Analyzer checks whether a password has appeared in a data breach without ever sending the password anywhere, using the Have I Been Pwned API and k-anonymity.",
-readTime: "5 min",
+readTime: "10 min",
 snippet: `hashed = hash_password("password")
 prefix, suffix = hashed[:5], hashed[5:]
 
