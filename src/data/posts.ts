@@ -1949,6 +1949,13 @@ I also tried a longer password built the way many people build theirs, with a wo
 
 The breach check returned 0 and my entropy function gave this password about 130.8 bits, which is a very high score. Both numbers make it look strong, but 0 only means this exact string hasn't appeared in the known breaches, not that it's safe. It follows a pattern that I suspect attackers try, so I can't call it strong, and this is the kind of password I want to test more of in the next post.
 
+## Combining entropy and breach data into one score
+
+Now that the tool has both measures, it needs a rule for turning them into a single risk score. The score I came up with stays between 10 and 100, where higher means riskier. If a password has appeared in a breach, its score starts at 80 and goes up by 4 points for every factor of ten in the breach count, up to a maximum of 100. If it hasn't, the score depends only on entropy: it is 10 at 80 bits or more and increases in a straight line as entropy drops, reaching 70 at 0 bits. Scores below 30 are labelled LOW, 30 to 59 MEDIUM, and 60 and above HIGH.
+
+The point of the two ranges is that a breach match always beats entropy. The lowest breached score (80) is higher than the highest score without a breach (70), so a breached password is HIGH no matter how strong its entropy looks. Without a breach, more entropy means less risk. The score never drops below 10, because as the second example above showed, not finding a password in a breach doesn't mean it's safe. The numbers themselves are my own choices, not a standard, and the 80-bit cap in particular is arbitrary, so I want to revisit it once I've tested more passwords.
+
+
 ## Refernces
 Stevens, M., Bursztein, E., Karpman, P., Albertini, A., & Markov, Y. (2017). The first collision for full SHA-1. In J. Katz & H. Shacham (Eds.), *Advances in cryptology – CRYPTO 2017* (Lecture Notes in Computer Science, Vol. 10401). Springer. [Link](https://doi.org/10.1007/978-3-319-63688-7_19)
 `
