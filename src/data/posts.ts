@@ -1955,6 +1955,30 @@ Now that the tool has both measures, it needs a rule for turning them into a sin
 
 The point of the two ranges is that a breach match always beats entropy. The lowest breached score (80) is higher than the highest score without a breach (70), so a breached password is HIGH no matter how strong its entropy looks. Without a breach, more entropy means less risk. The score never drops below 10, because as the second example above showed, not finding a password in a breach doesn't mean it's safe. The numbers themselves are my own choices, not a standard, and the 80-bit cap in particular is arbitrary, so I want to revisit it once I've tested more passwords.
 
+Here is the function that calculates the score:
+
+\`\`\`python
+def calculate_risk_score(entropy_bits: float, breach_count: int) -> float:
+    """Return a risk score from 10 to 100 (higher = riskier)."""
+    if breach_count > 0:
+        # A breach match starts at 80 and adds 4 points per factor of ten
+        risk_score = 80
+        remainder = breach_count
+        while remainder >= 10:
+            risk_score += 4
+            remainder = remainder // 10
+        if risk_score > 100:
+            risk_score = 100
+    else:
+        # No breach: 70 at 0 bits, falling to 10 at 80 bits or more
+        risk_score = 10 + 60 * (1 - min(entropy_bits, 80) / 80)
+
+    return risk_score
+\`\`\`
+
+For the two passwords from the results above, \`password\` gets a score of 100, which is HIGH, and \`R@nd0mP@ssw0rd!2026:)\` gets 10, which is LOW. The second result is the one I'm not comfortable with. LOW here only means that the password has no known breach and a high entropy score, and I've already said I can't call it strong, so I'll have to be careful with how the command-line output words it, since LOW shouldn't read as "safe". Also, HIGH isn't only for breached passwords, since one with no breach match and about 13 bits of entropy or less lands there too.
+
+**Note on which entropy the score uses**: I went with the pool-based entropy and not Shannon entropy, mainly because Shannon entropy is capped by the password's length. For example, an 8-character password can't go above 24 bits even if every character is different, so even a random one could never get a low risk score on this scale. It also ignores which kinds of characters are used, which is why \`password\` and \`P@ssw0rd\` both scored 22.0 in the previous post. The downside is that the pool-based formula can't see repetition, so a password like \`aaaaaaaaaa\` still scores 47.0 bits and lands in the middle of the scale. I may use Shannon entropy as an extra warning for repetitive passwords instead of part of the score.
 
 ## Refernces
 Stevens, M., Bursztein, E., Karpman, P., Albertini, A., & Markov, Y. (2017). The first collision for full SHA-1. In J. Katz & H. Shacham (Eds.), *Advances in cryptology – CRYPTO 2017* (Lecture Notes in Computer Science, Vol. 10401). Springer. [Link](https://doi.org/10.1007/978-3-319-63688-7_19)
