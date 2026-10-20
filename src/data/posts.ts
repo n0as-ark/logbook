@@ -1980,6 +1980,10 @@ For the two passwords from the results above, \`password\` gets a score of 100, 
 
 **Note on which entropy the score uses**: I went with the pool-based entropy and not Shannon entropy, mainly because Shannon entropy is capped by the password's length. For example, an 8-character password can't go above 24 bits even if every character is different, so even a random one could never get a low risk score on this scale. It also ignores which kinds of characters are used, which is why \`password\` and \`P@ssw0rd\` both scored 22.0 in the previous post. The downside is that the pool-based formula can't see repetition, so a password like \`aaaaaaaaaa\` still scores 47.0 bits and lands in the middle of the scale. I may use Shannon entropy as an extra warning for repetitive passwords instead of part of the score.
 
+## Wrapping up
+
+The tool can now check a password against known breaches without sending the password anywhere, and combine that with its entropy into a single risk score, with a breach match always overriding entropy. The result for \`R@nd0mP@ssw0rd!2026:)\` is a good reminder of what the score can't do, since a password can have no known breach and a high entropy number and still follow a pattern that is easy to guess. What I want to find out next is how often that happens, so the next step is to build the command-line interface and run a larger set of passwords through the tool.
+
 ## Refernces
 Stevens, M., Bursztein, E., Karpman, P., Albertini, A., & Markov, Y. (2017). The first collision for full SHA-1. In J. Katz & H. Shacham (Eds.), *Advances in cryptology – CRYPTO 2017* (Lecture Notes in Computer Science, Vol. 10401). Springer. [Link](https://doi.org/10.1007/978-3-319-63688-7_19)
 `
