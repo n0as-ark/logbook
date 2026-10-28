@@ -1996,9 +1996,9 @@ date: "2026-10-15",
 tags: ["Python", "Cryptography", "Projects"],
 excerpt: "I ran 354 common, pattern-based, and random passwords through my Credential Risk Analyzer to see how well entropy reflects real breach exposure, and where it falls short.",
 readTime: "7 min",
-snippet: `python -m src.main 
---file passwords/pattern_based_passwords.txt 
---output results/pattern_based_results.csv`,
+snippet: `common   125/125 breached
+pattern    6/119 breached
+random     0/110 breached`,
 content:`In the first post for this project, I had a question about whether a "strong" password is actually safe, and the rest of the series has been about building a tool to help me find out. The tool now measures a password's entropy, checks whether it has appeared in a known data breach, and combines the two into a risk score, as described in the [previous post](https://n0as-ark.github.io/logbook/blog/checking-passwords-without-revealing-them). This post covers what happened when I ran a few hundred passwords through it.
 
 ## How I tested it
