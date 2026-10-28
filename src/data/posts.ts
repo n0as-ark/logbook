@@ -1990,4 +1990,13 @@ The tool can now check a password against known breaches without sending the pas
 Stevens, M., Bursztein, E., Karpman, P., Albertini, A., & Markov, Y. (2017). The first collision for full SHA-1. In J. Katz & H. Shacham (Eds.), *Advances in cryptology – CRYPTO 2017* (Lecture Notes in Computer Science, Vol. 10401). Springer. [Link](https://doi.org/10.1007/978-3-319-63688-7_19)
 `
   },
+  {title: 'Same Entropy, Different Exposure: Testing My Credential Risk Analyzer',
+slug: "same-entropy-different-exposure",
+date: "2026-10-15",
+tags: ["Python", "Cryptography", "Projects"],
+excerpt: "I ran 354 common, pattern-based, and random passwords through my Credential Risk Analyzer to see how well entropy reflects real breach exposure, and where it falls short.",
+readTime: "7 min",
+snippet: `python -m src.main --file passwords/pattern_based_passwords.txt --output results/pattern_based_results.csv`,
+content:``
+  },
 ];
