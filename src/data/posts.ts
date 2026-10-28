@@ -1999,6 +1999,23 @@ readTime: "7 min",
 snippet: `python -m src.main 
 --file passwords/pattern_based_passwords.txt 
 --output results/pattern_based_results.csv`,
-content:``
+content:`In the first post for this project, I had a question about whether a "strong" password is actually safe, and the rest of the series has been about building a tool to help me find out. The tool now measures a password's entropy, checks whether it has appeared in a known data breach, and combines the two into a risk score, as described in the [previous post](https://n0as-ark.github.io/logbook/blog/checking-passwords-without-revealing-them). This post covers what happened when I ran a few hundred passwords through it.
+
+## How I tested it
+
+I split the passwords into three groups, chosen to cover the cases I was most curious about. The first group is common passwords, the kind that show up on lists of the most widely used passwords, such as \`password\`, \`qwerty\`, and \`letmein\`, and there are 125 of them. The second group is pattern-based passwords, which follow the way many people build theirs: a word, a few letter-to-symbol swaps, a year or number, and a symbol at the end, like the \`R@nd0mP@ssw0rd!2026:)\` example from the previous post, and there are 119 of these. The third group is random passwords, 110 in total, generated with Python's \`secrets\` module from the same 75-character pool that my entropy formula uses, with lengths from 8 to 24 characters. The code for the random password generator can be found in the [repository](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src/passwords).
+
+Each password went through the command-line tool, which recorded its entropy, its breach count, and the resulting risk score and label. For context, the breach counts are from the time I ran them and can change as new breaches are added. The groups are also a small sample, so the results show how the tool behaves on these examples and not how passwords behave in general. I'll come back to that near the end.
+
+## Results by group
+
+| Group | Total # of Passwords | # of Passwords Found in a Breach | Average Entropy | LOW / MEDIUM / HIGH |
+|---|---|---|---|---|
+| Common | 125 | 125 (100%) | 32.6 bits | 0 / 0 / 125 |
+| Pattern-based | 119 | 6 (5.0%) | 81.8 bits | 110 / 3 / 6 |
+| Random | 110 | 0 (0%) | 94.2 bits | 96 / 14 / 0 |
+
+The common passwords behaved as expected. All 125 were found in breach data and labelled HIGH, and their entropy averaged 32.6 bits. The random passwords were at the other end, since none of the 110 were found in a breach and their entropy averaged 94.2 bits. The pattern-based group is the more interesting one. Its average entropy of 81.8 bits is much closer to the random group than to the common one, yet 6 of its 119 passwords were found in breaches.
+`
   },
 ];
