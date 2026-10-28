@@ -1984,6 +1984,8 @@ For the two passwords from the results above, \`password\` gets a score of 100, 
 
 The tool can now check a password against known breaches without sending the password anywhere, and combine that with its entropy into a single risk score, with a breach match always overriding entropy. The result for \`R@nd0mP@ssw0rd!2026:)\` is a good reminder of what the score can't do, since a password can have no known breach and a high entropy number and still follow a pattern that is easy to guess. What I want to find out next is how often that happens, so the next step is to build the command-line interface and run a larger set of passwords through the tool.
 
+> → **Next up:** []()
+
 ## Refernces
 Stevens, M., Bursztein, E., Karpman, P., Albertini, A., & Markov, Y. (2017). The first collision for full SHA-1. In J. Katz & H. Shacham (Eds.), *Advances in cryptology – CRYPTO 2017* (Lecture Notes in Computer Science, Vol. 10401). Springer. [Link](https://doi.org/10.1007/978-3-319-63688-7_19)
 `
