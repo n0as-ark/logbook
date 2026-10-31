@@ -2063,6 +2063,7 @@ I also didn't test how fast any of these passwords could be guessed, so I can't 
 When I started this project, I wanted to know whether a password that passes the usual strength rules is actually safe. Based on these results, entropy and the breach check each catch something different, and neither catches everything. Entropy separated the weak common passwords from the rest, and the breach check caught the few pattern-based ones that other people had already used. Most of the predictable ones still got a \`LOW\` label, though, and I can't tell from this data whether they deserve it.
 
 What the tool doesn't measure is predictability, which would require recognizing words, years, and common substitutions. That's something I'd like to look into adding to the tool. Until then, \`LOW\` in this tool should be read as **"no known breach and high entropy"**, and not as safe, which is also why the score never goes below *10*.
-`
+
+The code, the password sets, and the results are in the [repository](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src).`
   },
 ];
