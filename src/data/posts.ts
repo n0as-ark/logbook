@@ -2031,6 +2031,12 @@ I also grouped all 354 passwords by entropy, ignoring which group they came from
 Looking at this table alone, entropy seems to predict breach exposure very well, since every password under 40 bits was breached and none above 80 were. I think this mostly reflects how I built the groups, though, because every password in the lowest band comes from the common group. The table is partly showing the difference between common passwords and everything else.
 
 A fairer comparison is the 40 to 80 bit range, where the pattern-based and random passwords overlap. In that range, 6 of 68 pattern-based passwords (about 9%) were found in breaches, while none of the 42 random ones were. Passwords with similar entropy had different exposure, so entropy by itself didn't separate them.
+
+## What the breach check caught
+
+The six pattern-based passwords found in breaches were \`mast3r1!\`, \`Admin2001$\`, \`Cherry2012?\`, \`Qwerty2020_\`, \`Winter2004-\`, and \`Winter2016#\`. Most of them are a very common word followed by a year, which fits the idea that the simplest versions of this pattern do get used and exposed. Their breach counts were also small, between 1 and 82, while the lowest count in the common group was 36,640. These look like passwords that a few people happened to choose and not ones that are widely used.
+
+For these six, the scoring rule worked the way I wanted. A breach match overrode the entropy and pushed each of them to 80 or above, even though entropy alone would have rated several of them as fairly strong (\`Winter2016#\` has 68.5 bits, which would have been LOW).
 `
   },
 ];
