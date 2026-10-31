@@ -2007,8 +2007,8 @@ I split the passwords into three groups, chosen to cover the cases I was most cu
 
 Each password went through the command-line tool, which recorded its entropy, its breach count, and the resulting risk score and label. For example, this is the command I used for the common passwords:
 
+### Analyze every password in the file and save the results as a CSV
 \`\`\`
-# Analyze every password in the file and save the results as a CSV
 python -m src.main --file passwords/common_passwords.txt --output results/common_passwords_results.csv
 \`\`\`
 
@@ -2044,7 +2044,13 @@ A fairer comparison is the 40 to 80 bit range, where the pattern-based and rando
 
 The six pattern-based passwords found in breaches were \`mast3r1!\`, \`Admin2001$\`, \`Cherry2012?\`, \`Qwerty2020_\`, \`Winter2004-\`, and \`Winter2016#\`. Most of them are a very common word followed by a year, which fits the idea that the simplest versions of this pattern do get used and exposed. Their breach counts were also small, between 1 and 82, while the lowest count in the common group was 36,640. These look like passwords that a few people happened to choose and not ones that are widely used.
 
-For these six, the scoring rule worked the way I wanted. A breach match overrode the entropy and pushed each of them to 80 or above, even though entropy alone would have rated several of them as fairly strong (\`Winter2016#\` has 68.5 bits, which would have been LOW).
+For these six, the scoring rule worked the way I wanted. A breach match overrode the entropy and pushed each of them to 80 or above, even though entropy alone would have rated several of them as fairly strong (\`Winter2016#\` has 68.5 bits, which on its own would have given it a risk score of about 18.6, or LOW).
+
+## Where the score misleads
+
+The other 113 pattern-based passwords had no breach match, so their scores depended only on entropy, and 110 of them were labelled LOW. The average risk score was 18.8 for the pattern-based group and 15.1 for the random group. That is a small gap, so the tool treats a word with a year and a symbol almost the same as a randomly generated password.
+
+A second result I didn't expect was the opposite case. Fourteen of the random passwords were labelled MEDIUM, and all of them were the 8-character ones, which have about 49.8 bits of entropy and a score of 32.6. Meanwhile, most of the longer pattern-based passwords scored LOW, so the tool rates a short but truly random password as riskier than a longer one built from a predictable pattern. This happens because the formula only counts a password's length and the types of characters in it. It can't tell whether those characters were chosen at random or follow a pattern, so a longer password tends to score higher. In other words, entropy describes how a password could have been generated, not how it actually was.
 `
   },
 ];
