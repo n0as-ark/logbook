@@ -2003,9 +2003,17 @@ content:`In the first post for this project, I had a question about whether a "s
 
 ## How I tested it
 
-I split the passwords into three groups, chosen to cover the cases I was most curious about. The first group is common passwords, the kind that show up on lists of the most widely used passwords, such as \`password\`, \`qwerty\`, and \`letmein\`, and there are 125 of them. The second group is pattern-based passwords, which follow the way many people build theirs: a word, a few letter-to-symbol swaps, a year or number, and a symbol at the end, like the \`R@nd0mP@ssw0rd!2026:)\` example from the previous post, and there are 119 of these. The third group is random passwords, 110 in total, generated with Python's \`secrets\` module from the same 75-character pool that my entropy formula uses, with lengths from 8 to 24 characters. The code for the random password generator can be found in the [repository](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src/passwords).
+I split the passwords into three groups, chosen to cover the cases I was most curious about. The first group is **common passwords**, the kind that show up on lists of the most widely used passwords, such as \`password\`, \`qwerty\`, and \`letmein\`, and there are 125 of them. The second group is **pattern-based passwords**, which follow the way many people build theirs: a word, a few letter-to-symbol swaps, a year or number, and a symbol at the end, like the \`R@nd0mP@ssw0rd!2026:)\` example from the previous post, and there are 119 of these. The third group is **random passwords**, 110 in total, generated with Python's *secrets* module from the same 75-character pool that my entropy formula uses, with lengths from 8 to 24 characters. The code for the random password generator can be found in the [repository](https://github.com/n0as-ark/credential-risk-analyzer/tree/main/src/passwords).
 
-Each password went through the command-line tool, which recorded its entropy, its breach count, and the resulting risk score and label. For context, the breach counts are from the time I ran them and can change as new breaches are added. The groups are also a small sample, so the results show how the tool behaves on these examples and not how passwords behave in general. I'll come back to that near the end.
+Each password went through the command-line tool, which recorded its entropy, its breach count, and the resulting risk score and label. For example, this is the command I used for the common passwords:
+
+\`\`\`
+# Analyze every password in the file and save the results as a CSV
+python -m src.main --file passwords/common_passwords.txt --output results/common_passwords_results.csv
+\`\`\`
+
+I ran the same command for the other two files.
+A few notes: the breach counts are from the time I ran them and can change as new breaches are added, and the groups are also a small sample, so the results show how the tool behaves on these examples and not how passwords behave in general. I'll come back to that near the end.
 
 ## Results by group
 
