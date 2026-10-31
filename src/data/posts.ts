@@ -2048,9 +2048,9 @@ For these six, the scoring rule worked the way I wanted. A breach match overrode
 
 ## Where the score misleads
 
-The other 113 pattern-based passwords had no breach match, so their scores depended only on entropy, and 110 of them were labelled LOW. The average risk score was 18.8 for the pattern-based group and 15.1 for the random group. That is a small gap, so the tool treats a word with a year and a symbol almost the same as a randomly generated password.
+The other 113 pattern-based passwords had no breach match, so their scores depended only on entropy, and 110 of them were labelled \`LOW\`. The average risk score was 18.8 for the pattern-based group and 15.1 for the random group. That is a small gap, so the tool treats a word with a year and a symbol almost the same as a randomly generated password.
 
-A second result I didn't expect was the opposite case. Fourteen of the random passwords were labelled MEDIUM, and all of them were the 8-character ones, which have about 49.8 bits of entropy and a score of 32.6. Meanwhile, most of the longer pattern-based passwords scored LOW, so the tool rates a short but truly random password as riskier than a longer one built from a predictable pattern. This happens because the formula only counts a password's length and the types of characters in it. It can't tell whether those characters were chosen at random or follow a pattern, so a longer password tends to score higher. In other words, entropy describes how a password could have been generated, not how it actually was.
+A second result I didn't expect was the opposite case. Fourteen of the random passwords were labelled \`MEDIUM\`, and all of them were the 8-character ones, which have about 49.8 bits of entropy and a score of 32.6. Meanwhile, most of the longer pattern-based passwords scored \`LOW\`, so the tool rates a short but truly random password as riskier than a longer one built from a predictable pattern. This happens because the formula only counts a password's length and the types of characters in it. It can't tell whether those characters were chosen at random or follow a pattern, so a longer password tends to score higher. In other words, entropy describes how a password could have been generated, not how it actually was.
 
 ## What I can and can't conclude
 
