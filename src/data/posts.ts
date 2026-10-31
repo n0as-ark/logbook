@@ -2057,6 +2057,12 @@ A second result I didn't expect was the opposite case. Fourteen of the random pa
 There are several limits on these results. I created all three groups, so the pattern-based group reflects my own idea of a common pattern, and real passwords are probably messier. The groups are also different sizes, and the percentages in the band table depend on how many passwords of each kind I included. The breach check only tells me whether a password appears in the Have I Been Pwned data, and a count of 0 means it wasn't found, not that it's safe.
 
 I also didn't test how fast any of these passwords could be guessed, so I can't say whether the pattern-based ones would hold up against an attacker who tries common words with years and symbols, which is what I suspected in the previous post. All I can say is that the breach data rarely contained them.
+
+## Wrapping up
+
+When I started this project, I wanted to know whether a password that passes the usual strength rules is actually safe. Based on these results, entropy and the breach check each catch something different, and neither catches everything. Entropy separated the weak common passwords from the rest, and the breach check caught the few pattern-based ones that other people had already used. Most of the predictable ones still got a \`LOW\` label, though, and I can't tell from this data whether they deserve it.
+
+What the tool doesn't measure is predictability, which would require recognizing words, years, and common substitutions. That's something I'd like to look into adding to the tool. Until then, \`LOW\` in this tool should be read as **"no known breach and high entropy"**, and not as safe, which is also why the score never goes below *10*.
 `
   },
 ];
