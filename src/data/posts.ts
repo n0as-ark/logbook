@@ -2016,6 +2016,21 @@ Each password went through the command-line tool, which recorded its entropy, it
 | Random | 110 | 0 (0%) | 94.2 bits | 96 / 14 / 0 |
 
 The common passwords behaved as expected. All 125 were found in breach data and labelled HIGH, and their entropy averaged 32.6 bits. The random passwords were at the other end, since none of the 110 were found in a breach and their entropy averaged 94.2 bits. The pattern-based group is the more interesting one. Its average entropy of 81.8 bits is much closer to the random group than to the common one, yet 6 of its 119 passwords were found in breaches.
+
+## Entropy and breaches by band
+
+I also grouped all 354 passwords by entropy, ignoring which group they came from:
+
+| Entropy | Passwords | Found in a breach |
+|---|---|---|
+| Under 40 bits | 93 | 93 |
+| 40 up to 60 bits | 53 | 33 |
+| 60 up to 80 bits | 89 | 5 |
+| 80 bits or more | 119 | 0 |
+
+Looking at this table alone, entropy seems to predict breach exposure very well, since every password under 40 bits was breached and none above 80 were. I think this mostly reflects how I built the groups, though, because every password in the lowest band comes from the common group. The table is partly showing the difference between common passwords and everything else.
+
+A fairer comparison is the 40 to 80 bit range, where the pattern-based and random passwords overlap. In that range, 6 of 68 pattern-based passwords (about 9%) were found in breaches, while none of the 42 random ones were. Passwords with similar entropy had different exposure, so entropy by itself didn't separate them.
 `
   },
 ];
