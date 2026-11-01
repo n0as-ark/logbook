@@ -2044,7 +2044,7 @@ A fairer comparison is the 40 to 80 bit range, where the pattern-based and rando
 
 The six pattern-based passwords found in breaches were \`mast3r1!\`, \`Admin2001$\`, \`Cherry2012?\`, \`Qwerty2020_\`, \`Winter2004-\`, and \`Winter2016#\`. Most of them are a very common word followed by a year, which fits the idea that the simplest versions of this pattern do get used and exposed. Their breach counts were also small, between 1 and 82, while the lowest count in the common group was 36,640. These look like passwords that a few people happened to choose and not ones that are widely used.
 
-For these six, the scoring rule worked the way I wanted. A breach match overrode the entropy and pushed each of them to 80 or above, even though entropy alone would have rated several of them as fairly strong (\`Winter2016#\` has 68.5 bits, which on its own would have given it a risk score of about 18.6, or LOW).
+For these six, the scoring rule worked the way I wanted. A breach match overrode the entropy and pushed each of them to 80 or above, even though entropy alone would have rated several of them as fairly strong (\`Winter2016#\` has 68.5 bits, which on its own would have given it a risk score of about 18.6, or \`LOW\`).
 
 ## Where the score misleads
 
@@ -2054,7 +2054,7 @@ A second result I didn't expect was the opposite case. Fourteen of the random pa
 
 ## What I can and can't conclude
 
-There are several limits on these results. I created all three groups, so the pattern-based group reflects my own idea of a common pattern, and real passwords are probably messier. The groups are also different sizes, and the percentages in the band table depend on how many passwords of each kind I included. The breach check only tells me whether a password appears in the Have I Been Pwned data, and a count of 0 means it wasn't found, not that it's safe.
+There are several limits on these results. I created all three groups, so the pattern-based group reflects my own idea of a common pattern, and real passwords are probably messier. The groups are also different sizes, and the percentages in the band table depend on how many passwords of each kind I included. The breach check only tells me whether a password appears in the Have I Been Pwned data, and *a count of 0 means it wasn't found, not that it's safe*.
 
 I also didn't test how fast any of these passwords could be guessed, so I can't say whether the pattern-based ones would hold up against an attacker who tries common words with years and symbols, which is what I suspected in the previous post. All I can say is that the breach data rarely contained them.
 
