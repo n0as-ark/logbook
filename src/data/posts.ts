@@ -2054,7 +2054,7 @@ A second result I didn't expect was the opposite case. Fourteen of the random pa
 
 ## What I can and can't conclude
 
-There are several limits on these results. I created all three groups, so the pattern-based group reflects my own idea of a common pattern, and real passwords are probably messier. The groups are also different sizes, and the percentages in the band table depend on how many passwords of each kind I included. The breach check only tells me whether a password appears in the Have I Been Pwned data, and *a count of 0 means it wasn't found, not that it's safe*.
+There are several limits on these results. I created all three groups, so the pattern-based group reflects my own idea of a common pattern, and real passwords are probably messier. The groups are also different sizes, and the percentages in the band table depend on how many passwords of each kind I included. The breach check only tells me whether a password appears in the Have I Been Pwned data, and **a count of 0 means it wasn't found, not that it's safe**.
 
 I also didn't test how fast any of these passwords could be guessed, so I can't say whether the pattern-based ones would hold up against an attacker who tries common words with years and symbols, which is what I suspected in the previous post. All I can say is that the breach data rarely contained them.
 
