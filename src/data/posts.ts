@@ -1779,6 +1779,42 @@ content: `## 1. Defining a computer
 - **System bus**: the main one
   - Connects CPU and RAM
   - Also relays traffic for input/output (I/O) devices such as keyboards and displays
+
+## 3. How the CPU runs programs
+
+### Processor
+- One silicon chip
+- The **only** component that actually executes program code
+- Speaks **machine language** only
+- **Registers**: tiny storage slots for the values being used right now
+- **Cache**: small, very fast memory on or near the chip that avoids slow trips to RAM
+
+### Instructions
+- Each instruction is a tiny step, for example:
+  - Load a value from memory into a register
+  - Store a register's value back into memory
+  - Add or subtract
+  - Bitwise AND/OR, shift bits
+  - Branch: jump elsewhere if a result is zero
+- Big programs have millions of these tiny steps in sequence
+- **Instruction set**: the complete menu of operations one CPU design supports
+  - Designed by the chip's makers
+  - A program built for one instruction set won't run directly on a different one
+- **Opcode**: the number that identifies each instruction
+| Opcode (hex) | Name | Meaning |
+|---|---|---|
+| 0x01 | LOAD | Copy a memory value into register A |
+| 0x02 | ADD | Add a memory value to register A |
+| 0x03 | STORE | Copy register A into memory |
+| 0xFF | HALT | Stop |
+- \`0x\` means the number is written in hexadecimal (base 16)
+- Real CPUs have far more opcodes, but work the same way
+
+### How one instruction gets run
+1. **Fetch**: pull the next instruction from RAM into an instruction register on the CPU
+2. **Decode**: figure out which operation it is and what data it needs
+3. **Execute**: do it
+4. Move to the next instruction and repeat, forever
 `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
