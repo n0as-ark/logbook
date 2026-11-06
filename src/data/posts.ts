@@ -1436,8 +1436,7 @@ date: "2026-09-14",
 tags: ["Network"],
 excerpt: "TCP segment structure, sequence/ACK numbers, RTT and retransmission, flow control, the three-way handshake and connection close, plus a QUIC comparison.",
 readTime: "8 min",
-snippet: `
-TCP + TLS handshake            QUIC handshake
+snippet: `TCP + TLS handshake            QUIC handshake
 --------------------        --------------------
  Client      Server          Client      Server
   |              |             |            |
