@@ -1815,6 +1815,23 @@ content: `## 1. Defining a computer
 2. **Decode**: figure out which operation it is and what data it needs
 3. **Execute**: do it
 4. Move to the next instruction and repeat, forever
+
+## Where Data Lives
+- Instructions can only run from registers, so ideally everything would live there
+- Problem: faster memory costs far more per byte, so only a tiny amount is affordable
+- Solution: a **hierarchy** of layers, balancing speed, size, and cost
+- Rule of thumb: faster -> smaller -> pricier
+
+| Layer | Rough access time | Rough capacity | Persistent? |
+|---|---|---|---|
+| **Registers** | about 1 ns or less | around 100 bytes | No |
+| **Cache** | 1 to 10 ns | tens of KB up to tens of MB | No |
+| **RAM** | 50 to 100 ns | 8 to 64 GB | No (volatile) |
+| **SSD / HDD** | 0.1 ms (SSD) to 5 to 10 ms (HDD) | 0.25 to 20 TB | Yes |
+| **Offline media** (tape, archive discs) | seconds to minutes to retrieve | very large when you add more media | Yes |
+ 
+- **Volatile:** loses its contents without power
+- **Offline / tertiary storage:** removable, used for backups and archives
 `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
