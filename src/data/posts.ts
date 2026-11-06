@@ -1816,7 +1816,7 @@ content: `## 1. Defining a computer
 3. **Execute**: do it
 4. Move to the next instruction and repeat, forever
 
-4. ## Where Data Lives
+## 4. Where Data Lives
 - Instructions can only run from registers, so ideally everything would live there
 - Problem: faster memory costs far more per byte, so only a tiny amount is affordable
 - Solution: a **hierarchy** of layers, balancing speed, size, and cost
@@ -1858,6 +1858,36 @@ content: `## 1. Defining a computer
 | Write endurance | Not a practical limit | Each flash cell survives only a finite number of rewrites |
  
 - Practical choice: SSD for the OS and everyday programs, HDD for cheap bulk storage
+
+## 5. The Role of an Operating System
+- **Operating system (OS)**: the software that manages the computer and runs programs on top of the hardware
+- Sits between application and hardware
+- Chain: **User** -> **Application** -> **OS** -> **Hardware**
+  - Apps ask the OS for things (read a file, send data over the network)
+  - The OS talks to the hardware
+  - Apps normally can't touch hardware directly
+- The OS is itself a program running on the same CPU
+- Applications are **not** part of the OS
+
+### The kernel
+- **Kernel**: the central, most trusted part of the OS
+  - Directly manages the CPU, memory, and devices
+
+### The OS as resource manager
+- The computer has limited resources
+  - RAM, processor time, disk space, open-file references
+- Several programs want them at once
+- Without a referee: programs overwrite each other's memory, hog the CPU, or crash the system
+- The OS therefore:
+  - Allocates resources fairly and efficiently
+  - Protects programs from one another
+  - Keeps some resources for itself
+
+### Processes
+- **Process:** a running instance of a program, tracked by the OS
+  - Has its own memory, state, and resources
+- Several processes can come from the same program (two windows of the same editor)
+- The OS keeps a record of every process to schedule and protect them
 
 `},
   {title: 'Is a "Strong" Password Actually Safe?',
