@@ -1816,7 +1816,7 @@ content: `## 1. Defining a computer
 3. **Execute**: do it
 4. Move to the next instruction and repeat, forever
 
-## Where Data Lives
+4. ## Where Data Lives
 - Instructions can only run from registers, so ideally everything would live there
 - Problem: faster memory costs far more per byte, so only a tiny amount is affordable
 - Solution: a **hierarchy** of layers, balancing speed, size, and cost
@@ -1832,6 +1832,33 @@ content: `## 1. Defining a computer
  
 - **Volatile:** loses its contents without power
 - **Offline / tertiary storage:** removable, used for backups and archives
+
+### RAM
+- **Random access**: reaching any location costs the same
+- Divided into bytes, each with its own **address** (a number identifying its position)
+  - The CPU can go straight to any address
+- Volatile
+- Starting a program copies its instructions from the drive into RAM; the CPU then fetches them from there
+
+### Spinning disks vs. flash drives
+- **HDD**
+  - Magnetic platters spin; a mechanical arm moves a read/write head across them
+  - **Seek delay**: time the arm needs to reach the right spot
+  - Data far apart takes longer than data close together
+- **SSD**
+  - Flash memory chips, no moving parts
+  - Same access time anywhere, so no seek delay
+- A **controller** (small chip inside the drive) manages how data is read and written
+| Aspect | HDD | SSD |
+|---|---|---|
+| Speed | Slower, mechanical | Much faster |
+| Cost per GB | Lower | Higher (gap shrinking) |
+| Shock resistance | Weaker (moving parts) | Stronger |
+| Noise | Audible spinning/clicking | Silent |
+| Write endurance | Not a practical limit | Each flash cell survives only a finite number of rewrites |
+ 
+- Practical choice: SSD for the OS and everyday programs, HDD for cheap bulk storage
+
 `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
