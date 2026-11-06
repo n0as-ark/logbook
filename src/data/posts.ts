@@ -1889,6 +1889,38 @@ content: `## 1. Defining a computer
 - Several processes can come from the same program (two windows of the same editor)
 - The OS keeps a record of every process to schedule and protect them
 
+## 6. How an OS is organized
+### User mode vs. Kernel mode
+- **User mode**
+  - Where ordinary programs run (browser, text editor, media player)
+  - Limited to its own memory
+  - Must ask the kernel to use hardware or other programs' resources
+- **Kernel mode**
+  - Where the core OS code runs (scheduler, memory manager, drivers)
+  - Unrestricted access to everything
+
+### Why a lean kernel is safer
+- Kernel code has full power, so a bug in it can crash the entire system
+- Less code in the kernel = fewer places for dangerous bugs
+- **Microkernel** approach
+  - Kernel keeps only the essentials (basic scheduling, memory, communication)
+  - Other services run outside it in user mode, so a failure stays contained
+- Trade-off: more communication between parts can cost some speed
+
+### HAL
+- Different machines have different chipsets and hardware details
+- **HAL:** a thin layer giving the kernel one consistent interface
+- Benefit: when hardware changes, only the HAL needs an update; the rest of the OS stays as is
+
+### Drivers: software for individual devices
+- **Driver:** software that lets the kernel control one particular device
+  - Examples: printer, graphics card, Wi-Fi chip, webcam
+- Usually written by the device maker
+- Risk: a buggy driver runs in kernel mode and can crash the whole system
+- Mitigations:
+  - Vendor testing and certification programs
+  - Digitally signed drivers
+  - Running some drivers in user mode so faults stay contained
 `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
