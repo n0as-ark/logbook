@@ -1578,14 +1578,14 @@ snippet: `Arriving         DHCP Server
    │                   │
    │◀──── DHCP ACK ────│  (confirms)
    │                   │`,
-content: `## Network Layer Basics
+content: `## 1. Network Layer Basics
  
 - Runs on every host and router; ferries transport segments between the sending and receiving machines
 - Sender wraps each segment in a datagram and passes it to the link layer; receiver unwraps it and hands the segment to TCP or UDP
 - Routers read each datagram header and move it from an input port to an output port
 - **Encapsulation**: data becomes a segment (with port numbers), then a datagram (with IP addresses), then a frame (with a link header). Segment and datagram stay essentially intact end to end, TTL aside. A frame lasts one **hop** (one link between neighbouring devices), and every router builds a fresh one
 
-## Forwarding and Routing
+## 2. Forwarding and Routing
 
 - **Forwarding**: moving a packet from input port to output port; local, per router action
 - **Routing**: choosing the path from source to destination
@@ -1594,7 +1594,7 @@ content: `## Network Layer Basics
   - Traditional: routing algorithms run in every router
   - SDN: separate servers compute decisions on the routers' behalf
 
-## Best Effort Service
+## 3. Best Effort Service
 
 - A **service model** lists the promises made about delivery. Per datagram: guaranteed arrival, or arrival within a bound such as 40 msec. Per flow: in order delivery, minimum bandwidth, limited jitter
 - The Internet's **best effort** model offers <u>none of these</u>
@@ -1604,7 +1604,7 @@ content: `## Network Layer Basics
   - Replicated services in datacenters and CDNs sit near users and survive a site failure
   - Elastic applications adapt through congestion control
 
-## Inside a Router
+## 4. Inside a Router
 \`\`\`
                       Input Port
 ┌───────────────┐  ┌───────────────┐  ┌─────────────────────┐   │
@@ -1619,7 +1619,7 @@ content: `## Network Layer Basics
 - **Destination based forwarding**: forwards based on destination IP only (traditional)
 - **Generalized forwarding**: forwards based on any header fields
 
-## Switching Fabrics
+## 5. Switching Fabrics
 - **Switching rate**: **how quickly packets can move** through the fabric from inputs to outputs, typically expressed as a multiple of a single port's line speed
 - **Line rate**: the speed of an individual physical link connected to one port
 - Ideal rate for N inputs: **N × Line Rate**
@@ -1628,7 +1628,7 @@ content: `## Network Layer Basics
   - **Via interconnection network**: crossbar and Clos (multistage) switches; **can fragment datagrams into cells, switch them in parallel, and reassemble at the exit**; speeding up and scaling using multiple parallel switching planes (Cisco CRS uses 8 planes, reaching hundreds of Tbps)
 - **Longest prefix matching**: when multiple table entries match, <u>pick the most specific (longest) prefix</u>. Implemented via ternary content addressable memories (TCAMs), giving **constant time lookup** regardless of table size (about 1M entries on Cisco Catalyst).
 
-## Queuing
+## 6. Queuing
 - **Input queuing**: occurs if the fabric is slower than the combined input rate, causing delay and loss
 - **Head-of-the-Line (HOL) blocking**: a blocked packet at the front of a queue **stalls every packet behind it**, even ones headed to a free output
 - **Output queuing**: occurs if the arrival rate via the fabric exceeds the output link rate, causing delay and loss
@@ -1639,7 +1639,7 @@ content: `## Network Layer Basics
   - RED (Random Early Detection) decides probabilistically which packets to mark as the queue starts to fill; while 
   - ECN (Explicit Congestion Notification) is the header bit actually used to carry that signal
 
-## Packet Scheduling
+## 7. Packet Scheduling
 
 Chooses which waiting packet goes out next:
  1. **FCFS / FIFO**: transmit in arrival order
@@ -1647,7 +1647,7 @@ Chooses which waiting packet goes out next:
  3. **Round robin**: classes take turns, one whole packet per nonempty class
  4. **Weighted fair queuing (WFQ)**: weighted round robin; a class receives weight divided by total weight of service, **guaranteeing it minimum bandwidth**
 
-## Internet Protocol (IP)
+## 8. Internet Protocol (IP)
 - The IP protocol defines datagram format, addressing, and packet handling; Internet Control Message Protocol (ICMP) handles error reporting and router signaling
 - Datagram header fields: 
   - IP protocol version, header length, type of service, total length
@@ -1657,7 +1657,7 @@ Chooses which waiting packet goes out next:
   - Header checksum: detects most errors in the header
   - Source and destination addresses, options, payload
  
-## IP Addressing
+## 9. IP Addressing
 - An IP address is **a 32 bit identifier** tied to an **interface (connection between host/router and physical link)**, not a device Routers typically have multiple interfaces; hosts usually have one or two.
 - **Subnet**: a group of interfaces that can communicate directly, with no router in between. An address splits into a subnet portion (shared upper bits within the group) and a host portion (remaining lower bits that pick out one device).
 - Address = **subnet portion** (high bits) + **host portion** (low bits)
@@ -1665,7 +1665,7 @@ Chooses which waiting packet goes out next:
 - The **network address (all host bits 0)** and **broadcast address (all host bits 1)** are reserved and not assignable to a device.
 - **Classless InterDomain Routing (CIDR)**: subnet portion of any length, written a.b.c.d/x. Example: 200.23.16.0/23 fixes 23 bits, leaves 9 free, so 200.23.17.0 lies in the same block
 
-## Obtaining an IP Address
+## 10. Obtaining an IP Address
 - Host part: assigned manually **by hard coding**, or **dynamically via** **Dynamic Host Configuration Protocol (DHCP)** ("plug and play")
 - DHCP addresses are leased for a period; automatically assigns IP addresses and other network configuration details to devices on a network; renewal typically begins at the halfway point; the DHCP server is often located inside a router
 - DHCP exchange has four steps: **discover, offer, request, ack** (discover and offer can be skipped if the host reuses a remembered address, per RFC 2131)
@@ -1686,14 +1686,14 @@ Arriving Client                    DHCP Server (192.168.1.1)
 - DHCP can also supply the **first hop router address**, **a DNS server**, and **a network mask** (indicating network vs. host portion of address)
 - Unlike hosts which get their address via hard coding or DHCP, a **network itself gets the subnet part of its address through its provider ISP's address space**
  
-## Route Aggregation
+## 11. Route Aggregation
 - An **ISP advertises one aggregated block** (such as a /20) instead of many small ones
 - If a customer switches ISPs, the new ISP advertises a more specific route just for that customer's block
 - Routers always prefer the **longest, most specific prefix match** when forwarding
 - **Internet Corporation for Assigned Names and Numbers (ICANN)** allocates address blocks through **five regional registries** and also manages the DNS root zone and TLD delegation
 - The IPv4 pool is exhausted: last block was allocated in 2011. Two responses are **NAT (stretching existing space)** and **IPv6 (far larger space)**
 
-## Network Address Translation (NAT)
+## 12. Network Address Translation (NAT)
 - Local network devices **share one public IPv4 address** and are **distinguished externally by port number**
 - Private address ranges, never publicly routed (RFC 1918): **10/8, 172.16/12, 192.168/16**
 - Mechanism: 
@@ -1711,7 +1711,7 @@ Arriving Client                    DHCP Server (192.168.1.1)
   - NAT traversal: harder for outside clients to start connections to servers behind it
 - Still used widely in homes, institutions, and 4G and 5G networks
 
-## IPv6
+## 13. IPv6
 - Motivation: IPv4 exhaustion, plus faster processing through a fixed 40 byte header, plus support for per flow treatment
 - Adds a **priority field** (identifies priority among datagrams flow), a **flow label** (identifies datagrams in the same flow), and **128 bit source and destination addresses**
 - Removes the **checksum**, **in-network fragmentation and reassembly**, and the **options** field (replaced by a next header protocol)
@@ -1730,9 +1730,56 @@ DECODE   work out what it is
 EXECUTE  carry it out
   |
   +--> back to FETCH`,
-content: ``
-    
- },
+content: `## 1. Defining a computer
+- A machine that accepts data, works on it, and returns a result
+- **INPUT -> PROCESSING -> OUTPUT**
+  - Input: typed text, a tap on a touchscreen, a sensor reading, a downloaded file
+  - Processing: calculating, sorting, comparing, converting
+  - Output: an image on a display, a saved file, a printed page, a signal to a motor
+
+### Computer categories by purpose
+- Personal: the machines people use directly
+  - Laptops, desktops, tablets, smartphones
+- Shared/heavy-duty: serve many users or crunch huge jobs
+  - Rack servers in a data center
+  - Supercomputers running weather or physics simulations
+- Size and power differ a lot, but each one still follows input -> processing -> output
+
+## 2. Physical Components
+
+### Minimum parts
+- **CPU**: the chip that executes instructions
+- **Main memory (RAM)**: short-term workspace for whatever is running now
+- **Secondary memory**: where files stay when the power is off
+- Usual extras:
+  - Graphics output (display connection)
+  - Network hardware (Ethernet or Wi-Fi)
+  - Ports for add-ons: HDMI, Ethernet, SATA, headphone jack
+
+### Other parts
+- **Motherboard**
+  - Large circuit board that every other part connects to
+  - Contains the wiring (buses) between parts
+- **Power supply**
+  - Turns household AC power into low-voltage DC for the components
+- **CPU**
+  - Where computing happens
+  - Built from registers, a control unit (CU), an arithmetic logic unit (ALU), and on-chip cache
+- **RAM**
+  - Stores active programs and their data
+  - Cleared when the computer shuts down
+- ** Graphics card (GPU)**
+  - Prepares the picture sent to the diplay
+  - Good at massive amounts of parallel math (also used for AI work)
+- ** Drive (HDD or SSD)**
+  - Permanent home for files and the OS itself
+  
+### Buses
+- **Bus**: a shared set of wires that lets components exchange data
+- **System bus**: the main one
+  - Connects CPU and RAM
+  - Also relays traffic for input/output (I/O) devices such as keyboards and displays
+`},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
 date: "2026-10-06",
