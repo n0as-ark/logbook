@@ -1921,6 +1921,27 @@ content: `## 1. Defining a computer
   - Vendor testing and certification programs
   - Digitally signed drivers
   - Running some drivers in user mode so faults stay contained
+
+## 7. Unix
+### Key features
+- Multi-user and multitasking
+- Each user can start, monitor, and end their own programs without an operator
+- Many descendants and look-alikes exist
+
+Unix is a family. Some members are proprietary, some open source, and they don't all share code.
+
+## Quick Recap
+- Computer: input → processing → output
+- Minimum parts: **CPU**, **RAM**, **storage**; connected by **buses**
+- CPU runs machine instructions (**opcodes**) in the **fetch-decode-execute** loop
+- Memory hierarchy: registers → cache → RAM (volatile) → SSD/HDD → offline media
+- **SSD:** flash, silent, fast; **HDD:** spinning, seek delay, cheap per GB
+- **OS:** sits between apps and hardware; core is the **kernel**; excludes applications
+- OS **manages resources** and **protects** programs from each other
+- Batch → time sharing with **preemption**; a **process** is a running program instance
+- **User mode** is restricted; **kernel mode** is unrestricted, so keep the kernel small
+- **HAL** hides hardware differences; **drivers** run specific devices
+- **Unix** is a family with mixed licensing (proprietary, BSD, Linux-like)
 `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
