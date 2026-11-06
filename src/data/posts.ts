@@ -1567,8 +1567,7 @@ date: "2026-09-16",
 tags: ["Network"],
 excerpt: "Forwarding vs. routing, router architecture, switching fabrics, queuing and scheduling, IP addressing, DHCP, NAT, and IPv6",
 readTime: "10 min",
-snippet: `
-Arriving         DHCP Server 
+snippet: `Arriving         DHCP Server 
  Client         (192.168.1.1)
    │                   │
    │── DHCP Discover ─▶│  (broadcast)
