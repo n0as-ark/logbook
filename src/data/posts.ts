@@ -1945,11 +1945,11 @@ Unix is a family. Some members are proprietary, some open source, and they don't
 - **HAL** hides hardware differences; **drivers** run specific devices
 - **Unix** is a family with mixed licensing (proprietary, BSD, Linux-like)
 `},
-  {title: "Study Notes: Processes and Threads",
-slug: "processes-and-threads",
+  {title: "Study Notes: Processes in OS",
+slug: "operating-systems-processes",
 date: "2026-09-26",
 tags: ["Operating Systems"],
-excerpt: "How the OS tracks running programs, hands over the CPU, and splits work into threads",
+excerpt: "Process states, the PCB, privilege levels, and how the OS hands the CPU from one process to another.",
 readTime: "10 min",
 snippet: `       Admit           Dispatch            Released
 New ──────────► Ready ──────────► Running ──────────► Exit
@@ -2007,6 +2007,49 @@ content: `## 1. Process Basics
   - I/O tables: list the devices the process is permitted to use
   - file tables: list the files the process is permitted to use
 - **Stack**: the chain of function calls in progress right now
+
+## 3. CPU Privilege Levels
+- CPUs run code at different privilege levels so that faulty or hostile programs cannot damage the whole system
+- **Kernel mode**
+  - complete control over the machine
+  - the kernel, the core of the OS, runs here
+  - any instruction may be executed
+- **User mode**
+  - where ordinary applications run
+  - no direct contact with hardware. A program cannot command the disk controller or network card itself
+  - some CPU instructions are off limits
+  - no access to memory belonging to anyone else, so one process cannot read or corrupt another's memory
+- A system call is how a user mode program asks the OS to do something on its behalf, such as reading a file
+- The Program Status Word (PSW) register stores one or more bits identifying the current privilege level
+- The two directions of switching are not symmetric:
+  - kernel to user is easy: the OS simply lowers the privilege level when handing the CPU to an application
+  - user to kernel is never a program's choice: the hardware forces it automatically when certain events occur
+
+## 4. Process States
+- A state is a condition in which a process is expected to spend a meaningful stretch of time
+- Five states describe the basic life of a process:
+ 
+\`\`\`
+       Admit           Dispatch            Released
+New ──────────► Ready ──────────► Running ──────────► Exit
+                 ▲ ▲               │   │
+                 │ └──── Timeout ──┘   │
+    Event Occurs │                     │ Event Wait
+                 │                     │
+                 └───── Blocked ◄──────┘
+\`\`\`
+- **New**: still being set up, cannot run yet
+- **Ready**: fully loaded and waiting for a turn on the CPU
+- **Running**: executing on the CPU right now
+- **Blocked**: asked for something slow, such as I/O, and has stepped aside until it finishes
+- **Exit**: finished. A child process that exits leaves its return value with the OS until the parent collects it
+- The arrows between states are triggered by specific events:
+  - **Admit**: New to Ready
+  - **Dispatch**: Ready to Running, chosen by the scheduler
+  - **Timeout**: Running to Ready. The process used up its time slice, its allotted stretch of CPU time, and rejoins the line
+  - **Event Wait**: Running to Blocked
+  - **Event Occurs**: Blocked to Ready, once the awaited event has completed
+  - **Released**: Running to Exit
 
  `},
   {title: 'Is a "Strong" Password Actually Safe?',
