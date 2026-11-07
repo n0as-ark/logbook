@@ -1930,6 +1930,8 @@ content: `## 1. Defining a computer
 
 Unix is a family. Some members are proprietary, some open source, and they don't all share code.
 
+---
+
 ## Quick Recap
 - Computer: input → processing → output
 - Minimum parts: **CPU**, **RAM**, **storage**; connected by **buses**
