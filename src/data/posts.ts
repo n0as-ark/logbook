@@ -1951,8 +1951,7 @@ date: "2026-09-26",
 tags: ["Operating Systems"],
 excerpt: "How the OS tracks running programs, hands over the CPU, and splits work into threads",
 readTime: "10 min",
-snippet: `
-       Admit           Dispatch            Released
+snippet: `       Admit           Dispatch            Released
 New ──────────► Ready ──────────► Running ──────────► Exit
                  ▲ ▲               │   │
                  │ └──── Timeout ──┘   │
@@ -1982,6 +1981,33 @@ content: `## 1. Process Basics
   - **Disk (secondary storage)**: slower, but it keeps its contents
   - **I/O (input/output)**: any exchange with the world outside the CPU and RAM, such as disk, network, or keyboard activity
   - **Core**: one independent processing unit inside a CPU. A CPU with several cores can run several things at the same instant
+
+## 2. Process Records
+- The Process Control Block (PCB) is the single record holding everything the OS needs to manage and resume a process
+- **Identifiers**
+  - Process ID (PID): a number unique among running processes. A new PID is issued on every launch, so restarting a program gives it a different one. Classic designs use 16 bits, though the width varies by OS
+  - Parent Process ID (PPID): the PID of the process that created this one
+    - almost every process has a parent
+    - the exception is the first process started at boot (often called init, PID 1)
+    - if a parent exits before its children, init normally adopts the orphans so they keep a valid parent
+  - User ID (UID): the account that owns the process
+    - when a process touches a protected resource such as a file, the OS compares the UID with that resource's access settings
+    - the PID plays no part in permissions, because it labels one particular run, not a person
+- **Saved registers**: copies of the CPU's register values
+  - meaningful only while the process is not running
+  - during execution, the live values sit in the CPU and the PCB copy is stale
+- **Stack pointers**: where the process's call stack currently ends
+- **Scheduling details**: information used by the scheduler, the part of the OS that picks which process gets the CPU next
+- **Linkages**: connections to related processes, such as parent and child
+- **Inter process communication (IPC) data**: channels for exchanging information with other processes
+- **Resource tables**
+  - memory tables: describe how the process's memory is organized
+    - closely tied to paging, a scheme that cuts memory into equal sized blocks called pages
+    - pages can be placed anywhere in RAM or on disk, so no single continuous region is needed
+  - I/O tables: list the devices the process is permitted to use
+  - file tables: list the files the process is permitted to use
+- **Stack**: the chain of function calls in progress right now
+
  `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
