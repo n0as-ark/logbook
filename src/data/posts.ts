@@ -1945,6 +1945,44 @@ Unix is a family. Some members are proprietary, some open source, and they don't
 - **HAL** hides hardware differences; **drivers** run specific devices
 - **Unix** is a family with mixed licensing (proprietary, BSD, Linux-like)
 `},
+  {title: "Study Notes: Processes and Threads",
+slug: "processes-and-threads",
+date: "2026-09-26",
+tags: ["Operating Systems"],
+excerpt: "How the OS tracks running programs, hands over the CPU, and splits work into threads",
+readTime: "10 min",
+snippet: `
+       Admit           Dispatch            Released
+New ──────────► Ready ──────────► Running ──────────► Exit
+                 ▲ ▲               │   │
+                 │ └──── Timeout ──┘   │
+    Event Occurs │                     │ Event Wait
+                 │                     │
+                 └───── Blocked ◄──────┘`,
+content: `## 1. Process Basics
+- A process is a program that is currently being executed
+- System state is the full picture of that execution at one moment:
+  - which stage the program has reached (running, waiting, or ready)
+  - what its registers and memory hold
+  - which resources it has been given
+- A program file sitting on disk has no state. It gains one only after being loaded and started
+- Every process has three parts:
+  - **Code**: the instructions, laid out in order in memory. Usually marked read only so the program cannot rewrite itself
+  - **Data**: the variables, buffers, and other values the instructions work on
+  - **Context**: a snapshot of the CPU's live state, made of three pieces
+    - registers: tiny, very fast storage slots inside the CPU
+    - program counter: the address of the next instruction to run
+    - stack pointer: the top of the call stack, which is the record of function calls currently in progress
+  - Context is what allows the OS to freeze a process and restart it at exactly the same point
+- Creating a process gives the OS a way to follow two things:
+  - where the program currently stands
+  - which resources it owns (memory, files, devices)
+- A few hardware terms come up repeatedly:
+  - **Main memory (RAM)**: fast working memory that the CPU reads and writes directly
+  - **Disk (secondary storage)**: slower, but it keeps its contents
+  - **I/O (input/output)**: any exchange with the world outside the CPU and RAM, such as disk, network, or keyboard activity
+  - **Core**: one independent processing unit inside a CPU. A CPU with several cores can run several things at the same instant
+ `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
 date: "2026-10-06",
