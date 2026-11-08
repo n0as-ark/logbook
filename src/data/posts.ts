@@ -2051,6 +2051,51 @@ New ──────────► Ready ──────────► Ru
   - **Event Occurs**: Blocked to Ready, once the awaited event has completed
   - **Released**: Running to Exit
 
+## 5. Moving Processes to Disk
+- Suspension means copying an entire process out of RAM onto disk, to be brought back later and resumed from the same point
+- The point is to make room in RAM for other work
+- The process itself cannot tell that it was suspended
+- The choice of what to move is governed by a **medium term scheduling algorithm**
+  - medium term scheduling decides which processes move out of RAM to disk, and which suspended ones return, so that memory demand stays balanced
+  - it sits between long term scheduling (which decides what new work the system accepts at all) and short term scheduling (which picks the next process to run on the CPU)
+- Typical reasons to suspend:
+  - inspecting a program while debugging it
+  - reclaiming memory
+  - a process that expects a very long wait
+- Suspension adds two states:
+  - **Ready/Suspend**: could run, but currently lives on disk
+  - **Blocked/Suspended**: still waiting on something, and its image sits on disk as well
+- It also adds two transitions: **Suspend** moves a process into its disk resident twin, and **Activate** brings it back into RAM
+- The full set of new connections:
+  - New ──Admit──► Ready/Suspend (accepted straight to disk when RAM has no room)
+  - Ready ──Suspend──► Ready/Suspend
+  - Ready/Suspend ──Activate──► Ready
+  - Blocked ──Suspend──► Blocked/Suspended
+  - Blocked/Suspended ──Activate──► Blocked
+  - Blocked/Suspended ──Event Occurs──► Ready/Suspend (the event finished while the process was on disk, so it becomes ready but stays on disk until activated)
+ 
+## 6. Changing the Running Process
+- Control moves from a user program into the kernel in three situations:
+  - **Interrupt**: a hardware signal announcing that a device needs attention from the OS. Its source is something other than the running process
+  - **Trap**: an event raised by the running instruction itself that needs OS support
+      - examples: dividing by zero, or touching a page that is not in RAM (a page fault)
+      - the name describes the mechanism: the hardware catches the event while running the instruction and redirects control to an OS handler, much like a trap door
+      - covers genuine errors the CPU cannot resolve alone, and also deliberate requests, since many architectures implement system calls with a special trap instruction
+  - **Blocking system call**: the process explicitly requests something from the OS, such as reading a file. The process often ends up Blocked
+- Once the kernel decides to change which process runs, a typical switch follows six steps:
+  1. Save the current context (registers, program counter, and so on) into the outgoing process's PCB
+  2. Record usage numbers, for instance how long the process held the CPU, for later scheduling choices and reporting
+  3. Place the outgoing PCB on the queue matching its new state (Ready, Blocked, Exit, and so on)
+  4. Pick the next process to run
+  5. Adjust memory management, for example the page tables, so addresses now resolve to the incoming process's memory
+  6. Restore the incoming process's context by loading the register values saved in its PCB into the CPU
+- A worked case: a text editor (A) is running and a music player (B) is waiting
+  - a timer interrupt signals that A's time slice has ended
+  - the OS copies A's live registers into A's PCB, records A's CPU time, and puts A at the back of the Ready queue
+  - the scheduler chooses B, the memory mappings switch to B's, and B's saved registers are loaded into the CPU
+  - the CPU now executes B, starting at exactly the instruction where B was last stopped
+- The CPU can only be one process at a time. Switching is freezing one process into its PCB and thawing another out of its own, fast enough to look simultaneous
+- With several cores running processes at once, switches occur far more often and the cores must stay in step with each other
  `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
