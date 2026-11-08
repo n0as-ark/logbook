@@ -2096,6 +2096,45 @@ content: `## 1. Process Basics
 - The CPU can only be one process at a time. Switching is freezing one process into its PCB and thawing another out of its own, fast enough to look simultaneous
 - With several cores running processes at once, switches occur far more often and the cores must stay in step with each other
  `},
+ {title: "Study Notes: Threads in OS",
+slug: "operating-systems-threads",
+date: "2026-09-26",
+tags: ["Operating Systems"],
+excerpt: "Threads, concurrency versus parallelism, thread scheduling, and priority inversion.",
+readTime: "10 min",
+snippet: `Concurrency (multiple queues, one resource): 
+  ●  ●  ● ─┐
+            ├──► [ Resource ]
+  ●  ●  ● ─┘
+ 
+Parallelism (multiple queues, multiple resources):
+  ●  ●  ● ──────► [ Resource A ]
+ 
+  ●  ●  ● ──────► [ Resource B ]`,
+content: `## 1. Thread Basics
+- A thread is an independent path of execution inside a process
+  - it owns only its own program counter, stack, and register values
+  - threads in the same process share that process's memory and other resources automatically
+  - separate processes each keep private memory and files, and cannot see one another's data without deliberate effort
+- Threads exist because owning resources and running code are two separate jobs:
+  - **process**: holds the resources (memory, open files, devices) and makes them available to its threads. It no longer runs anything itself
+  - **threads**: do the running, meaning they are scheduled and execute instructions. One process may hold many of them
+- What lives where:
+  - **Process Control Block** keeps what belongs to the process as a whole
+    - the memory the process has been given
+    - the files the process has open
+    - links to related processes
+  - **Thread Control Block** keeps what belongs to one thread
+    - its context, meaning its register values
+    - its own call stack, with local variables included
+    - permission to use anything the parent process owns
+- Only three states apply to threads: Ready, Running, and Blocked
+  - no New or Exit state of their own
+  - suspension applies to whole processes, not to individual threads
+
+**Does a process stay meaningful once every one of its threads is gone?** Its resources would remain allocated, yet nothing would be executing.
+
+  `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
 date: "2026-10-06",
