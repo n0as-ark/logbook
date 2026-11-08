@@ -1640,7 +1640,6 @@ content: `## 1. Network Layer Basics
   - ECN (Explicit Congestion Notification) is the header bit actually used to carry that signal
 
 ## 7. Packet Scheduling
-
 Chooses which waiting packet goes out next:
  1. **FCFS / FIFO**: transmit in arrival order
  2. **Priority**: sorted into classes; the highest nonempty priority class is always served first, and FCFS within a class
@@ -2030,13 +2029,13 @@ content: `## 1. Process Basics
 - Five states describe the basic life of a process:
  
 \`\`\`
-       Admit           Dispatch            Released
-New ──────────► Ready ──────────► Running ──────────► Exit
-                 ▲ ▲               │   │
-                 │ └──── Timeout ──┘   │
-    Event Occurs │                     │ Event Wait
-                 │                     │
-                 └───── Blocked ◄──────┘
+                 Admit           Dispatch            Released
+          New ──────────► Ready ──────────► Running ──────────► Exit
+                           ▲ ▲               │   │
+                           │ └──── Timeout ──┘   │
+              Event Occurs │                     │ Event Wait
+                           │                     │
+                           └───── Blocked ◄──────┘
 \`\`\`
 - **New**: still being set up, cannot run yet
 - **Ready**: fully loaded and waiting for a turn on the CPU
