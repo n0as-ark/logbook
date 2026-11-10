@@ -2135,7 +2135,6 @@ content: `## 1. Thread Basics
 **Does a process stay meaningful once every one of its threads is gone?** Its resources would remain allocated, yet nothing would be executing.
 
 ## 2. Benefits of Threads
- 
 - Multithreading: structuring one process to run several threads, so it can progress on multiple things at once instead of working through everything in one strict sequence
 - Common motivations:
   - **Foreground and background work**: a responsive part such as the interface keeps running on one thread while slow work proceeds on another
@@ -2146,7 +2145,6 @@ content: `## 1. Thread Basics
   - **Modular design**: several independent pieces, each on its own thread, can be easier to reason about than one long sequential block
  
 ## 3. Concurrency and Parallelism
- 
 - **Concurrency**: several lines of work make progress during the same period, but all depend on one shared resource and take turns using it
 - **Parallelism**: several lines of work genuinely run at the same instant, because each has a resource of its own, such as a separate CPU core
 \`\`\`
@@ -2165,6 +2163,25 @@ Parallelism (multiple queues, multiple resources):
 - The costs of using many threads:
   - coordinating access to shared resources under concurrency is where much of the complexity and risk originates
   - creating more threads than needed adds confusion
+
+## 4. Scheduling Threads
+- Where thread scheduling happens depends on the kind of threads in use
+- **Kernel level threads** (managed by the OS)
+  - the kernel scheduler deals with threads directly
+  - its ready queue holds individual threads, not whole processes, so each decision selects one specific thread
+  - it follows a policy such as arrival order, shortest expected duration, taking turns, or ranking by priority
+  - **the kernel chooses which thread runs**
+  - if a thread blocks, the kernel can simply run another one, even from the same process
+- **User level threads** (managed inside the program)
+  - the kernel knows only about the process and gives it a share of CPU time
+  - within that share, a thread library, which is ordinary code inside the program that manages its own threads, picks which thread runs
+  - **the process chooses which of its own threads runs**
+  - the kernel cannot see the individual threads, so if one blocks, the whole process looks blocked even when other threads are ready
+- The words "kernel" and "user" here describe which layer owns the scheduling decision. They are unrelated to kernel mode and user mode, which describe CPU privilege levels
+- Many systems let programmers attach priorities to threads, so the highest priority ready thread is chosen first
+- Two hazards come with priorities:
+  - **Starvation**: a lower ranked thread or process is never given the CPU, because higher ranked ones keep showing up ready
+  - **Priority inversion**: a task that should win on priority ends up held back by a lower priority one. The next section shows a real case
   `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
