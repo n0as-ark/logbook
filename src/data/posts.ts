@@ -2134,6 +2134,37 @@ content: `## 1. Thread Basics
 
 **Does a process stay meaningful once every one of its threads is gone?** Its resources would remain allocated, yet nothing would be executing.
 
+## 2. Benefits of Threads
+ 
+- Multithreading: structuring one process to run several threads, so it can progress on multiple things at once instead of working through everything in one strict sequence
+- Common motivations:
+  - **Foreground and background work**: a responsive part such as the interface keeps running on one thread while slow work proceeds on another
+  - **Asynchronous work**: a slow operation like a network request runs on its own thread, and the rest of the program carries on without pausing
+  - **Synchronous work**: a task made of ordered stages can be divided among threads that each handle a stage, keeping the order while improving throughput
+  - **Occasional tasks**: something that runs rarely, like a periodic cleanup, gets a light thread instead of the overhead of a whole process
+  - **Faster responsiveness**: parts such as content loading proceed alongside the parts a person is actively using
+  - **Modular design**: several independent pieces, each on its own thread, can be easier to reason about than one long sequential block
+ 
+## 3. Concurrency and Parallelism
+ 
+- **Concurrency**: several lines of work make progress during the same period, but all depend on one shared resource and take turns using it
+- **Parallelism**: several lines of work genuinely run at the same instant, because each has a resource of its own, such as a separate CPU core
+\`\`\`
+Concurrency (multiple queues, one resource):
+  ●  ●  ● ─┐
+            ├──► [ Resource ]
+  ●  ●  ● ─┘
+ 
+Parallelism (multiple queues, multiple resources):
+  ●  ●  ● ──────► [ Resource A ]
+ 
+  ●  ●  ● ──────► [ Resource B ]
+\`\`\`
+ 
+- Concurrency can exist without parallelism
+- The costs of using many threads:
+  - coordinating access to shared resources under concurrency is where much of the complexity and risk originates
+  - creating more threads than needed adds confusion
   `},
   {title: 'Is a "Strong" Password Actually Safe?',
 slug: "is-a-strong-password-actually-safe",
