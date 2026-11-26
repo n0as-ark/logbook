@@ -570,7 +570,12 @@ date: "2026-06-14",
 tags: ["C++", "Data Structure"],
 excerpt: "Comparing linear search and binary search side by side, including their worst-case running times.",
 readTime: "5 min",
-snippet:``,
+snippet:`int linear_search(const std::vector<int>& list, int target) {
+    for (int pos = 0; pos < list.size(); pos++) {
+        if (list[pos] == target) return pos;    //target found
+    }
+    return -1;    // no match
+}`,
 content:`## 1. Linear Search
 
 ### Idea
@@ -755,6 +760,278 @@ worst-case time = Θ(log2 n)
 - The binary search loop runs at most 1 + log2(n) times, so its worst case is Θ(log2 n)
 - Both report the position of a match, or -1 when the target is missing
 - Linear search returns the first match, while binary search may return any one of several equal matches
+`,
+  },
+  {title: "Study Notes: Sorting Algorithms",
+slug: "sorting-algorithms",
+date: "2026-06-15",
+tags: ["C++", "Data Structure"],
+excerpt: "Comparing how selection sort, insertion sort, merge sort and quick sort work and how their best, average, and wrost case running times differ.",
+readTime: "9 min",
+snippet:`| Algorithm | Best | Average | Worst |
+|---|---|---|---|
+| Selection sort | Θ(n²) | Θ(n²) | Θ(n²) |
+| Insertion sort | Θ(n) | Θ(n²) | Θ(n²) |
+| Merge sort | Θ(nlogn) | Θ(nlogn) | Θ(nlogn) |
+| Quick sort | Θ(nlogn) | Θ(nlogn) | Θ(n²) |`,
+content:`## 1. Selection Sort
+
+### Idea
+
+- The list is treated as two parts - a sorted front part (empty at first) and an unsorted remainder
+- Each pass scans the whole unsorted remainder to find its smallest value
+- That smallest value is swapped into the first slot of the remainder, which grows the sorted front part by one
+- Values in the sorted front part are already in their final positions, so later passes never touch them again
+- After n - 1 passes the list is fully sorted, since the last item left over must be the largest
+
+### Code
+
+\`\`\`c++
+void selection_sort(std::vector<int>& list) {
+    int count = list.size();
+    for (int front = 0; front < count - 1; front++) {
+        int smallest = front;                       // index of the smallest value seen so far
+        for (int pos = front + 1; pos < count; pos++) {
+            if (list[pos] < list[smallest]) {
+                smallest = pos;                     // a new minimum was found
+            }
+        }
+        std::swap(list[front], list[smallest]);   // move it to the start of the unsorted part
+    }
+}
+\`\`\`
+
+### Example
+
+Sample list used for every walkthrough in this post: \`31 12 47 8 25 19 40 3\`
+
+\`|\` marks the end of the sorted front part:
+
+\`\`\`
+start    31  12  47   8  25  19  40   3
+pass 1    3| 12  47   8  25  19  40  31   smallest = 3, swapped with 31
+pass 2    3   8| 47  12  25  19  40  31   smallest = 8, swapped with 12
+pass 3    3   8  12| 47  25  19  40  31   smallest = 12, swapped with 47
+pass 4    3   8  12  19| 25  47  40  31   smallest = 19, swapped with 47
+pass 5    3   8  12  19  25| 47  40  31   smallest = 25, already in place
+pass 6    3   8  12  19  25  31| 40  47   smallest = 31, swapped with 47
+pass 7    3   8  12  19  25  31  40| 47   smallest = 40, already in place
+\`\`\`
+
+### Cost analysis
+
+- Pass 1 compares n - 1 pairs, pass 2 compares n - 2 pairs, and so on down to 1
+- Total comparisons: (n - 1) + (n - 2) + ... + 1 = n(n - 1) / 2
+- The full scan happens no matter what the input looks like, so the best, average, and worst cases are all **Θ(n²)**
+- At most n - 1 swaps are made
+
+## 2. Insertion Sort
+
+### Idea
+
+- The front part of the list is always sorted (at first, just the first item is sorted)
+- Each following item moves toward the front of the list until it reaches its correct position among the items before it
+
+### Code
+
+\`\`\`c++
+void insertion_sort(std::vector<int>& list) {
+    int count = list.size();
+    for (int next = 1; next < count; next++) {     // consider the first item in the list already sorted
+        int temp = list[next];                     // value being inserted
+        int pos = next - 1;                        // last index of the sorted prefix
+        while (pos >= 0 && list[pos] > temp) {
+            list[pos + 1] = list[pos];             // shift a larger value one slot right
+            pos--;
+        }
+        list[pos + 1] = temp;                      // drop the held value into the gap
+    }
+}
+\`\`\`
+
+### Example
+
+\`|\` marks the end of the sorted front part:
+
+\`\`\`
+start    31| 12  47   8  25  19  40   3
+step 1   12  31| 47   8  25  19  40   3   insert 12, 1 shift
+step 2   12  31  47|  8  25  19  40   3   insert 47, 0 shifts
+step 3    8  12  31  47| 25  19  40   3   insert 8, 3 shifts
+step 4    8  12  25  31  47| 19  40   3   insert 25, 2 shifts
+step 5    8  12  19  25  31  47| 40   3   insert 19, 3 shifts
+step 6    8  12  19  25  31  40  47|  3   insert 40, 1 shift
+step 7    3   8  12  19  25  31  40  47|   insert 3, 7 shifts
+\`\`\`
+
+### Cost analysis
+
+- Each insertion shifts only the values greater than the held item, so the work depends on the input order
+- Worst case (list in descending order): insertion k shifts k values, giving 1 + 2 + ... + (n - 1) = n(n - 1) / 2, which is **Θ(n²)**
+- Best case (list already ascending): one comparison per item and no shifts, which is **Θ(n)**
+- Nearly sorted input therefore runs close to linear time
+
+## 3. Merge Sort
+
+### Idea
+
+- The list is split into two halves
+- Each half is sorted by the same procedure, recursively
+- The sorted halves are joined into a single sorted list
+- A list of 0 or 1 items is already sorted, which stops the recursion
+- Merging works because the smallest unmerged value is always at the front of one of the halves
+
+### Code
+
+\`\`\`c++
+void merge_halves(std::vector<int>& list, int low, int mid, int high) {
+    std::vector<int> combined(high - low + 1);    // temporary storage for the merged range
+    int left = low;                               // read position in the left half
+    int right = mid + 1;                          // read position in the right half
+    int ind = 0;                                  // index of the next empty slot in the combined list
+
+    while (left <= mid && right <= high) {
+        if (list[left] <= list[right]) {          // <= keeps equal values in their original order
+            combined[ind++] = list[left++];
+        } else {
+            combined[ind++] = list[right++];
+        }
+    }
+    while (left <= mid) combined[ind++] = list[left++];       // leftovers from the left half
+    while (right <= high) combined[ind++] = list[right++];    // leftovers from the right half
+    for (int i = 0; i < ind; i++) {
+        list[low + i] = combined[i];               // copy the merged result back
+    }
+}
+\`\`\`
+
+\`\`\`c++
+void merge_sort(std::vector<int>& list, int low, int high) {
+    if (low >= high) return;                    // 0 or 1 items: already sorted
+    int mid = low + (high - low) / 2;
+    merge_sort(list, low, mid);                 // sort the left half recursively
+    merge_sort(list, mid + 1, high);            // sort the right half recursively
+    merge_halves(list, low, mid, high);         // combine the sorted halves
+}
+\`\`\`
+
+### Example
+
+Splitting down to single items, then merging back up:
+
+\`\`\`
+split
+    [31 12 47 8 25 19 40 3]
+  [31 12 47 8]   [25 19 40 3]
+ [31 12] [47 8] [25 19] [40 3]
+[31][12][47][8][25][19][40][3]
+
+merge
+[12 31] [8 47] [19 25] [3 40]
+ [8 12 31 47]  [3 19 25 40]
+  [3 8 12 19 25 31 40 47]
+\`\`\`
+
+### Cost analysis
+
+- Merging two halves with m items in total touches each item once, so it takes Θ(m) time
+- The merged result is built in a temporary list of m items before it is copied back, so merging needs Θ(m) extra space
+- Recursion levels: level k has 2^k calls, each working on n / 2^k items
+
+\`\`\`
+level   calls   items per call   merge work on the level
+0       1       n                n
+1       2       n/2              2 x n/2 = n
+2       4       n/4              4 x n/4 = n
+...     ...     ...              ...
+k       2^k     n/2^k            2^k x n/2^k = n
+last    n       1                nothing to merge
+\`\`\`
+
+- Every level does about n units of work in total, and there are 1 + log2(n) levels
+- Total time: n x (1 + log2 n) = nlog2(n) + n = **Θ(nlogn)**
+- The **input order does not matter**, so the best, average, and worst cases are all Θ(nlogn)
+- The largest temporary list is created by the top-level merge and holds n items, so merge sort needs **O(n) extra space**
+
+## 4. Quick Sort
+
+### Idea
+
+- A pivot value is chosen from the range being sorted
+- The range is rearranged (partitioned) so that values smaller than the pivot come before it and the remaining values come after it
+- After partitioning, the pivot is already in its final position
+- The two sides are then sorted the same way, recursively
+- A range of 0 or 1 items needs no work
+- The heavy work happens before the recursive calls, so no merge step is needed afterwards
+
+### Code
+
+\`\`\`c++
+int partition_range(std::vector<int>& list, int low, int high) {
+    int mid = low + (high - low) / 2;
+    std::swap(list[mid], list[high]);               // park the chosen pivot at the end
+    int pivot = list[high];
+    int boundary = low;                             // everything before boundary is smaller than pivot
+    for (int pos = low; pos < high; pos++) {
+        if (list[pos] < pivot) {
+            std::swap(list[pos], list[boundary]);   // grow the "smaller" region
+            boundary++;
+        }
+    }
+    std::swap(list[boundary], list[high]);          // pivot lands in its final place
+    return boundary;
+}
+\`\`\`
+
+\`\`\`c++
+void quick_sort(std::vector<int>& list, int low, int high) {
+    if (low >= high) return;                        // 0 or 1 items: already sorted
+    int split = partition_range(list, low, high);
+    quick_sort(list, low, split - 1);              // values smaller than the pivot
+    quick_sort(list, split + 1, high);             // values not smaller than the pivot
+}
+\`\`\`
+
+### Example
+
+First partition of the sample list:
+
+\`\`\`
+before        31 12 47 8 25 19 40 3
+              (pivot 8 = middle item, swapped to the end)
+pivot parked  31 12 47 3 25 19 40 8
+after         3 | 8 | 47 31 25 19 40 12
+              ('|' separates smaller values, the pivot, and the rest)
+\`\`\`
+
+- The pivot (8) is now in its final position, index 1
+- The left side (\`3\`) and the right side (\`47 31 25 19 40 12\`) are sorted by repeating the same steps
+
+### Cost analysis
+
+- Partitioning a range of m items is a single scan, so it takes Θ(m) time
+- Balanced splits give about log2(n) levels with Θ(n) work each, so the best and average cases are Θ(nlogn)
+- Worst case: the pivot is always the smallest or largest value
+  - Each split puts 0 items on one side and the rest on the other side, so the range shrinks by only one item per level: n, n - 1, ... , 1 items
+  - The total work is **n + (n - 1) + ... + 1 = Θ(n²)**
+- A fixed first-item or last-item pivot hits the worst case on an already sorted list
+- Common refinements: a median-of-three pivot (median of the first, middle, and last items), a random pivot, and switching to insertion sort for very small ranges
+- Sorting happens in place, and the only extra memory is the recursion stack, about O(logn) on average
+
+## Key Points to Remember
+
+- Selection sort picks the smallest remaining value each pass, and it is Θ(n²) in every case
+- Insertion sort grows a sorted prefix, and it ranges from Θ(n) on sorted input to Θ(n²) in the worst case
+- Merge sort splits, sorts both halves, and merges, giving Θ(nlogn) time and O(n) extra space
+- Quick sort partitions around a pivot, giving Θ(n log n) on average and Θ(n²) in the worst case
+- The slower sorts are fine for small lists, while merge sort and quick sort pay off as lists grow
+
+| Algorithm | Best | Average | Worst |
+|---|---|---|---|
+| Selection sort | Θ(n²) | Θ(n²) | Θ(n²) |
+| Insertion sort | Θ(n) | Θ(n²) | Θ(n²) |
+| Merge sort | Θ(n log n) | Θ(n log n) | Θ(n log n) |
+| Quick sort | Θ(n log n) | Θ(n log n) | Θ(n²) |
 `,
   },
   {title: "Study Notes: Introduction to Computer Networking",
