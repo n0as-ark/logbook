@@ -564,6 +564,199 @@ Building this made the gap between a toy cipher and a real one feel concrete in 
 
 > 🔗 **Code:** The full implementation is available on [GitHub](https://github.com/n0as-ark/XOR-Encryption-In-Python/blob/main/src/multi_byte_xor.py).`,
   },
+  {title: "Study Notes: Searching Algorithms",
+slug: "searching-algorithms",
+date: "2026-06-14",
+tags: ["C++", "Data Structure"],
+excerpt: "Comparing linear search and binary search side by side, including their worst-case running times.",
+readTime: "5 min",
+snippet:``,
+content:`## 1. Linear Search
+
+### Idea
+
+- Items are inspected one at a time, starting from the front of the list
+- The search stops at the first match
+- The result is the position of that match (counting from 0)
+- When the target is absent, the result is -1
+- Any list works, sorted or unsorted
+
+### Code
+
+\`\`\`c++
+int linear_search(const std::vector<int>& list, int target) {
+    int count = list.size();
+    for (int pos = 0; pos < count; pos++) {
+        if (list[pos] == target) {
+            return pos;   // stop at the first match
+        }
+    }
+    return -1;            // no match
+}
+\`\`\`
+
+### Example
+
+\`\`\`
+index    0    1    2    3    4    5    6
+value   14    3   27    9    3   31   20
+\`\`\`
+
+| Call | Result | Reason |
+|---|---|---|
+| search for 3 | 1 | first of two matches (indices 1 and 4) |
+| search for 27 | 2 | single match |
+| search for 50 | -1 | no match anywhere |
+
+### Cost analysis
+- Every step inside the loop (one comparison, one possible return) takes a fixed amount of time, written Θ(1)
+- The final \`return -1\` is also Θ(1)
+- The running time therefore depends almost entirely on how many times the loop body runs:
+
+\`\`\`
+T(n) = Θ(number of loop passes)
+\`\`\`
+
+| Situation | Loop passes | Growth |
+|---|---|---|
+| Best case: target is first | 1 | Θ(1) |
+| Worst case: target is last or missing | n | Θ(n) |
+
+- The worst case is the one that gets quoted
+- Doubling the list size roughly doubles the work
+
+## 2. Binary Search
+
+### Idea
+
+- A list **sorted in ascending order** is required
+- The ordering lets one comparison rule out a large part of the list at once
+- Repeating that on the remaining half narrows the search quickly
+
+Procedure on a list:
+
+1. The target is compared with the middle item
+2. A match ends the search
+3. A smaller target means everything at or after the middle is irrelevant, so only the left part stays
+4. A larger target means everything at or before the middle is irrelevant, so only the right part stays
+5. The comparison then repeats on what remains, and an empty range means the target is absent
+
+### Code
+
+\`\`\`c++
+int binary_search(const std::vector<int>& list, int target) {
+    int low = 0;                     // left edge of the range still in play
+    int high = list.size() - 1;      // right edge of the range still in play
+    while (low <= high) {                               
+        int mid = low + (high - low) / 2;        // midpoint, rounded down
+        if (list[mid] == target) {
+            return mid;                    // found
+        }
+        if (target < list[mid]) {
+            high = mid - 1;                // target can only be in the left part
+        } else {
+            low = mid + 1;                 // target can only be in the right part
+        }
+    }
+    return -1;                             // range became empty, target is absent
+}
+\`\`\`
+
+- \`low + (high - low) / 2\` gives the same midpoint as \`(low + high) / 2\`, but avoids adding \`low\` and \`high\` directly. That sum could exceed the largest value an \`int\` can hold on a very large vector
+- The list must be sorted
+- On unsorted data the discarding logic is wrong and results are unreliable
+
+### Example
+
+1. Sorted sample list (11 items), looking for 42:
+
+\`\`\`
+index      0   1   2   3   4   5   6   7   8   9  10
+step 1     2   6  11  15  19  23  38  42  57  61  74
+                               ^                       mid = 5: 42 > 23, keep the right part
+step 2                            38  42  57  61  74
+                                           ^           mid = 8: 42 < 57, keep the left part
+step 3                            38  42
+                                   ^                   mid = 6: 42 > 38, keep the right part
+step 4                                42
+                                       ^               mid = 7: found at index 7
+\`\`\`
+
+- Four rounds were enough, even though the list holds eleven items
+- A linear scan would have needed eight comparisons to reach the same item
+
+2. Failed lookup, searching for 40 in the same list:
+
+\`\`\`
+index      0   1   2   3   4   5   6   7   8   9  10
+step 1     2   6  11  15  19  23  38  42  57  61  74
+                               ^                       mid = 5: 40 > 23, keep the right part
+step 2                            38  42  57  61  74
+                                           ^           mid = 8: 40 < 57, keep the left part
+step 3                            38  42
+                                   ^                   mid = 6: 40 > 38, keep the right part
+step 4                                42
+                                       ^               mid = 7: 40 < 42, keep the left part
+        range is empty -> not present, return -1
+\`\`\`
+
+- The path is the same until the range disappears
+
+### Duplicates
+
+- Binary search returns whichever matching index the halving happens to land on
+- That index is not necessarily the earliest one
+
+\`\`\`
+index    0    1    2    3    4
+value    4    9    9    9   12
+              ^    ^    ^
+        linear search -> 1, binary search -> 2
+\`\`\`
+
+- When the first occurrence is required, a small modification is needed (keep searching leftward after a match)
+- A linear scan is the other option
+
+### Cost analysis
+
+- Each round throws away about half of the remaining items
+- Size of the searched range after each round:
+
+| Round | Items still in range |
+|---|---|
+| 1 | n |
+| 2 | n / 2 |
+| 3 | n / 4 |
+| 4 | n / 8 |
+| ... | ... |
+| k | n / 2^(k-1) |
+
+- The process ends once a single item is left, so the final round k satisfies:
+
+\`\`\`
+n / 2^(k-1) = 1
+n = 2^(k-1)
+log2(n) = k - 1
+k = 1 + log2(n)
+\`\`\`
+
+- The number of rounds is therefore 1 + log2(n)
+- Each round costs Θ(1)
+- Overall result:
+
+\`\`\`
+worst-case time = Θ(log2 n)
+\`\`\`
+
+## Key Points to Remember
+
+- Linear search checks items in order, works on any list, and has a worst case of Θ(n)
+- Binary search needs sorted input and discards half of the remaining range each round
+- The binary search loop runs at most 1 + log2(n) times, so its worst case is Θ(log2 n)
+- Both report the position of a match, or -1 when the target is missing
+- Linear search returns the first match, while binary search may return any one of several equal matches
+`,
+  },
   {title: "Study Notes: Introduction to Computer Networking",
   slug: "introduction-to-computer-networking",
   date: "2026-09-01",
