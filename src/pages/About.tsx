@@ -35,11 +35,11 @@ const About = () => {
       <h1 className="text-3xl font-semibold tracking-tight mb-8">About</h1>
       <div className="space-y-6 mb-16 max-w-5xl">
         <p className="text-muted-foreground leading-relaxed">
-          I've been interested in programming since high school, but ended up studying actuarial science and going into financial consulting. The interest never really went away though.
-          If anything, spending a few years working made me realize how much I actually wanted to pursue cybersecurity — so here I am.
+          I've been interested in programming and cybersecurity since high school. I studied actuarial science and statistics at university, then worked in financial consulting after graduation, but that interest never went away.
+          After a few years in the industry, it became clear how much I wanted to pursue cybersecurity.
         </p>
         <p className="text-muted-foreground leading-relaxed">
-          This is where I write through what I'm learning. Systems programming and security are new territory for me, but I'm not starting from zero. Partly to keep track, partly because explaining something is the fastest way to find out if you actually understand it.
+          This blog is where I share what I'm learning. I picked up some programming skills at school, but systems programming and security are both new to me. Most of my posts will cover what I learn in those areas, along with related topics and personal projects I'm working on.
         </p>
       </div>
       {/* Currently learning */}
